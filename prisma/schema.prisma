@@ -40,8 +40,8 @@ model User {
   emailVerified DateTime?
   image         String?
   school        String?
-  diploma       String?
   year          Int?
+  diploma       String?
   accounts      Account[]
   sessions      Session[]
   Timetable     Timetable[]

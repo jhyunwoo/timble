@@ -1,6 +1,7 @@
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import axios from "axios"
 
 export default function Lobby() {
   // router 설정
@@ -8,7 +9,7 @@ export default function Lobby() {
   // 사용자 로그인 정보 가져오기
   const { data: session } = useSession()
   // NullData 저장
-  const [nullData, setNullData] = useState()
+  const [nullData, setNullData] = useState([])
 
   // 로그인 되지 않은 사용자 메인 페이지로 이동
   function checkUserAuth() {
@@ -20,19 +21,26 @@ export default function Lobby() {
   // 사용자 Null 데이터 받아오기
   function getUserNull() {
     if (session) {
-      let userData = fetch("/api/getUserNullData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      axios
+        .post("/api/getUserNullData", {
           userEmail: session.user.email,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => setNullData(data))
+        })
+        .then((response) => setNullData(response.data))
+        .catch((error) => console.log(error))
     }
   }
+
+  function checkUserNull() {
+    if (nullData.length >= 1) {
+      router
+        .push("/userinfo")
+        .then((r) => console.log("Redirect to UserInfo Page"))
+    }
+  }
+
+  useEffect(() => {
+    checkUserNull()
+  }, [nullData])
 
   useEffect(() => {
     checkUserAuth()

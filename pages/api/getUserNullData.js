@@ -15,7 +15,7 @@ export default async function getUserNullData(req, res) {
         nullData.push(key)
       }
     })
-    console.log(nullData)
+    nullData = nullData.filter((element) => element !== "emailVerified")
     res.json(nullData)
   }
 }
