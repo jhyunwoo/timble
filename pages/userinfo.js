@@ -13,7 +13,7 @@ export default function Userinfo() {
   const [page, setPage] = useState(0)
   const [school, setSchool] = useState("")
   const [diploma, setDiploma] = useState("")
-  const [year, setYear] = useState("")
+  const [year, setYear] = useState(0)
 
   // 로그인 되지 않은 사용자 메인 페이지로 이동
   function checkUserAuth() {
@@ -42,10 +42,43 @@ export default function Userinfo() {
       setSchool("")
     }
   }
+  // diploma control
+  function controlDiploma(value) {
+    if (school === "") {
+      setDiploma(value)
+    } else {
+      setDiploma("")
+    }
+  }
+
+  // year control
+  function controlYear(value) {
+    if (school === "") {
+      setYear(value)
+    } else {
+      setYear(0)
+    }
+  }
+
+  // 사용자 데이터 서버에 수정
+  function postUserInfo(pageData, userData) {
+    axios.post("api/postUserInfo", {
+      post: pageData,
+      userEmail: session.user.email,
+      data: userData,
+    })
+  }
 
   // nullData에서 다음 클릭시 다음장으로 이동
   function pageControl() {
     if (nullData[page] === "school") {
+      postUserInfo(nullData[page], school)
+      setPage(page + 1)
+    } else if (nullData[page] === "diploma") {
+      postUserInfo(nullData[page], diploma)
+      setPage(page + 1)
+    } else if (nullData[page] === "year") {
+      postUserInfo(nullData[page], year)
       setPage(page + 1)
     }
   }
@@ -90,10 +123,104 @@ export default function Userinfo() {
       )}
       {nullData[page] === "diploma" ? (
         <div>
-          <div
-            className={"bg-green-300 text-2xl text-center p-4 font-semibold "}
-          >
+          <div className={"text-2xl text-center p-4 font-semibold "}>
             디플로마
+          </div>
+          <div className={"grid grid-cols-2 gap-4 p-4"}>
+            <button
+              onClick={() => {
+                controlDiploma("자연과학")
+              }}
+              className={`${
+                diploma === "자연과학"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              자연과학
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("공학")
+              }}
+              className={`${
+                diploma === "공학"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              공학
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("IT")
+              }}
+              className={`${
+                diploma === "IT" ? "bg-green-500 text-white" : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              IT
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("생명과학")
+              }}
+              className={`${
+                diploma === "생명과학"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              생명과학
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("국제인문")
+              }}
+              className={`${
+                diploma === "국제인문"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              국제인문
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("사회과학")
+              }}
+              className={`${
+                diploma === "사회과학"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              사회과학
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("경제경영")
+              }}
+              className={`${
+                diploma === "경제경영"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              경제경영
+            </button>
+            <button
+              onClick={() => {
+                controlDiploma("예술체육")
+              }}
+              className={`${
+                diploma === "예술체육"
+                  ? "bg-green-500 text-white"
+                  : "text-green-900"
+              } ring-4 ring-green-500 p-2 text-xl font-semibold rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition`}
+            >
+              예술체육
+            </button>
           </div>
         </div>
       ) : (
@@ -105,6 +232,32 @@ export default function Userinfo() {
             className={"bg-green-300 text-2xl text-center p-4 font-semibold "}
           >
             학년
+          </div>
+          <div className={"grid p-4 grid-cols-1 w-full gap-6"}>
+            <button
+              className={`${
+                year === 1 ? "bg-green-500 text-white" : "text-green-900"
+              } ring-4 ring-green-500 p-4 text-xl font-semibold rounded-xl hover:ring-offset-4 hover:bg-green-500 hover:text-white duration-200 transition`}
+              onClick={() => controlYear(1)}
+            >
+              1학년
+            </button>
+            <button
+              className={`${
+                year === 2 ? "bg-green-500 text-white" : "text-green-900"
+              } ring-4 ring-green-500 p-4 text-xl font-semibold rounded-xl hover:ring-offset-4 hover:bg-green-500 hover:text-white duration-200 transition`}
+              onClick={() => controlYear(2)}
+            >
+              2학년
+            </button>
+            <button
+              className={`${
+                year === 3 ? "bg-green-500 text-white" : "text-green-900"
+              } ring-4 ring-green-500 p-4 text-xl font-semibold rounded-xl hover:ring-offset-4 hover:bg-green-500 hover:text-white duration-200 transition`}
+              onClick={() => controlYear(3)}
+            >
+              3학년
+            </button>
           </div>
         </div>
       ) : (
