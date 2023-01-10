@@ -36,6 +36,16 @@ export default async function getUserNullData(req, res) {
         },
       })
       res.status(200)
+    } else if (post === "name") {
+      const postName = await prisma.user.update({
+        where: {
+          email: userEmail,
+        },
+        data: {
+          name: data,
+        },
+      })
+      res.status(200)
     }
   } else {
     res.status(403).json({
