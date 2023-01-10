@@ -3,6 +3,9 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import axios from "axios"
 
+import HeadBar from "../components/HeadBar"
+import LobbyCard from "../components/LobbyCard"
+
 export default function Lobby() {
   // router 설정
   const router = useRouter()
@@ -49,11 +52,19 @@ export default function Lobby() {
 
   if (session) {
     return (
-      <div>
-        <div>Lobby</div>
-        <button onClick={() => signOut()}>Sign Out</button>
-        <br />
-        <button onClick={() => console.log(nullData)}>print null</button>
+      <div className={"w-full min-h-screen bg-green-50"}>
+        <HeadBar page={"lobby"} />
+        <div className={"grid grid-cols-1 gap-4 p-4"}>
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+        </div>
       </div>
     )
   } else {

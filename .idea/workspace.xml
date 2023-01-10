@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="59d69b41-f253-4599-873f-7819376b3f88" name="변경" comment="add year and diploma info page">
+    <list default="true" id="59d69b41-f253-4599-873f-7819376b3f88" name="변경" comment="finish userInfo page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/postUserInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/postUserInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/userinfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/userinfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/lobby.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/lobby.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +60,7 @@
       <workItem from="1672495639099" duration="7863000" />
       <workItem from="1672668475141" duration="6579000" />
       <workItem from="1672842226801" duration="3483000" />
-      <workItem from="1673351638989" duration="4923000" />
+      <workItem from="1673351638989" duration="8631000" />
     </task>
     <task id="LOCAL-00001" summary="add year and diploma info page">
       <created>1672845709265</created>
@@ -73,7 +69,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672845709265</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="finish userInfo page">
+      <created>1673356739321</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1673356739321</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -81,6 +84,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add year and diploma info page" />
-    <option name="LAST_COMMIT_MESSAGE" value="add year and diploma info page" />
+    <MESSAGE value="finish userInfo page" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish userInfo page" />
   </component>
 </project>
