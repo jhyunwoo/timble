@@ -5,6 +5,7 @@ import axios from "axios"
 
 import HeadBar from "../components/HeadBar"
 import LobbyCard from "../components/LobbyCard"
+import Footer from "../components/Footer"
 
 export default function Lobby() {
   // router 설정
@@ -52,19 +53,24 @@ export default function Lobby() {
 
   if (session) {
     return (
-      <div className={"w-full min-h-screen bg-green-50"}>
+      <div className={"w-full min-h-screen bg-slate-50"}>
         <HeadBar page={"lobby"} />
-        <div className={"grid grid-cols-1 gap-4 p-4"}>
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
-          <LobbyCard title={"2학년 2학기 시간표"} subtitle={"시간표"} />
+        <div
+          className={
+            "grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-20"
+          }
+        >
+          <LobbyCard title={"시간표 구성하기"} subtitle={"시간표"} />
+          <LobbyCard
+            title={"친구랑 시간표 맞추기"}
+            subtitle={"친구"}
+            color={"bg-emerald-500 text-white"}
+          />
+          <LobbyCard title={"디플로마 시간표 추천"} subtitle={"시간표"} />
+          <LobbyCard title={"과목 정보"} subtitle={"시간표"} />
+          <LobbyCard title={"친구 추가"} subtitle={"친구"} />
         </div>
+        <Footer />
       </div>
     )
   } else {
