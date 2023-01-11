@@ -18,10 +18,8 @@ export default function timetable() {
           title={"친구랑 시간표 맞추기"}
           color={"bg-indigo-500 text-white"}
         />
-        <div className={"grid grid-cols-2 gap-4"}>
-          <LobbyCard subtitle={"시간표"} title={"디플로마 시간표 추천"} />
-          <LobbyCard subtitle={"시간표"} title={"과목 상세 정보"} />
-        </div>
+        <LobbyCard subtitle={"시간표"} title={"디플로마 시간표 추천"} />
+        <LobbyCard subtitle={"시간표"} title={"과목 상세 정보"} />
       </div>
       <Footer />
     </div>
