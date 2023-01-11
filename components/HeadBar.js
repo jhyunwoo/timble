@@ -1,11 +1,12 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
+import { signOut } from "next-auth/react"
 
 export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
   return (
-    <div className={" py-4 fixed top-0 w-full backdrop-blur-3xl"}>
+    <div className={"py-4 fixed top-0 w-full backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>
         <button onClick={() => setMenu(true)}>
           <Bars3Icon className={"w-8 h-8"} />
@@ -13,7 +14,7 @@ export default function HeadBar(props) {
         <div className={"flex items-center"}>
           <Link href={"/lobby"}>
             <button
-              className={` text-lg p-1 px-3 rounded-full ${
+              className={` text-base p-1 px-3 rounded-full ${
                 props.page === "lobby"
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
@@ -24,7 +25,7 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"timetable"}>
             <button
-              className={` text-lg p-1 px-3 rounded-full ${
+              className={` text-base p-1 px-3 rounded-full ${
                 props.page === "timetable"
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
@@ -35,7 +36,7 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"friends"}>
             <button
-              className={` text-lg p-1 px-3 rounded-full ${
+              className={` text-base p-1 px-3 rounded-full ${
                 props.page === "friends"
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
@@ -56,6 +57,7 @@ export default function HeadBar(props) {
             <XMarkIcon className={"w-8 h-8"} />
           </button>
         </div>
+        <button onClick={() => signOut()}>Sign Out</button>
       </div>
     </div>
   )

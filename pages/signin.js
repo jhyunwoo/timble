@@ -16,6 +16,7 @@ export default function Signin() {
       router.push("/lobby")
     }
   })
+
   return (
     <div className={"w-full h-screen flex flex-col"}>
       <div className={"m-auto w-full"}>
