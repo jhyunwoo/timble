@@ -6,7 +6,7 @@ import LobbyCard from "../../components/LobbyCard"
 import Loading from "../../components/Loading"
 import { useRouter } from "next/router"
 
-export default function timetable() {
+export default function Timetable() {
   const { data: session, status } = useSession()
   const router = useRouter()
 

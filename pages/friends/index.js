@@ -6,7 +6,7 @@ import Footer from "../../components/Footer"
 import LobbyCard from "../../components/LobbyCard"
 import Loading from "../../components/Loading"
 
-export default function friends() {
+export default function Friends() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
