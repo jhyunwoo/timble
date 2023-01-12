@@ -1,6 +1,6 @@
 import prisma from "../../lib/prismadb"
-import { unstable_getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]"
+import { unstable_getServerSession } from "next-auth/next"
 
 export default async function getUserNullData(req, res) {
   const { userEmail } = req.body
