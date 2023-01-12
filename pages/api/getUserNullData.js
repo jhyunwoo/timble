@@ -1,9 +1,10 @@
 import prisma from "../../lib/prismadb"
-import { getSession } from "next-auth/react"
+import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
 
 export default async function getUserNullData(req, res) {
   const { userEmail } = req.body
-  const session = await getSession({ req })
+  const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
     if (userEmail) {
@@ -23,9 +24,10 @@ export default async function getUserNullData(req, res) {
       res.json(nullData)
     }
   } else {
-    res.status(403).json({
+    res.status(401).json({
       message:
         "You must be sign in to view the protected content on this page.",
     })
   }
+  res.end()
 }

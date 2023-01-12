@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import AppleProvider from "next-auth/providers/apple";
-import NaverProvider from "next-auth/providers/naver";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "../../../lib/prismadb";
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import AppleProvider from "next-auth/providers/apple"
+import NaverProvider from "next-auth/providers/naver"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import prisma from "../../../lib/prismadb"
 
-export default NextAuth({
+const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -24,4 +24,6 @@ export default NextAuth({
   pages: {
     signIn: "/signin",
   },
-});
+}
+
+export default NextAuth(authOptions)

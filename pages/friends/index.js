@@ -18,7 +18,7 @@ export default function Friends() {
   }
   if (status === "authenticated") {
     return (
-      <div className={"pt-20"}>
+      <div className={"pt-20 bg-slate-50"}>
         <div className="min-h-screen">
           <HeadBar page={"friends"} />
           <div

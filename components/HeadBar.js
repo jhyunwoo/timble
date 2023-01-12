@@ -59,7 +59,7 @@ export default function HeadBar(props) {
             <XMarkIcon className={"w-8 h-8"} />
           </button>
         </div>
-        <div className="w-full bg-slate-100/70 flex flex-col p-4">
+        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl ">
           <div className="text-xl font-semibold">{session.user.name}님</div>
           <div className="mt-2 flex">
             <button>내 정보 관리</button>
