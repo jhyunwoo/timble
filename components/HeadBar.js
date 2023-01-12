@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 
 export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
+  const { data: session } = useSession()
   return (
     <div className={"py-4 fixed top-0 w-full backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>
@@ -47,17 +48,42 @@ export default function HeadBar(props) {
           </Link>
         </div>
       </div>
+
       <div
-        className={`bg-red-200 w-screen h-screen z-40 absolute top-0 -translate-x-full transition flex flex-col ${
+        className={`bg-slate-50 w-screen min-h-screen z-40 absolute top-0 -translate-x-full transition flex flex-col ${
           menu ? "translate-x-0" : ""
         }`}
       >
-        <div className={"bg-red-100 flex justify-between items-center p-4"}>
+        <div className={" flex justify-between items-center p-4"}>
           <button onClick={() => setMenu(false)}>
             <XMarkIcon className={"w-8 h-8"} />
           </button>
         </div>
-        <button onClick={() => signOut()}>Sign Out</button>
+        <div className="w-full bg-slate-100/70 flex flex-col p-4">
+          <div className="text-xl font-semibold">{session.user.name}님</div>
+          <div className="mt-2 flex">
+            <button>내 정보 관리</button>
+            <div className="mx-2">|</div>
+            <button onClick={() => signOut()}>로그아웃</button>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
+            시간표
+          </div>
+          <div className=" grid grid-cols-1 gap-1">
+            <div className="text-lg font-semibold">내 시간표</div>
+            <div className="text-lg font-semibold">시간표 구성하기</div>
+          </div>
+          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
+            친구
+          </div>
+          <div className=" grid grid-cols-1 gap-1">
+            <div className="text-lg font-semibold">친구 추가</div>
+            <div className="text-lg font-semibold">친구 목록</div>
+            <div className="text-lg font-semibold">친구랑 시간표 맞추기</div>
+          </div>
+        </div>
       </div>
     </div>
   )
