@@ -1,9 +1,22 @@
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/router"
+
 import HeadBar from "../../components/HeadBar"
 import Footer from "../../components/Footer"
 import LobbyCard from "../../components/LobbyCard"
-import ProtectedPage from "../../components/ProtectedPage"
+import Loading from "../../components/Loading"
+
 export default function friends() {
-  function FriendsPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  if (status === "loading") {
+    return <Loading />
+  }
+  if (status === "unauthenticated") {
+    router.push("/signin")
+  }
+  if (status === "authenticated") {
     return (
       <div className={"pt-20"}>
         <HeadBar page={"friends"} />
@@ -26,5 +39,4 @@ export default function friends() {
       </div>
     )
   }
-  return <ProtectedPage page={FriendsPage()} />
 }

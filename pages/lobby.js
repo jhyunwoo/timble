@@ -6,22 +6,15 @@ import axios from "axios"
 import HeadBar from "../components/HeadBar"
 import LobbyCard from "../components/LobbyCard"
 import Footer from "../components/Footer"
-import ProtectedPage from "../components/ProtectedPage"
+import Loading from "../components/Loading"
 
 export default function Lobby() {
   // router 설정
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   // NullData 저장
   const [nullData, setNullData] = useState([])
-
-  // 로그인 되지 않은 사용자 메인 페이지로 이동
-  // function checkUserAuth() {
-  //   if (!session) {
-  //     router.push("/").then((r) => console.log("Redirect to Main Page"))
-  //   }
-  // }
 
   // 사용자 Null 데이터 받아오기
   function getUserNull() {
@@ -51,7 +44,13 @@ export default function Lobby() {
     getUserNull()
   }, [session])
 
-  function LobbyPage() {
+  if (status === "loading") {
+    return <Loading />
+  }
+  if (status === "unauthenticated") {
+    router.push("/signin")
+  }
+  if (status === "authenticated") {
     return (
       <div className={"w-full min-h-screen bg-slate-50"}>
         <HeadBar page={"lobby"} />
@@ -74,5 +73,4 @@ export default function Lobby() {
       </div>
     )
   }
-  return <ProtectedPage page={LobbyPage()} />
 }
