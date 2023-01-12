@@ -7,7 +7,7 @@ export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
   const { data: session } = useSession()
   return (
-    <div className={"py-4 fixed top-0 w-full backdrop-blur-3xl"}>
+    <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>
         <button onClick={() => setMenu(true)}>
           <Bars3Icon className={"w-8 h-8"} />
