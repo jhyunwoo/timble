@@ -29,8 +29,8 @@ export default function LayOut(props) {
   function checkUserNull() {
     if (nullData.length >= 1) {
       router
-        .push("/userinfo")
-        .then((r) => console.log("Redirect to UserInfo Page"))
+        .push("/user/addinfo")
+        .then((r) => console.log("Redirect to addinfo Page"))
     }
   }
 

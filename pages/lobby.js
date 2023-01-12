@@ -12,20 +12,24 @@ export default function Lobby() {
         <LobbyCard
           title={"시간표 구성하기"}
           subtitle={"시간표"}
-          link={"/lobby"}
+          link={"/timetable/generate"}
         />
         <LobbyCard
           title={"친구랑 시간표 맞추기"}
           subtitle={"친구"}
           color={"bg-emerald-500 text-white"}
-          link={"/lobby"}
+          link={"/timetable/matchwithfriend"}
         />
         <LobbyCard
           title={"디플로마 시간표 추천"}
           subtitle={"시간표"}
-          link={"/lobby"}
+          link={"/timetable/advise"}
         />
-        <LobbyCard title={"과목 정보"} subtitle={"시간표"} link={"/lobby"} />
+        <LobbyCard
+          title={"과목 정보"}
+          subtitle={"시간표"}
+          link={"/timetable/class"}
+        />
         <LobbyCard title={"친구 추가"} subtitle={"친구"} link={"/lobby"} />
       </div>
     </LayOut>

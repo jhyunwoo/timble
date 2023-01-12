@@ -9,15 +9,23 @@ export default function Friends() {
           "grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         }
       >
-        <LobbyCard subtitle={"친구"} title={"친구 목록"} link={"/lobby"} />
-        <LobbyCard subtitle={"친구"} title={"친구 추가"} link={"/lobby"} />
+        <LobbyCard
+          subtitle={"친구"}
+          title={"친구 목록"}
+          link={"/friends/list"}
+        />
+        <LobbyCard
+          subtitle={"친구"}
+          title={"친구 추가"}
+          link={"/friends/add"}
+        />
         <LobbyCard
           subtitle={"시간표"}
           title={"친구랑 시간표 맞추기"}
           color={"bg-amber-400 text-white"}
-          link={"/lobby"}
+          link={"/timetable/matchwithfriend"}
         />
-        <LobbyCard subtitle={"친구"} title={"내 정보"} link={"/lobby"} />
+        <LobbyCard subtitle={"친구"} title={"내 정보"} link={"/user/myinfo"} />
       </div>
     </LayOut>
   )

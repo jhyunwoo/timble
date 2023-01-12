@@ -62,7 +62,7 @@ export default function HeadBar(props) {
         <div className=" bg-white flex flex-col p-6 m-4 shadow-xl max-w-md rounded-md">
           <div className="text-xl font-semibold">{session.user.name}님</div>
           <div className="mt-2 flex">
-            <button>내 정보 관리</button>
+            <Link href="/user/myinfo">내 정보 관리</Link>
             <div className="mx-2">|</div>
             <button onClick={() => signOut()}>로그아웃</button>
           </div>
@@ -72,16 +72,38 @@ export default function HeadBar(props) {
             시간표
           </div>
           <div className=" grid grid-cols-1 gap-1">
-            <div className="text-lg font-semibold">내 시간표</div>
-            <div className="text-lg font-semibold">시간표 구성하기</div>
+            <Link
+              className="text-lg font-semibold"
+              href="/timetable/mytimetable"
+            >
+              내 시간표
+            </Link>
+            <Link className="text-lg font-semibold" href="/timetable/generate">
+              시간표 구성하기
+            </Link>
+            <Link
+              className="text-lg font-semibold"
+              href="/timetable/matchwithfriend"
+            >
+              친구랑 시간표 맞추기
+            </Link>
+            <Link className="text-lg font-semibold" href="/timetable/class">
+              과목 정보
+            </Link>
+            <Link className="text-lg font-semibold" href="/timetable/advise">
+              디플로마 시간표 추천
+            </Link>
           </div>
           <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
             친구
           </div>
           <div className=" grid grid-cols-1 gap-1">
-            <div className="text-lg font-semibold">친구 추가</div>
-            <div className="text-lg font-semibold">친구 목록</div>
-            <div className="text-lg font-semibold">친구랑 시간표 맞추기</div>
+            <Link className="text-lg font-semibold" href="/friends/add">
+              친구 추가
+            </Link>
+            <Link className="text-lg font-semibold" href="/friends/list">
+              친구 목록
+            </Link>
           </div>
         </div>
       </div>
