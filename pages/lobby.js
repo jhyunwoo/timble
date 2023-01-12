@@ -1,78 +1,33 @@
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import axios from "axios"
-
-import HeadBar from "../components/HeadBar"
 import LobbyCard from "../components/LobbyCard"
-import Footer from "../components/Footer"
-import Loading from "../components/Loading"
+import LayOut from "../components/LayOut"
 
 export default function Lobby() {
-  // router 설정
-  const router = useRouter()
-  // 사용자 로그인 정보 가져오기
-  const { data: session, status } = useSession()
-  // NullData 저장
-  const [nullData, setNullData] = useState([])
-
-  // 사용자 Null 데이터 받아오기
-  function getUserNull() {
-    if (session) {
-      axios
-        .post("/api/getUserNullData", {
-          userEmail: session.user.email,
-        })
-        .then((response) => setNullData(response.data))
-        .catch((error) => console.log(error))
-    }
-  }
-
-  function checkUserNull() {
-    if (nullData.length >= 1) {
-      router
-        .push("/userinfo")
-        .then((r) => console.log("Redirect to UserInfo Page"))
-    }
-  }
-
-  useEffect(() => {
-    checkUserNull()
-  }, [nullData])
-
-  useEffect(() => {
-    getUserNull()
-  }, [session])
-
-  if (status === "loading") {
-    return <Loading />
-  }
-  if (status === "unauthenticated") {
-    router.push("/signin")
-  }
-  if (status === "authenticated") {
-    return (
-      <div className={"w-full bg-slate-50 pt-20"}>
-        <div className="min-h-screen">
-          <HeadBar page={"lobby"} />
-          <div
-            className={
-              "grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            }
-          >
-            <LobbyCard title={"시간표 구성하기"} subtitle={"시간표"} />
-            <LobbyCard
-              title={"친구랑 시간표 맞추기"}
-              subtitle={"친구"}
-              color={"bg-emerald-500 text-white"}
-            />
-            <LobbyCard title={"디플로마 시간표 추천"} subtitle={"시간표"} />
-            <LobbyCard title={"과목 정보"} subtitle={"시간표"} />
-            <LobbyCard title={"친구 추가"} subtitle={"친구"} />
-          </div>
-        </div>
-        <Footer />
+  return (
+    <LayOut pageLocation="lobby">
+      <div
+        className={
+          "grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        }
+      >
+        <LobbyCard
+          title={"시간표 구성하기"}
+          subtitle={"시간표"}
+          link={"/lobby"}
+        />
+        <LobbyCard
+          title={"친구랑 시간표 맞추기"}
+          subtitle={"친구"}
+          color={"bg-emerald-500 text-white"}
+          link={"/lobby"}
+        />
+        <LobbyCard
+          title={"디플로마 시간표 추천"}
+          subtitle={"시간표"}
+          link={"/lobby"}
+        />
+        <LobbyCard title={"과목 정보"} subtitle={"시간표"} link={"/lobby"} />
+        <LobbyCard title={"친구 추가"} subtitle={"친구"} link={"/lobby"} />
       </div>
-    )
-  }
+    </LayOut>
+  )
 }

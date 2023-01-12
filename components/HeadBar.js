@@ -24,7 +24,7 @@ export default function HeadBar(props) {
               홈
             </button>
           </Link>
-          <Link href={"timetable"}>
+          <Link href={"/timetable"}>
             <button
               className={` text-base p-1 px-3 rounded-full ${
                 props.page === "timetable"
@@ -35,7 +35,7 @@ export default function HeadBar(props) {
               시간표
             </button>
           </Link>
-          <Link href={"friends"}>
+          <Link href={"/friends"}>
             <button
               className={` text-base p-1 px-3 rounded-full ${
                 props.page === "friends"
@@ -59,7 +59,7 @@ export default function HeadBar(props) {
             <XMarkIcon className={"w-8 h-8"} />
           </button>
         </div>
-        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl ">
+        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl max-w-md rounded-md">
           <div className="text-xl font-semibold">{session.user.name}님</div>
           <div className="mt-2 flex">
             <button>내 정보 관리</button>
