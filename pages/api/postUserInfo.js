@@ -54,4 +54,5 @@ export default async function getUserNullData(req, res) {
         "You must be sign in to view the protected content on this page.",
     })
   }
+  res.end()
 }
