@@ -71,7 +71,7 @@ export default function Userinfo() {
 
   // 사용자 데이터 서버에 수정
   function postUserInfo(pageData, userData) {
-    axios.post("api/postUserInfo", {
+    axios.post("/api/postUserInfo", {
       post: pageData,
       userEmail: session.user.email,
       data: userData,
