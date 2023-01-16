@@ -1,11 +1,21 @@
 import axios from "axios"
-import { selector, selectorFamily } from "recoil"
+import { atom, selector } from "recoil"
 
-export const userInfo = selectorFamily({
+export const emailState = atom({
+  key: "emailState",
+  default: "",
+})
+
+export const userState = selector({
   key: "userState",
-  get: (userEmail) => async () => {
-    if (!userEmail) return ""
-    const { data } = await axios.post("/api/getUserInfo")
-    return data
+  get: async ({ get }) => {
+    try {
+      const { data } = await axios.post("/api/getUserInfo", {
+        userEmail: get(emailState),
+      })
+      return data
+    } catch (err) {
+      throw err
+    }
   },
 })

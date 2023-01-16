@@ -3,19 +3,18 @@ import { useState, useEffect } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { signOut, useSession } from "next-auth/react"
 import axios from "axios"
-import { adminState } from "./states"
 import { useRecoilState } from "recoil"
 
 export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
   const { data: session } = useSession()
-  const [admin, setAdmin] = useRecoilState(adminState)
+  const [admin, setAdmin] = useState("")
 
   function isAdmin() {
-    if (admin === "") {
+    if (admin === "" && session) {
       axios
         .post("/api/verifyAdminUser", {
-          userEmail: "jhyunwoo0228@gmail.com",
+          userEmail: session.user.email,
         })
         .then((r) => setAdmin(r.data))
     }

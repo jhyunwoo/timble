@@ -1,6 +1,8 @@
 import "../styles/globals.css"
 import { SessionProvider } from "next-auth/react"
 import { RecoilRoot } from "recoil"
+import React from "react"
+import Loading from "../components/Loading"
 
 export default function App({
   Component,
@@ -9,7 +11,9 @@ export default function App({
   return (
     <RecoilRoot>
       <SessionProvider session={session}>
-        <Component {...pageProps} />
+        <React.Suspense fallback={<Loading />}>
+          <Component {...pageProps} />
+        </React.Suspense>
       </SessionProvider>
     </RecoilRoot>
   )
