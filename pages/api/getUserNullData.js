@@ -21,6 +21,7 @@ export default async function getUserNullData(req, res) {
         }
       })
       nullData = nullData.filter((element) => element !== "emailVerified")
+      nullData = nullData.filter((element) => element !== "admin")
       res.json(nullData)
     }
   } else {

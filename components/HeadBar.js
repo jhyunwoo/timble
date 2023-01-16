@@ -1,11 +1,28 @@
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { signOut, useSession } from "next-auth/react"
+import axios from "axios"
+import { adminState } from "./states"
+import { useRecoilState } from "recoil"
 
 export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
   const { data: session } = useSession()
+  const [admin, setAdmin] = useRecoilState(adminState)
+
+  function isAdmin() {
+    if (admin === "") {
+      axios
+        .post("/api/verifyAdminUser", {
+          userEmail: "jhyunwoo0228@gmail.com",
+        })
+        .then((r) => setAdmin(r.data))
+    }
+  }
+  useEffect(() => {
+    isAdmin()
+  })
   return (
     <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>
@@ -60,7 +77,16 @@ export default function HeadBar(props) {
           </button>
         </div>
         <div className=" bg-white flex flex-col p-6 m-4 shadow-xl max-w-md rounded-md">
-          <div className="text-xl font-semibold">{session.user.name}님</div>
+          <div className="flex items-center">
+            <div className="text-xl font-semibold">{session.user.name}님</div>
+            {admin ? (
+              <div className="mx-2 text-sm rounded-full bg-green-500 p-1 px-2 text-white">
+                <Link href={`/admin/${admin}`}>관리자 페이지</Link>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
           <div className="mt-2 flex">
             <Link href="/user/myinfo">내 정보 관리</Link>
             <div className="mx-2">|</div>

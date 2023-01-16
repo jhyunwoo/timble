@@ -2,7 +2,7 @@ import prisma from "../../lib/prismadb"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
-export default async function verifyAdminUser(req, res) {
+export default async function getUserInfo(req, res) {
   const { userEmail } = req.body
   const session = await unstable_getServerSession(req, res, authOptions)
 
@@ -12,7 +12,7 @@ export default async function verifyAdminUser(req, res) {
         email: userEmail,
       },
     })
-    res.json(userInfo.admin)
+    res.json(userInfo)
   } else {
     res.status(401).json({
       message:
