@@ -6,18 +6,12 @@ import { useRouter } from "next/router"
 import HeadBar from "../components/HeadBar"
 import Footer from "../components/Footer"
 import Loading from "../components/Loading"
-import { useRecoilState } from "recoil"
-import { emailState, userState } from "./states"
 
 export default function LayOut(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
   const { data: session, status } = useSession()
   // NullData 저장
-
-  const [email, setEmail] = useRecoilState(emailState)
-  const [user, setUser] = useRecoilState(userState)
-
   const [nullData, setNullData] = useState()
 
   // 사용자 Null 데이터 받아오기
@@ -48,11 +42,6 @@ export default function LayOut(props) {
 
   useEffect(() => {
     getUserNull()
-    if (session) {
-      setEmail(session.user.email)
-    }
-    console.log(email)
-    console.log(user)
   }, [session])
 
   if (status === "loading") {

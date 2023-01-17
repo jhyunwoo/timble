@@ -75,7 +75,7 @@ export default function HeadBar(props) {
             <XMarkIcon className={"w-8 h-8"} />
           </button>
         </div>
-        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl max-w-md rounded-md">
+        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl rounded-md">
           <div className="flex items-center">
             <div className="text-xl font-semibold">{session.user.name}님</div>
             {admin ? (

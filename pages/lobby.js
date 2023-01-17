@@ -30,7 +30,11 @@ export default function Lobby() {
           subtitle={"시간표"}
           link={"/timetable/class"}
         />
-        <LobbyCard title={"친구 추가"} subtitle={"친구"} link={"/lobby"} />
+        <LobbyCard
+          title={"친구 추가"}
+          subtitle={"친구"}
+          link={"/friends/add"}
+        />
       </div>
     </LayOut>
   )
