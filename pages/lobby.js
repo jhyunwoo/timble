@@ -1,5 +1,8 @@
 import LobbyCard from "../components/LobbyCard"
 import LayOut from "../components/LayOut"
+import { emailState } from "../components/states"
+import { useRecoilValue } from "recoil"
+import { useEffect } from "react"
 
 export default function Lobby() {
   return (

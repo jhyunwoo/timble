@@ -2,7 +2,9 @@ import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
+import { useRecoilState, useRecoilValue } from "recoil"
 
+import { emailState, userState, userNullState, sessionState } from "./states"
 import HeadBar from "../components/HeadBar"
 import Footer from "../components/Footer"
 import Loading from "../components/Loading"
@@ -13,6 +15,11 @@ export default function LayOut(props) {
   const { data: session, status } = useSession()
   // NullData 저장
   const [nullData, setNullData] = useState()
+
+  const [email, setEmail] = useRecoilState(emailState)
+  const [userSession, setUserSession] = useRecoilState(sessionState)
+  const userData = useRecoilValue(userState)
+  const userNull = useRecoilValue(userNullState)
 
   // 사용자 Null 데이터 받아오기
   function getUserNull() {
@@ -42,6 +49,14 @@ export default function LayOut(props) {
 
   useEffect(() => {
     getUserNull()
+    if (session) {
+      setEmail(session.user.email)
+      setUserSession(session)
+      console.log("in layout")
+    }
+    // console.log(userData)
+    console.log(userNull)
+    // console.log(userSession)
   }, [session])
 
   if (status === "loading") {
