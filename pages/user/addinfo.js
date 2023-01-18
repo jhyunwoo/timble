@@ -27,7 +27,7 @@ export default function Userinfo() {
     formState: { errors },
   } = useForm()
   const onSubmit = (data) => {
-    postUserInfo(nullData[page], data.name)
+    postUserInfo(nullData[page], data.naml)
     setPage(page + 1)
   }
 
@@ -83,7 +83,7 @@ export default function Userinfo() {
 
   // nullData에서 다음 클릭시 다음장으로 이동
   function pageControl() {
-    if (nullData[page] === "school") {
+    if (nullData[page] === "schoolId") {
       if (school === "" || school === null || school === undefined) {
         setWarn(true)
       } else {
@@ -116,11 +116,12 @@ export default function Userinfo() {
   useEffect(() => {
     // checkUserAuth()
     getUserNull()
+    console.log(nullData)
   }, [])
 
   return (
     <div className={"bg-slate-50 w-full h-screen flex flex-col"}>
-      {nullData[page] === "school" ? (
+      {nullData[page] === "schoolId" ? (
         <div>
           <div className={"text-2xl text-center p-4 font-semibold pt-8"}>
             학교
@@ -128,9 +129,9 @@ export default function Userinfo() {
           <div className={"grid p-4 grid-cols-1 w-full gap-6"}>
             <button
               className={`${
-                school === "충남삼성고등학교" ? "bg-green-500 text-white" : ""
+                school === "cnsa" ? "bg-green-500 text-white" : ""
               }   p-4 text-xl font-semibold rounded-xl shadow-lg hover:ring-offset-4 hover:bg-green-500 hover:text-white duration-200 transition`}
-              onClick={() => controlSchool("충남삼성고등학교")}
+              onClick={() => controlSchool("cnsa")}
             >
               충남삼성고등학교
             </button>

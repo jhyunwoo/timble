@@ -39,10 +39,13 @@ model User {
   email         String      @unique
   emailVerified DateTime?
   image         String?
-  school        String?
   year          Int?
   diploma       String?
   admin         String?
+  School        school?     @relation(fields: [schoolId], references: [id])
+  schoolId      Int?
+  createdAt     DateTime    @default(now())
+  role          role        @default(USER)
   accounts      Account[]
   sessions      Session[]
   Timetable     Timetable[]
@@ -68,4 +71,40 @@ model Timetable {
   class4 String?
   class5 String?
   class6 String?
+}
+
+model school {
+  id       Int         @id @default(autoincrement())
+  code     String      @unique
+  name     String
+  classes  classinfo[]
+  students User[]
+}
+
+model classinfo {
+  id           Int            @id @default(autoincrement())
+  School       school?        @relation(fields: [schoolId], references: [id])
+  schoolId     Int?
+  title        String
+  diploma      String?
+  open         String[]
+  prerequisite String[]
+  type         String
+  target       String
+  relatedMajor String[]
+  content      classcontent[]
+}
+
+model classcontent {
+  id         String     @id
+  Class      classinfo? @relation(fields: [classId], references: [id])
+  classId    Int?
+  area       String
+  mainTarget String[]
+  detail     String
+}
+
+enum role {
+  USER
+  ADMIN
 }

@@ -7,13 +7,17 @@ export default async function getUserNullData(req, res) {
 
   if (session) {
     const { post, userEmail, data } = req.body
-    if (post === "school") {
-      const postSchool = await prisma.user.update({
+    if (post === "schoolId") {
+      const postSchool = await prisma.school.update({
         where: {
-          email: userEmail,
+          code: data,
         },
         data: {
-          school: data,
+          students: {
+            connect: {
+              email: userEmail,
+            },
+          },
         },
       })
       res.status(200)
