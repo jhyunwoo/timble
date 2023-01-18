@@ -3,51 +3,59 @@ import { useState } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { signOut } from "next-auth/react"
 import useUser from "../lib/client/useUser"
+import { useRouter } from "next/router"
 
-export default function HeadBar(props) {
+export default function AdminHeadBar(props) {
   // 메뉴바 선택 관리 변수
   const [menu, setMenu] = useState(false)
+  const router = useRouter()
   const { user } = useUser()
   const admin = user.admin
 
   return (
-    <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
-      <div className={"flex justify-between px-4 items-center"}>
+    <div className={"py-2 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
+      <div className={"flex justify-between px-2 items-center"}>
         <button onClick={() => setMenu(true)}>
           <Bars3Icon className={"w-8 h-8"} />
         </button>
         <div className={"flex items-center"}>
-          <Link href={"/lobby"}>
+          <Link href={`/admin/${admin}/classes`}>
             <button
               className={` text-base p-1 px-3 rounded-full ${
-                props.page === "lobby"
+                router.asPath
+                  .replace(`/admin/${admin}/`, "")
+                  .includes("classes")
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
               }`}
             >
-              홈
+              수업 정보
             </button>
           </Link>
-          <Link href={"/timetable"}>
+          <Link href={`/admin/${admin}/students`}>
             <button
               className={` text-base p-1 px-3 rounded-full ${
-                props.page === "timetable"
+                router.asPath
+                  .replace(`/admin/${admin}/`, "")
+                  .includes("students")
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
               }`}
             >
-              시간표
+              학생 관리
             </button>
           </Link>
-          <Link href={"/friends"}>
+          <Link href={`/admin/${admin}/timetable`}>
             <button
               className={` text-base p-1 px-3 rounded-full ${
-                props.page === "friends"
+                router.asPath
+                  .replace(`/admin/${admin}/`, "")
+                  .includes("timetable")
                   ? "font-semibold bg-slate-900 text-white"
                   : ""
               }`}
             >
-              친구
+              시간표 추천
             </button>
           </Link>
         </div>
@@ -58,7 +66,7 @@ export default function HeadBar(props) {
           menu ? "translate-x-0" : ""
         }`}
       >
-        <div className={" flex justify-between items-center p-4"}>
+        <div className={" flex justify-between items-center p-2"}>
           <button onClick={() => setMenu(false)}>
             <XMarkIcon className={"w-8 h-8"} />
           </button>
@@ -80,45 +88,7 @@ export default function HeadBar(props) {
             <button onClick={() => signOut()}>로그아웃</button>
           </div>
         </div>
-        <div className="p-4">
-          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
-            시간표
-          </div>
-          <div className=" grid grid-cols-1 gap-1">
-            <Link
-              className="text-lg font-semibold"
-              href="/timetable/mytimetable"
-            >
-              내 시간표
-            </Link>
-            <Link className="text-lg font-semibold" href="/timetable/generate">
-              시간표 구성하기
-            </Link>
-            <Link
-              className="text-lg font-semibold"
-              href="/timetable/matchwithfriend"
-            >
-              친구랑 시간표 맞추기
-            </Link>
-            <Link className="text-lg font-semibold" href="/timetable/class">
-              과목 정보
-            </Link>
-            <Link className="text-lg font-semibold" href="/timetable/advise">
-              디플로마 시간표 추천
-            </Link>
-          </div>
-          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
-            친구
-          </div>
-          <div className=" grid grid-cols-1 gap-1">
-            <Link className="text-lg font-semibold" href="/friends/add">
-              친구 추가
-            </Link>
-            <Link className="text-lg font-semibold" href="/friends/list">
-              친구 목록
-            </Link>
-          </div>
-        </div>
+        <div className="p-4"></div>
       </div>
     </div>
   )
