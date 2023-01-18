@@ -1,15 +1,25 @@
 import prisma from "../../lib/prismadb"
-import { authOptions } from "../api/auth/[...nextauth]"
+import { authOptions } from "./auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function getUserInfo(req, res) {
-  const { userEmail } = req.body
+  const query = req.query
+  const { userEmail } = query
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
     const userInfo = await prisma.user.findUnique({
       where: {
         email: userEmail,
+      },
+      select: {
+        name: true,
+        email: true,
+        year: true,
+        diploma: true,
+        schoolId: true,
+        role: true,
+        admin: true,
       },
     })
     res.json(userInfo)

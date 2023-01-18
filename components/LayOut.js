@@ -1,54 +1,39 @@
 import { useSession } from "next-auth/react"
-import { useState, useEffect } from "react"
-import axios from "axios"
+import { useEffect } from "react"
 import { useRouter } from "next/router"
-import { useRecoilState, useRecoilValue } from "recoil"
 
-import {
-  emailSelector,
-  sessionState,
-  userInfoSelector,
-  userNullSelector,
-} from "./states"
-import HeadBar from "../components/HeadBar"
-import Footer from "../components/Footer"
-import Loading from "../components/Loading"
+import HeadBar from "./HeadBar"
+import Footer from "./Footer"
+import Loading from "./Loading"
+import Error from "./Error"
+
+import useUser from "../lib/client/useUser"
 
 export default function LayOut(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
-  const { data: session, status } = useSession()
-
-  const [userSession, setUserSession] = useRecoilState(sessionState)
-  const userNullData = useRecoilValue(userNullSelector)
+  const { status } = useSession()
+  const { isLoading, isError, nullData } = useUser()
 
   function checkUserNull() {
-    if (userNullData) {
-      if (userNullData.length >= 1) {
-        router
-          .push("/user/addinfo")
-          .then((r) => console.log("Redirect to addinfo Page"))
+    if (nullData) {
+      if (nullData.length >= 1) {
+        router.push("/user/addinfo").then()
       }
     }
   }
 
   useEffect(() => {
     checkUserNull()
-  }, [userNullData])
+  }, [nullData])
 
-  useEffect(() => {
-    if (session) {
-      setUserSession(session)
-    }
-  }, [session])
-
-  if (status === "loading") {
+  if (status === "loading" || isLoading) {
     return <Loading />
-  }
-  if (status === "unauthenticated") {
+  } else if (isError) {
+    return <Error />
+  } else if (status === "unauthenticated") {
     router.push("/signin")
-  }
-  if (status === "authenticated") {
+  } else if (status === "authenticated") {
     return (
       <div className="pt-20 bg-slate-50">
         <div className="min-h-screen">

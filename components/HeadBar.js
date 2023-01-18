@@ -1,15 +1,15 @@
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { signOut, useSession } from "next-auth/react"
-import axios from "axios"
-import { useRecoilValue } from "recoil"
-import { adminSelector } from "./states"
+import useUser from "../lib/client/useUser"
 
 export default function HeadBar(props) {
+  // 메뉴바 선택 관리 변수
   const [menu, setMenu] = useState(false)
-  const { data: session } = useSession()
-  const admin = useRecoilValue(adminSelector)
+  const { user } = useUser()
+  const admin = user.admin
+
   return (
     <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>
@@ -65,7 +65,7 @@ export default function HeadBar(props) {
         </div>
         <div className=" bg-white flex flex-col p-6 m-4 shadow-xl rounded-md">
           <div className="flex items-center">
-            <div className="text-xl font-semibold">{session.user.name}님</div>
+            <div className="text-xl font-semibold">{user.name}님</div>
             {admin ? (
               <div className="mx-2 text-sm rounded-full bg-green-500 p-1 px-2 text-white">
                 <Link href={`/admin/${admin}`}>관리자 페이지</Link>

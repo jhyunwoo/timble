@@ -14,7 +14,7 @@ export default function App({
       <SessionProvider session={session}>
         <React.Suspense fallback={<Loading />}>
           <Component {...pageProps} />
-          <Analytics />
+          {/* <Analytics /> */}
         </React.Suspense>
       </SessionProvider>
     </RecoilRoot>
