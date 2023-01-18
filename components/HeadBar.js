@@ -3,25 +3,14 @@ import { useState, useEffect } from "react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { signOut, useSession } from "next-auth/react"
 import axios from "axios"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { adminSelector } from "./states"
 
 export default function HeadBar(props) {
   const [menu, setMenu] = useState(false)
   const { data: session } = useSession()
-  const [admin, setAdmin] = useState("")
-
-  function isAdmin() {
-    if (admin === "" && session) {
-      axios
-        .post("/api/verifyAdminUser", {
-          userEmail: session.user.email,
-        })
-        .then((r) => setAdmin(r.data))
-    }
-  }
-  useEffect(() => {
-    isAdmin()
-  })
+  const admin = useRecoilValue(adminSelector)
+  useEffect(() => console.log(admin), [])
   return (
     <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
       <div className={"flex justify-between px-4 items-center"}>

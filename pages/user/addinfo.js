@@ -3,7 +3,8 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import axios from "axios"
-
+import { userNullSelector } from "../../components/states"
+import { useRecoilRefresher_UNSTABLE } from "recoil"
 export default function Userinfo() {
   // router 설정
   const router = useRouter()
@@ -16,6 +17,8 @@ export default function Userinfo() {
   const [diploma, setDiploma] = useState("")
   const [year, setYear] = useState(0)
   const [warn, setWarn] = useState(false)
+
+  const refresh = useRecoilRefresher_UNSTABLE(userNullSelector)
 
   // react hook form 설정
   const {
@@ -105,6 +108,7 @@ export default function Userinfo() {
         setWarn(false)
       }
     } else {
+      refresh()
       router.push("/lobby")
     }
   }

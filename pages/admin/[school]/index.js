@@ -27,7 +27,7 @@ export default function SchoolAdminPage() {
   } else if (status === "unauthenticated") {
     router.push("/signin")
   } else if (status === "authenticated") {
-    if (admin !== "") {
+    if (admin) {
       return (
         <div>
           <div>학교 관리자 페이지</div>

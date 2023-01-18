@@ -1,23 +1,51 @@
 import { atom, selector } from "recoil"
 import axios from "axios"
 
-export const emailState = atom({
-  key: "emailState",
-  default: "",
-})
-
 export const sessionState = atom({
   key: "sessionState",
-  default: {},
+  default: null,
 })
 
-export const userState = selector({
-  key: "userState",
+export const userSelector = selector({
+  key: "userSelector",
   get: ({ get }) => {
-    if (get(emailState) !== "") {
+    if (get(sessionState)) {
+      const data = get(sessionState)
+      const user = data.user
+      return user
+    }
+  },
+})
+
+export const emailSelector = selector({
+  key: "emailSelector",
+  get: ({ get }) => {
+    if (get(userSelector)) {
+      const userData = get(userSelector)
+      const email = userData.email
+      return email
+    }
+  },
+})
+
+export const adminSelector = selector({
+  key: "adminSelector",
+  get: ({ get }) => {
+    if (get(userInfoSelector)) {
+      const userData = get(userInfoSelector)
+      const admin = userData.admin
+      return admin
+    }
+  },
+})
+
+export const userInfoSelector = selector({
+  key: "userInfoSelector",
+  get: ({ get }) => {
+    if (get(emailSelector) && get(sessionState)) {
       const userData = axios
         .post("/api/getUserInfo", {
-          userEmail: get(emailState),
+          userEmail: get(emailSelector),
         })
         .then((response) => {
           return response.data
@@ -26,15 +54,14 @@ export const userState = selector({
 
       return userData
     }
-    return
   },
 })
 
-export const userNullState = selector({
-  key: "userNullState",
+export const userNullSelector = selector({
+  key: "userNullSelector",
   get: ({ get }) => {
-    if (get(userState) && get(sessionState)) {
-      const userInfo = get(userState)
+    if (get(userSelector)) {
+      const userInfo = get(userInfoSelector)
       const keys = Object.keys(userInfo)
       let nullData = []
       keys.map((key) => {
@@ -42,29 +69,9 @@ export const userNullState = selector({
           nullData.push(key)
         }
       })
-      // nullData = nullData.filter((element) => element !== "emailVerified")
-      // nullData = nullData.filter((element) => element !== "admin")
+      nullData = nullData.filter((element) => element !== "emailVerified")
+      nullData = nullData.filter((element) => element !== "admin")
       return nullData
     }
-    // if (get(sessionState)) {
-    //   const user = get(sessionState).user
-    //   const userInfo = user[0]
-    //   const keys = Object.keys(userInfo)
-    //   let nullData = []
-    //   keys.map((key) => {
-    //     if (!userInfo[key]) {
-    //       nullData.push(key)
-    //     }
-    //   })
-    //   // nullData = nullData.filter((element) => element !== "emailVerified")
-    //   // nullData = nullData.filter((element) => element !== "admin")
-    //   return nullData
-    // }
-    // if (get(sessionState)) {
-    //   const userData = get(sessionState)
-    //   const user = userData.user
-
-    //   return user
-    // }
   },
 })
