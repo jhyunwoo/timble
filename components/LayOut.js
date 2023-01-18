@@ -8,34 +8,25 @@ import Loading from "./Loading"
 import Error from "./Error"
 
 import useUser from "../lib/client/useUser"
+import useCheckUserNull from "../lib/client/useCheckUserNull"
 
 export default function LayOut(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
-  const { isLoading, isError, nullData } = useUser()
+  const { isLoadingUser, isErrorUser, nullData } = useUser()
 
-  function checkUserNull() {
-    if (nullData) {
-      if (nullData.length >= 1) {
-        router.push("/user/addinfo").then()
-      }
-    }
-  }
+  useCheckUserNull(nullData)
 
-  useEffect(() => {
-    checkUserNull()
-  }, [nullData])
-
-  if (status === "loading" || isLoading) {
+  if (status === "loading" || isLoadingUser) {
     return <Loading />
-  } else if (isError) {
+  } else if (isErrorUser) {
     return <Error />
   } else if (status === "unauthenticated") {
     router.push("/signin")
   } else if (status === "authenticated") {
     return (
-      <div className="pt-20 bg-slate-50">
+      <div className="bg-slate-50 pt-20">
         <div className="min-h-screen">
           <HeadBar page={props.pageLocation} />
           {props.children}

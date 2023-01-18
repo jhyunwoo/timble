@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react"
-import { useEffect } from "react"
 import { useRouter } from "next/router"
 
 import Loading from "./Loading"
@@ -8,38 +7,38 @@ import Footer from "./Footer"
 
 import useUser from "../lib/client/useUser"
 import AdminHeadBar from "./AdminHeadBar"
+import useSchool from "../lib/client/useSchool"
+import useCheckUserNull from "../lib/client/useCheckUserNull"
+import AccessDenied from "./AccessDenied"
 
 export default function ProtectedPage(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
-  const { isLoading, isError, nullData } = useUser()
+  const { user, isLoadingUser, isErrorUser, nullData } = useUser()
+  const { isLoadingSchool, isErrorSchool } = useSchool()
 
-  function checkUserNull() {
-    if (nullData) {
-      if (nullData.length >= 1) {
-        router.push("/user/addinfo").then()
-      }
-    }
-  }
+  useCheckUserNull(nullData)
 
-  useEffect(() => {
-    checkUserNull()
-  }, [nullData])
-
-  if (status === "loading" || isLoading) {
+  if (status === "loading" || isLoadingUser || isLoadingSchool) {
     return <Loading />
-  } else if (isError) {
+  } else if (isErrorUser || isErrorSchool) {
     return <Error />
   } else if (status === "unauthenticated") {
     router.push("/signin")
   } else if (status === "authenticated") {
-    return (
-      <div className="pt-10">
-        <AdminHeadBar />
-        {props.children}
-        <Footer />
-      </div>
-    )
+    if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
+      return <AccessDenied />
+    } else {
+      return (
+        <div className="bg-slate-50 pt-14">
+          <AdminHeadBar />
+          <div className="min-h-screen w-full">{props.children}</div>
+          <Footer />
+        </div>
+      )
+    }
+  } else {
+    return <AccessDenied />
   }
 }

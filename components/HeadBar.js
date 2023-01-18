@@ -11,17 +11,17 @@ export default function HeadBar(props) {
   const admin = user.admin
 
   return (
-    <div className={"py-4 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
-      <div className={"flex justify-between px-4 items-center"}>
+    <div className={"fixed top-0 w-full bg-white/50 py-4 backdrop-blur-3xl"}>
+      <div className={"flex items-center justify-between px-4"}>
         <button onClick={() => setMenu(true)}>
-          <Bars3Icon className={"w-8 h-8"} />
+          <Bars3Icon className={"h-8 w-8"} />
         </button>
         <div className={"flex items-center"}>
           <Link href={"/lobby"}>
             <button
-              className={` text-base p-1 px-3 rounded-full ${
+              className={` rounded-full p-1 px-3 text-base ${
                 props.page === "lobby"
-                  ? "font-semibold bg-slate-900 text-white"
+                  ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
@@ -30,9 +30,9 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"/timetable"}>
             <button
-              className={` text-base p-1 px-3 rounded-full ${
+              className={` rounded-full p-1 px-3 text-base ${
                 props.page === "timetable"
-                  ? "font-semibold bg-slate-900 text-white"
+                  ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
@@ -41,9 +41,9 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"/friends"}>
             <button
-              className={` text-base p-1 px-3 rounded-full ${
+              className={` rounded-full p-1 px-3 text-base ${
                 props.page === "friends"
-                  ? "font-semibold bg-slate-900 text-white"
+                  ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
@@ -54,20 +54,20 @@ export default function HeadBar(props) {
       </div>
 
       <div
-        className={`bg-slate-50 w-screen min-h-screen z-40 absolute top-0 -translate-x-full transition flex flex-col ${
+        className={`absolute top-0 z-40 flex min-h-screen w-screen -translate-x-full flex-col bg-slate-50 transition ${
           menu ? "translate-x-0" : ""
         }`}
       >
-        <div className={" flex justify-between items-center p-4"}>
+        <div className={" flex items-center justify-between p-4"}>
           <button onClick={() => setMenu(false)}>
-            <XMarkIcon className={"w-8 h-8"} />
+            <XMarkIcon className={"h-8 w-8"} />
           </button>
         </div>
-        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl rounded-md">
+        <div className=" m-4 flex flex-col rounded-lg bg-white p-6 shadow-xl">
           <div className="flex items-center">
             <div className="text-xl font-semibold">{user.name}님</div>
             {admin && user.role === "ADMIN" ? (
-              <div className="mx-2 text-sm rounded-full bg-green-500 p-1 px-2 text-white">
+              <div className="mx-2 rounded-full bg-green-500 p-1 px-2 text-sm text-white">
                 <Link href={`/admin/${admin}`}>관리자 페이지</Link>
               </div>
             ) : (
@@ -81,7 +81,7 @@ export default function HeadBar(props) {
           </div>
         </div>
         <div className="p-4">
-          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">
             시간표
           </div>
           <div className=" grid grid-cols-1 gap-1">
@@ -107,7 +107,7 @@ export default function HeadBar(props) {
               디플로마 시간표 추천
             </Link>
           </div>
-          <div className="text-sm font-medium my-2 border-b-2 border-slate-300 text-slate-400">
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">
             친구
           </div>
           <div className=" grid grid-cols-1 gap-1">

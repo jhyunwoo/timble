@@ -2,11 +2,11 @@ import Link from "next/link"
 
 export default function Error404() {
   return (
-    <div className="flex justify-center items-center min-h-screen w-full">
-      <div className="flex flex-col justify-center items-center">
+    <div className="flex min-h-screen w-full items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <div className="text-2xl font-semibold">🚨 Error (404) 🚨</div>
         <Link href={"/"}>
-          <div className="m-4 p-2 px-8 bg-green-500 rounded-xl text-white text-lg transition duration-200 hover:bg-green-400">
+          <div className="m-4 rounded-xl bg-green-500 p-2 px-8 text-lg text-white transition duration-200 hover:bg-green-400">
             홈 페이지
           </div>
         </Link>

@@ -13,19 +13,30 @@ export default function AdminHeadBar(props) {
   const admin = user.admin
 
   return (
-    <div className={"py-2 fixed top-0 w-full bg-white/50 backdrop-blur-3xl"}>
-      <div className={"flex justify-between px-2 items-center"}>
+    <div className={"fixed top-0 w-full bg-white/50 py-2 backdrop-blur-3xl"}>
+      <div className={"flex items-center justify-between px-2"}>
         <button onClick={() => setMenu(true)}>
-          <Bars3Icon className={"w-8 h-8"} />
+          <Bars3Icon className={"h-8 w-8"} />
         </button>
         <div className={"flex items-center"}>
+          <Link href={`/admin/${admin}`}>
+            <button
+              className={` rounded-full p-1 px-3 text-base ${
+                router.asPath === `/admin/${admin}`
+                  ? "bg-slate-900 font-semibold text-white"
+                  : ""
+              }`}
+            >
+              홈
+            </button>
+          </Link>
           <Link href={`/admin/${admin}/classes`}>
             <button
-              className={` text-base p-1 px-3 rounded-full ${
+              className={` rounded-full p-1 px-3 text-base ${
                 router.asPath
                   .replace(`/admin/${admin}/`, "")
                   .includes("classes")
-                  ? "font-semibold bg-slate-900 text-white"
+                  ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
@@ -34,48 +45,35 @@ export default function AdminHeadBar(props) {
           </Link>
           <Link href={`/admin/${admin}/students`}>
             <button
-              className={` text-base p-1 px-3 rounded-full ${
+              className={` rounded-full p-1 px-3 text-base ${
                 router.asPath
                   .replace(`/admin/${admin}/`, "")
                   .includes("students")
-                  ? "font-semibold bg-slate-900 text-white"
+                  ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
               학생 관리
             </button>
           </Link>
-          <Link href={`/admin/${admin}/timetable`}>
-            <button
-              className={` text-base p-1 px-3 rounded-full ${
-                router.asPath
-                  .replace(`/admin/${admin}/`, "")
-                  .includes("timetable")
-                  ? "font-semibold bg-slate-900 text-white"
-                  : ""
-              }`}
-            >
-              시간표 추천
-            </button>
-          </Link>
         </div>
       </div>
 
       <div
-        className={`bg-slate-50 w-screen min-h-screen z-40 absolute top-0 -translate-x-full transition flex flex-col ${
+        className={`absolute top-0 z-40 flex min-h-screen w-screen -translate-x-full flex-col bg-slate-50 transition ${
           menu ? "translate-x-0" : ""
         }`}
       >
-        <div className={" flex justify-between items-center p-2"}>
+        <div className={" flex items-center justify-between p-2"}>
           <button onClick={() => setMenu(false)}>
-            <XMarkIcon className={"w-8 h-8"} />
+            <XMarkIcon className={"h-8 w-8"} />
           </button>
         </div>
-        <div className=" bg-white flex flex-col p-6 m-4 shadow-xl rounded-md">
+        <div className=" m-4 flex flex-col rounded-lg bg-white p-6 shadow-xl">
           <div className="flex items-center">
             <div className="text-xl font-semibold">{user.name}님</div>
             {admin && user.role === "ADMIN" ? (
-              <div className="mx-2 text-sm rounded-full bg-green-500 p-1 px-2 text-white">
+              <div className="mx-2 rounded-full bg-green-500 p-1 px-2 text-sm text-white">
                 <Link href={`/admin/${admin}`}>관리자 페이지</Link>
               </div>
             ) : (

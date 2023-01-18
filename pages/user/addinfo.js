@@ -22,7 +22,7 @@ export default function Userinfo() {
   const [warn, setWarn] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { nullData, isLoading } = useUser()
+  const { nullData, isLoadingUser } = useUser()
 
   // react hook form 설정
   const {
@@ -111,7 +111,7 @@ export default function Userinfo() {
     }
   }, [router, nullData])
 
-  if (isLoading || loading || !nullData[0]) {
+  if (isLoadingUser || loading || !nullData[0]) {
     return <Loading />
   } else {
     return (

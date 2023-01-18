@@ -18,17 +18,17 @@ export default function Signin() {
   })
 
   return (
-    <div className={"w-full h-screen flex flex-col"}>
+    <div className={"flex h-screen w-full flex-col"}>
       <div className={"m-auto w-full"}>
         <div className={"text-center text-4xl font-bold"}>로그인</div>
         <div
           className={
-            "flex flex-col m-4 bg-white shadow-2xl p-4 rounded-2xl w-5/6  sm:w-96 mx-auto justify-center items-center"
+            "m-4 mx-auto flex w-5/6 flex-col items-center justify-center rounded-2xl  bg-white p-4 shadow-2xl sm:w-96"
           }
         >
           <button
             className={
-              "grid grid-cols-6 shadow-md hover:shadow-2xl transition duration-300 items-center bg-white rounded-lg w-4/5 m-2 "
+              "m-2 grid w-4/5 grid-cols-6 items-center rounded-lg bg-white shadow-md transition duration-300 hover:shadow-2xl "
             }
             onClick={() => signIn("google")}
           >
@@ -39,7 +39,7 @@ export default function Signin() {
             />
             <p
               className={
-                " text-lg sm:text-xl text-slate-800 font-semibold basis-10/12 text-center col-span-5"
+                " col-span-5 basis-10/12 text-center text-lg font-semibold text-slate-800 sm:text-xl"
               }
             >
               Google로 로그인
@@ -47,7 +47,7 @@ export default function Signin() {
           </button>
           <button
             className={
-              "grid grid-cols-6 shadow-md hover:shadow-2xl transition duration-300 items-center bg-black rounded-lg w-4/5 m-2 "
+              "m-2 grid w-4/5 grid-cols-6 items-center rounded-lg bg-black shadow-md transition duration-300 hover:shadow-2xl "
             }
             onClick={() => signIn("apple")}
           >
@@ -58,7 +58,7 @@ export default function Signin() {
             />
             <p
               className={
-                " text-lg sm:text-xl text-white font-semibold basis-10/12 text-center col-span-5"
+                " col-span-5 basis-10/12 text-center text-lg font-semibold text-white sm:text-xl"
               }
             >
               Apple로 로그인
@@ -66,7 +66,7 @@ export default function Signin() {
           </button>
           <button
             className={
-              "grid grid-cols-6 shadow-md hover:shadow-2xl transition duration-300 items-center bg-[#03c75a] rounded-lg w-4/5 m-2 "
+              "m-2 grid w-4/5 grid-cols-6 items-center rounded-lg bg-[#03c75a] shadow-md transition duration-300 hover:shadow-2xl "
             }
             onClick={() => signIn("naver")}
           >
@@ -77,7 +77,7 @@ export default function Signin() {
             />
             <p
               className={
-                " text-lg sm:text-xl text-white font-semibold basis-10/12 text-center col-span-5"
+                " col-span-5 basis-10/12 text-center text-lg font-semibold text-white sm:text-xl"
               }
             >
               네이버로 로그인

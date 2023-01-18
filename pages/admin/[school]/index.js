@@ -1,32 +1,21 @@
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
+
 import useUser from "../../../lib/client/useUser"
-import AccessDenied from "../../../components/AccessDenied"
+import useSchool from "../../../lib/client/useSchool"
+
 import ProtectedPage from "../../../components/ProtectedPage"
-import Loading from "../../../components/Loading"
 
 export default function SchoolAdminPage() {
   const { status } = useSession()
   const router = useRouter()
   const { user } = useUser()
-
-  if (user) {
-    if (status === "authenticated" && user.role === "ADMIN") {
-      if (user.admin === router.asPath.replace("/admin/", "")) {
-        return (
-          <ProtectedPage>
-            <div className="w-full min-h-screen bg-slate-50 flex justify-center items-center">
-              <div>학교 관리자 페이지</div>
-            </div>
-          </ProtectedPage>
-        )
-      } else {
-        return <AccessDenied />
-      }
-    } else {
-      return <AccessDenied />
-    }
-  } else {
-    return <Loading />
-  }
+  const { students } = useSchool()
+  return (
+    <ProtectedPage>
+      <div className="grid grid-cols-1 gap-4 p-4">
+        <div className="rounded-xl bg-white p-4 shadow-lg">관리자 페이지</div>
+      </div>
+    </ProtectedPage>
+  )
 }
