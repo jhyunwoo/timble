@@ -39,11 +39,11 @@ model User {
   email         String      @unique
   emailVerified DateTime?
   image         String?
+  School        school?     @relation(fields: [schoolId], references: [id])
+  schoolId      Int?
   year          Int?
   diploma       String?
   admin         String?
-  School        school?     @relation(fields: [schoolId], references: [id])
-  schoolId      Int?
   createdAt     DateTime    @default(now())
   role          role        @default(USER)
   accounts      Account[]

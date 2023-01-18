@@ -3,8 +3,7 @@ import { authOptions } from "./auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function getUserInfo(req, res) {
-  const query = req.query
-  const { userEmail } = query
+  const { userEmail } = req.body
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
@@ -15,9 +14,9 @@ export default async function getUserInfo(req, res) {
       select: {
         name: true,
         email: true,
+        schoolId: true,
         year: true,
         diploma: true,
-        schoolId: true,
         role: true,
         admin: true,
       },

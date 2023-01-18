@@ -74,7 +74,7 @@ export default function Userinfo() {
       data: userData,
     })
     setLoading(false)
-    mutate("/api/getUserInfo?userEmail=" + session.user.email)
+    mutate(["/api/getUserInfo", session.user.email])
   }
 
   // nullData에서 다음 클릭시 다음장으로 이동
