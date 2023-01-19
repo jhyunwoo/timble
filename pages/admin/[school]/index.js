@@ -14,20 +14,20 @@ export default function SchoolAdminPage() {
   const router = useRouter()
   const { user } = useUser()
   const { students, school, color, subjects, diplomas } = useSchool()
-  const [schoolColor, setSchoolColor] = useState("#ffffff")
-  useEffect(() => {
-    setSchoolColor(color)
-  }, [color])
+
   return (
     <ProtectedPage>
       <div className="sm:grid-cols-24 grid grid-cols-2 gap-4 p-4 lg:grid-cols-6 xl:grid-cols-8">
         <div
-          className={`col-span-2 bg-[${schoolColor}] shadow-lg transition duration-200 hover:shadow-xl ${
-            schoolColor === "#ffffff" ? "text-black" : `text-white`
-          } flex flex-col rounded-xl p-4`}
+          className={`col-span-2 text-[${
+            color ? color : "#333333"
+          }] flex flex-col rounded-xl p-4  shadow-lg transition duration-200 hover:shadow-xl`}
           onClick={() => console.log(color)}
         >
-          <div className="mx-4 text-center text-2xl font-bold">{school}</div>
+          <div className="mx-4 text-center text-2xl font-bold">
+            {school}
+            {color}
+          </div>
         </div>
 
         <DataCard
