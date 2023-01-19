@@ -18,10 +18,10 @@ export default function SchoolAdminPage() {
     <ProtectedPage>
       <div className="sm:grid-cols-24 grid grid-cols-2 gap-4 p-4 lg:grid-cols-6 xl:grid-cols-8">
         <div
-          className={`col-span-2 rounded-lg bg-blue-500 p-4 text-white shadow-lg transition duration-200 hover:shadow-xl`}
+          className={`col-span-2 flex items-center justify-center rounded-lg bg-blue-500 p-4 text-white shadow-lg transition duration-200 hover:shadow-xl`}
           onClick={() => console.log(color)}
         >
-          <div className="mx-4 text-center text-2xl font-bold">{school}</div>
+          <div className="mx-4 text-2xl font-bold">{school}</div>
         </div>
 
         <DataCard
