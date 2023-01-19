@@ -18,9 +18,17 @@ export default async function getSchool(req, res) {
         color: true,
         subjects: true,
         diplomas: true,
-        students: true,
       },
     })
+    const schoolStudents = await prisma.user.findMany({
+      where: {
+        schoolId: schoolId,
+      },
+      include: {
+        diploma: true,
+      },
+    })
+    schoolInfo.students = schoolStudents
     res.json(schoolInfo)
   } else {
     res.status(401).json({

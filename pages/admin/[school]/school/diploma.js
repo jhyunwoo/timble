@@ -5,6 +5,7 @@ import {
   SquaresPlusIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline"
+import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -12,118 +13,205 @@ import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
 
 export default function AdminDiploma() {
-  const [pop, setPop] = useState(false)
+  const [pop, setPop] = useState()
   const [diplomaId, setDiplomaId] = useState(0)
-  const { diplomas } = useSchool()
+  const { diplomas, id } = useSchool()
   const { user } = useUser()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm()
-
-  const onSubmit = (data) => {
-    postDiploma("adminDiplomaUpdate", diplomas[diplomaId].id, {
-      diplomaName: data.diplomaName,
-      diplomaDescription: data.diplomaDescription,
-    })
-    setPop(false)
-    mutate(["/api/getSchool", user ? user.schoolId : null])
-  }
-
-  async function postDiploma(postData, idData, data) {
-    await axios.post("/api/adminPost", {
-      post: postData,
-      dataId: idData,
-      data: data,
-    })
+  async function updateData() {
+    await mutate(["/api/getSchool", user ? user.schoolId : null])
   }
 
   useEffect(() => {
-    if (diplomas) {
-      reset({
-        diplomaName: diplomas[diplomaId].name,
-        diplomaDescription: diplomas[diplomaId].description,
-      })
-    }
-  }, [diplomas, diplomaId])
-
-  useEffect(() => {
-    mutate(["/api/getSchool", user ? user.schoolId : null])
+    updateData()
   }, [pop])
 
   return (
     <ProtectedPage>
-      {pop ? <PopUp /> : ""}
-      <div className="flex h-full w-full justify-center p-2">
-        <div className="w-full rounded-lg shadow-lg">
-          <table className="w-full table-fixed rounded-lg bg-slate-50">
-            <thead className="">
-              <tr className=" ">
-                <th className="w-1/5 rounded-tl-lg border-r-2 border-slate-200 bg-slate-200">
-                  디플로마
-                </th>
-                <th className="w-3/5 border-x-2 border-slate-200 bg-slate-200">
-                  설명
-                </th>
-                <th className="w-1/5 rounded-tr-lg border-l-2 border-slate-200 bg-slate-200">
-                  수정
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {diplomas
-                ? diplomas.map((data, key) => (
-                    <tr
-                      key={key}
-                      className={`${key % 2 === 1 ? "bg-slate-100" : ""}`}
-                    >
-                      <td className="border-r-2 border-slate-200 text-center">
-                        {data.name}
-                      </td>
-                      <td className="border-x-2 border-slate-200 pl-2">
-                        {data.description}
-                      </td>
-                      <td className="border-l-2 border-slate-200">
-                        <button
-                          className="flex h-full w-full items-center justify-center"
-                          onClick={() => {
-                            setPop("edit")
-                            setDiplomaId(key)
-                          }}
-                        >
-                          <PencilSquareIcon className="mx-auto h-full max-h-6 rounded-md p-[2px] text-slate-900 transition duration-150 hover:bg-slate-400/50 " />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                : ""}
-            </tbody>
-          </table>
-          <div className="flex w-full justify-center p-2">
+      {pop === "edit" ? <EditPopUp /> : ""}
+      {pop === "add" ? <AddPopUp /> : ""}
+      <div className="flex h-full w-full flex-col items-center">
+        <div className="w-full px-6 text-left text-2xl font-semibold">
+          디플로마
+        </div>
+        {diplomas ? (
+          <div className="grid grid-cols-1 gap-4 p-4">
+            {diplomas.map((data, key) => (
+              <div
+                key={key}
+                className="grid w-full grid-cols-8 rounded-lg bg-white shadow-lg transition duration-200 hover:shadow-xl"
+              >
+                <div className="col-span-7  py-4 pl-4 pr-2">
+                  <div className="text-lg font-bold">{data.name}</div>
+                  <div className="mt-2 text-base">{data.description}</div>
+                </div>
+                <div className="col-span-1 flex items-center justify-center ">
+                  <button
+                    onClick={() => {
+                      setPop("edit")
+                      setDiplomaId(key)
+                    }}
+                    className="h-8 w-8 rounded-md bg-slate-100 p-1 transition duration-150 hover:bg-slate-200"
+                  >
+                    <PencilSquareIcon className="h-full w-full" />
+                  </button>
+                </div>
+              </div>
+            ))}
             <button
               onClick={() => setPop("add")}
-              className="rounded-md bg-slate-100 p-1 transition duration-150 hover:bg-slate-800 hover:text-white"
+              className="flex w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-center shadow-lg transition duration-200 hover:bg-slate-700 hover:text-white hover:shadow-xl"
             >
-              <SquaresPlusIcon className="h-6 w-6" />
+              <SquaresPlusIcon className="h-8 w-8" />
             </button>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
     </ProtectedPage>
   )
 
-  function PopUp() {
+  function EditPopUp() {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm()
+
+    const onSubmit = (data) => {
+      postDiploma("adminDiplomaUpdate", diplomas[diplomaId].id, {
+        diplomaName: data.diplomaName,
+        diplomaDescription: data.diplomaDescription,
+      })
+      setPop(false)
+      updateData()
+    }
+
+    async function postDiploma(postData, idData, data) {
+      await axios.post("/api/adminPost", {
+        post: postData,
+        dataId: idData,
+        data: data,
+      })
+    }
+
+    useEffect(() => {
+      if (diplomas) {
+        reset({
+          diplomaName: diplomas[diplomaId].name,
+          diplomaDescription: diplomas[diplomaId].description,
+        })
+      }
+    }, [diplomas, diplomaId])
+
     return (
       <div className="fixed top-0 right-0 left-0 flex h-full w-full items-center justify-center bg-slate-400/30 backdrop-blur-sm">
-        <div className="h-3/5 w-4/5 rounded-xl bg-white p-4">
+        <div className="h-3/5 w-5/6 rounded-xl bg-white p-4">
           <div className="flex h-full w-full flex-col">
             <div className="flex items-center justify-between">
-              <div className="text-xl font-semibold">
-                {pop === "add" ? "디플로마 추가" : "디플로마 수정"}
-              </div>
+              <div className="ml-2 text-xl font-semibold">디플로마 수정</div>
+              <button
+                onClick={() => setPop(null)}
+                className={
+                  "rounded-md transition duration-150 hover:bg-slate-200"
+                }
+              >
+                <XMarkIcon className="h-8 w-8" />
+              </button>
+            </div>
+
+            <div className="flex h-full w-full items-center justify-center p-1">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="relative flex h-full w-full flex-col items-center p-1"
+              >
+                <div className="w-full px-1 text-sm font-semibold">
+                  디플로마
+                </div>
+                <input
+                  {...register("diplomaName", {
+                    ...register("diplomaName", {
+                      required: {
+                        value: true,
+                        message: "디플로마를 입력하세요",
+                      },
+                    }),
+                  })}
+                  className="m-1 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
+                />
+                <div className="w-full px-1 text-sm font-semibold">설명</div>
+                <textarea
+                  {...register("diplomaDescription", {
+                    required: {
+                      value: true,
+                      message: "디플로마 설명을 입력하세요",
+                    },
+                  })}
+                  className="m-1 h-2/5 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name="diplomaName"
+                  render={({ message }) => (
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
+                      {message}
+                    </p>
+                  )}
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name="diplomaDescription"
+                  render={({ message }) => (
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
+                      {message}
+                    </p>
+                  )}
+                />
+
+                <input
+                  type="submit"
+                  className="absolute inset-x-0 bottom-0 mt-4 rounded-full bg-green-500 p-2 px-8 text-lg font-semibold text-white transition duration-150 hover:bg-green-600"
+                />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  function AddPopUp() {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm()
+
+    const onSubmit = (data) => {
+      postDiploma("adminDiplomaCreate", {
+        diplomaName: data.diplomaName,
+        diplomaDescription: data.diplomaDescription,
+        schoolId: id,
+      })
+      setPop(false)
+      updateData()
+    }
+
+    async function postDiploma(postData, data) {
+      await axios.post("/api/adminPost", {
+        post: postData,
+        data: data,
+      })
+    }
+
+    return (
+      <div className="fixed top-0 right-0 left-0 flex h-full w-full items-center justify-center bg-slate-400/30 backdrop-blur-sm">
+        <div className="h-3/5 w-5/6 rounded-xl bg-white p-4">
+          <div className="flex h-full w-full flex-col">
+            <div className="flex items-center justify-between">
+              <div className="ml-2 text-xl font-semibold">디플로마 추가</div>
               <button
                 onClick={() => setPop(null)}
                 className={
@@ -137,24 +225,52 @@ export default function AdminDiploma() {
             <div className="flex h-full w-full items-center justify-center  p-1">
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex h-full w-full flex-col items-center justify-center  p-1"
+                className="relative flex h-full w-full flex-col items-center   p-1"
               >
-                <div className="w-full px-1 text-sm font-semibold">
+                <div className="w-full  px-1 text-sm font-semibold">
                   디플로마
                 </div>
                 <input
-                  {...register("diplomaName")}
+                  {...register("diplomaName", {
+                    required: {
+                      value: true,
+                      message: "디플로마를 입력하세요",
+                    },
+                  })}
                   className="m-1 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
                 />
                 <div className="w-full px-1 text-sm font-semibold">설명</div>
                 <textarea
-                  {...register("diplomaDescription")}
+                  {...register("diplomaDescription", {
+                    required: {
+                      value: true,
+                      message: "디플로마 설명을 입력하세요",
+                    },
+                  })}
                   className="m-1 h-2/5 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name="diplomaName"
+                  render={({ message }) => (
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
+                      {message}
+                    </p>
+                  )}
+                />
+                <ErrorMessage
+                  errors={errors}
+                  name="diplomaDescription"
+                  render={({ message }) => (
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
+                      {message}
+                    </p>
+                  )}
                 />
 
                 <input
                   type="submit"
-                  className="mt-4 rounded-full bg-green-500 p-2 px-8 text-lg font-semibold text-white transition duration-150 hover:bg-green-600"
+                  className="absolute inset-x-0 bottom-0 mt-4 rounded-full bg-green-500 p-2 px-8 text-lg font-semibold text-white transition duration-150 hover:bg-green-600"
                 />
               </form>
             </div>

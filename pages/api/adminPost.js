@@ -18,47 +18,25 @@ export default async function AdminPost(req, res) {
         },
       })
       res.status(200)
-    } else if (post === "diploma") {
-      console.log(data, userEmail)
-      const postDiploma = await prisma.diploma.update({
-        where: {
-          id: data,
-        },
+    } else if (post === "adminDiplomaCreate") {
+      const createDiploma = await prisma.diploma.create({
         data: {
-          students: {
+          name: data.diplomaName,
+          description: data.diplomaDescription,
+          school: {
             connect: {
-              email: userEmail,
+              id: data.schoolId,
             },
           },
         },
       })
       res.status(200)
-    } else if (post === "year") {
-      const postYear = await prisma.user.update({
-        where: {
-          email: userEmail,
-        },
-        data: {
-          year: data,
-        },
+    } else {
+      res.status(403).json({
+        message:
+          "You must be sign in to view the protected content on this page.",
       })
-      res.status(200)
-    } else if (post === "name") {
-      const postName = await prisma.user.update({
-        where: {
-          email: userEmail,
-        },
-        data: {
-          name: data,
-        },
-      })
-      res.status(200)
     }
-  } else {
-    res.status(403).json({
-      message:
-        "You must be sign in to view the protected content on this page.",
-    })
+    res.end()
   }
-  res.end()
 }
