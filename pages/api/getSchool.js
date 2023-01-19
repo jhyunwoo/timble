@@ -15,7 +15,9 @@ export default async function getSchool(req, res) {
         id: true,
         code: true,
         name: true,
-        classes: true,
+        color: true,
+        subjects: true,
+        diplomas: true,
         students: true,
       },
     })

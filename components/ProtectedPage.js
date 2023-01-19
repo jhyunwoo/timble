@@ -16,7 +16,7 @@ export default function ProtectedPage(props) {
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
   const { user, isLoadingUser, isErrorUser, nullData } = useUser()
-  const { isLoadingSchool, isErrorSchool } = useSchool()
+  const { isLoadingSchool, isErrorSchool, students } = useSchool()
 
   useCheckUserNull(nullData)
 

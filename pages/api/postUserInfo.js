@@ -22,12 +22,17 @@ export default async function getUserNullData(req, res) {
       })
       res.status(200)
     } else if (post === "diploma") {
-      const postDiploma = await prisma.user.update({
+      console.log(data, userEmail)
+      const postDiploma = await prisma.diploma.update({
         where: {
-          email: userEmail,
+          id: data,
         },
         data: {
-          diploma: data,
+          students: {
+            connect: {
+              email: userEmail,
+            },
+          },
         },
       })
       res.status(200)

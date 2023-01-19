@@ -42,7 +42,8 @@ model User {
   School        school?     @relation(fields: [schoolId], references: [id])
   schoolId      Int?
   year          Int?
-  diploma       String?
+  diploma       diploma?    @relation(fields: [diplomaId], references: [id])
+  diplomaId     String?
   admin         String?
   createdAt     DateTime    @default(now())
   role          role        @default(USER)
@@ -60,7 +61,7 @@ model VerificationToken {
 }
 
 model Timetable {
-  id     String  @id
+  id     String  @id @default(cuid())
   year   Int?
   semi   Int?
   userId String
@@ -74,34 +75,47 @@ model Timetable {
 }
 
 model school {
-  id       Int         @id @default(autoincrement())
-  code     String      @unique
+  id       Int       @id @default(autoincrement())
+  code     String    @unique
   name     String
-  classes  classinfo[]
+  color    String?
+  subjects subject[]
   students User[]
+  diplomas diploma[]
 }
 
-model classinfo {
-  id           Int            @id @default(autoincrement())
-  School       school?        @relation(fields: [schoolId], references: [id])
+model subject {
+  id           Int              @id @default(autoincrement())
+  School       school?          @relation(fields: [schoolId], references: [id])
   schoolId     Int?
+  diploma      diploma?         @relation(fields: [diplomaId], references: [id])
+  diplomaId    String?
   title        String
-  diploma      String?
   open         String[]
   prerequisite String[]
   type         String
   target       String
   relatedMajor String[]
-  content      classcontent[]
+  content      subjectcontent[]
 }
 
-model classcontent {
-  id         String     @id
-  Class      classinfo? @relation(fields: [classId], references: [id])
-  classId    Int?
+model subjectcontent {
+  id         String   @id @default(cuid())
+  subject    subject? @relation(fields: [subjectId], references: [id])
+  subjectId  Int?
   area       String
   mainTarget String[]
   detail     String
+}
+
+model diploma {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  subjects    subject[]
+  school      school?   @relation(fields: [schoolId], references: [id])
+  schoolId    Int?
+  students    User[]
 }
 
 enum role {

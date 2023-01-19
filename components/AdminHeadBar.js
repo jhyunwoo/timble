@@ -30,17 +30,15 @@ export default function AdminHeadBar(props) {
               홈
             </button>
           </Link>
-          <Link href={`/admin/${admin}/classes`}>
+          <Link href={`/admin/${admin}/school`}>
             <button
               className={` rounded-full p-1 px-3 text-base ${
-                router.asPath
-                  .replace(`/admin/${admin}/`, "")
-                  .includes("classes")
+                router.asPath.replace(`/admin/${admin}/`, "").includes("school")
                   ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
             >
-              수업 정보
+              학교
             </button>
           </Link>
           <Link href={`/admin/${admin}/students`}>
@@ -53,7 +51,7 @@ export default function AdminHeadBar(props) {
                   : ""
               }`}
             >
-              학생 관리
+              학생
             </button>
           </Link>
         </div>
