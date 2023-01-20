@@ -18,13 +18,12 @@ export default function AdminDiploma() {
   const { diplomas, id } = useSchool()
   const { user } = useUser()
 
-  async function updateData() {
-    await mutate(["/api/getSchool", user ? user.schoolId : null])
+  function updateData() {
+    function mutateData() {
+      mutate(["/api/getSchool", user ? user.schoolId : null])
+    }
+    setTimeout(mutateData, 2000)
   }
-
-  useEffect(() => {
-    updateData()
-  }, [pop])
 
   return (
     <ProtectedPage>
@@ -35,17 +34,17 @@ export default function AdminDiploma() {
           디플로마
         </div>
         {diplomas ? (
-          <div className="grid grid-cols-1 gap-4 p-4">
+          <div className="grid w-full grid-cols-1 gap-4 p-4">
             {diplomas.map((data, key) => (
               <div
                 key={key}
-                className="grid w-full grid-cols-8 rounded-lg bg-white shadow-lg transition duration-200 hover:shadow-xl"
+                className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-lg transition duration-200 hover:shadow-xl"
               >
-                <div className="col-span-7  py-4 pl-4 pr-2">
+                <div className="  py-4 pl-4 pr-2">
                   <div className="text-lg font-bold">{data.name}</div>
                   <div className="mt-2 text-base">{data.description}</div>
                 </div>
-                <div className="col-span-1 flex items-center justify-center ">
+                <div className=" flex items-center justify-center ">
                   <button
                     onClick={() => {
                       setPop("edit")
@@ -104,7 +103,7 @@ export default function AdminDiploma() {
           diplomaDescription: diplomas[diplomaId].description,
         })
       }
-    }, [diplomas, diplomaId])
+    }, [reset])
 
     return (
       <div className="fixed top-0 right-0 left-0 flex h-full w-full items-center justify-center bg-slate-400/30 backdrop-blur-sm">
@@ -112,6 +111,7 @@ export default function AdminDiploma() {
           <div className="flex h-full w-full flex-col">
             <div className="flex items-center justify-between">
               <div className="ml-2 text-xl font-semibold">디플로마 수정</div>
+
               <button
                 onClick={() => setPop(null)}
                 className={
@@ -151,6 +151,20 @@ export default function AdminDiploma() {
                   })}
                   className="m-1 h-2/5 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
                 />
+                <div className="mt-1">
+                  <button
+                    onClick={() =>
+                      postDiploma(
+                        "adminDiplomaDelete",
+                        diplomas[diplomaId].id,
+                        "delete",
+                      )
+                    }
+                    className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
+                  >
+                    삭제
+                  </button>
+                </div>
                 <ErrorMessage
                   errors={errors}
                   name="diplomaName"

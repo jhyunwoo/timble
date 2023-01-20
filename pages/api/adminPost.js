@@ -31,6 +31,29 @@ export default async function AdminPost(req, res) {
         },
       })
       res.status(200)
+    } else if (post === "adminDiplomaDelete") {
+      const disconnectDiploma = await prisma.diploma.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          subjects: {
+            set: [],
+          },
+          school: {
+            disconnect: true,
+          },
+          students: {
+            set: [],
+          },
+        },
+      })
+      const deleteDiploma = await prisma.diploma.delete({
+        where: {
+          id: dataId,
+        },
+      })
+      res.status(200)
     } else {
       res.status(403).json({
         message:
