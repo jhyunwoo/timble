@@ -19,10 +19,8 @@ export default function HeadBar(props) {
         <div className={"flex items-center"}>
           <Link href={"/lobby"}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
-                props.page === "lobby"
-                  ? "bg-slate-900 font-semibold text-white"
-                  : ""
+              className={`mx-1 rounded-full p-1 px-3 text-base ${
+                props.page === "lobby" ? "bg-slate-900 font-semibold text-white" : ""
               }`}
             >
               홈
@@ -30,10 +28,8 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"/timetable"}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
-                props.page === "timetable"
-                  ? "bg-slate-900 font-semibold text-white"
-                  : ""
+              className={`mx-1 rounded-full p-1 px-3 text-base ${
+                props.page === "timetable" ? "bg-slate-900 font-semibold text-white" : ""
               }`}
             >
               시간표
@@ -41,10 +37,8 @@ export default function HeadBar(props) {
           </Link>
           <Link href={"/friends"}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
-                props.page === "friends"
-                  ? "bg-slate-900 font-semibold text-white"
-                  : ""
+              className={`mx-1 rounded-full p-1 px-3 text-base ${
+                props.page === "friends" ? "bg-slate-900 font-semibold text-white" : ""
               }`}
             >
               친구
@@ -81,23 +75,15 @@ export default function HeadBar(props) {
           </div>
         </div>
         <div className="p-4">
-          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">
-            시간표
-          </div>
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">시간표</div>
           <div className=" grid grid-cols-1 gap-1">
-            <Link
-              className="text-lg font-semibold"
-              href="/timetable/mytimetable"
-            >
+            <Link className="text-lg font-semibold" href="/timetable/mytimetable">
               내 시간표
             </Link>
             <Link className="text-lg font-semibold" href="/timetable/generate">
               시간표 구성하기
             </Link>
-            <Link
-              className="text-lg font-semibold"
-              href="/timetable/matchwithfriend"
-            >
+            <Link className="text-lg font-semibold" href="/timetable/matchwithfriend">
               친구랑 시간표 맞추기
             </Link>
             <Link className="text-lg font-semibold" href="/timetable/class">
@@ -107,9 +93,7 @@ export default function HeadBar(props) {
               디플로마 시간표 추천
             </Link>
           </div>
-          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">
-            친구
-          </div>
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">친구</div>
           <div className=" grid grid-cols-1 gap-1">
             <Link className="text-lg font-semibold" href="/friends/add">
               친구 추가

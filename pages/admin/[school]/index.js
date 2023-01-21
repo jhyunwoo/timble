@@ -3,10 +3,12 @@ import useSchool from "../../../lib/client/useSchool"
 
 import ProtectedPage from "../../../components/ProtectedPage"
 import DataCard from "../../../components/DataCard"
+import useStudents from "../../../lib/client/useStudents"
 
 export default function SchoolAdminPage() {
   const { user } = useUser()
-  const { students, school, color, subjects, diplomas } = useSchool()
+  const { school, color, subjects, diplomas } = useSchool()
+  const { students } = useStudents()
 
   return (
     <ProtectedPage>
@@ -19,15 +21,15 @@ export default function SchoolAdminPage() {
         </div>
 
         <DataCard link={`/admin/${user ? user.admin : null}/students`} title={"학생"}>
-          {students ? students.length : "loading..."}
+          {students ? students.length : "..."}
         </DataCard>
 
         <DataCard link={`/admin/${user ? user.admin : null}/school/subjects`} title={"교과목"}>
-          {subjects ? subjects.length : "loading..."}
+          {subjects ? subjects.length : "..."}
         </DataCard>
 
         <DataCard link={`/admin/${user ? user.admin : null}/school/diploma`} title={"디플로마"}>
-          {diplomas ? diplomas.length : "loading..."}
+          {diplomas ? diplomas.length : "..."}
         </DataCard>
       </div>
     </ProtectedPage>

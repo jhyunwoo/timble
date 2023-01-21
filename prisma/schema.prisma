@@ -79,29 +79,30 @@ model school {
   code     String    @unique
   name     String
   color    String?
-  subjects subject[]
+  subjects Subject[]
   students User[]
   diplomas diploma[]
 }
 
-model subject {
-  id           Int              @id @default(autoincrement())
-  School       school?          @relation(fields: [schoolId], references: [id])
-  schoolId     Int?
-  diploma      diploma?         @relation(fields: [diplomaId], references: [id])
-  diplomaId    String?
-  title        String
-  open         String[]
-  prerequisite String[]
-  type         String
-  target       String
-  relatedMajor String[]
-  content      subjectcontent[]
+model Subject {
+  id                   Int              @id @default(autoincrement())
+  School               school?          @relation(fields: [schoolId], references: [id])
+  schoolId             Int?
+  diploma              diploma?         @relation(fields: [diplomaId], references: [id])
+  diplomaId            String?
+  title                String
+  open                 String[]
+  prerequisite         Subject[]        @relation("SubjectPrerequisite")
+  prerequisiteRelation Subject[]        @relation("SubjectPrerequisite")
+  type                 String
+  target               String
+  relatedMajor         String[]
+  content              subjectcontent[]
 }
 
 model subjectcontent {
   id         String   @id @default(cuid())
-  subject    subject? @relation(fields: [subjectId], references: [id])
+  subject    Subject? @relation(fields: [subjectId], references: [id])
   subjectId  Int?
   area       String
   mainTarget String[]
@@ -112,7 +113,7 @@ model diploma {
   id          String    @id @default(cuid())
   name        String
   description String?
-  subjects    subject[]
+  subjects    Subject[]
   school      school?   @relation(fields: [schoolId], references: [id])
   schoolId    Int?
   students    User[]

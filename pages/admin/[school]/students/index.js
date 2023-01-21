@@ -1,9 +1,11 @@
 import ProtectedPage from "../../../../components/ProtectedPage"
 import useSchool from "../../../../lib/client/useSchool"
 import { useEffect, useState } from "react"
+import useStudents from "../../../../lib/client/useStudents"
 
 export default function AdminStudents() {
-  const { students, diplomas } = useSchool()
+  const { diplomas } = useSchool()
+  const { students } = useStudents()
   const [yearFilter, setYearFilter] = useState()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredStudents, setFilteredStudents] = useState([])
@@ -63,7 +65,7 @@ export default function AdminStudents() {
           onClick={() => controlYearFilter(1)}
           className={`${
             yearFilter === 1 ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
         >
           1학년
         </button>
@@ -71,7 +73,7 @@ export default function AdminStudents() {
           onClick={() => controlYearFilter(2)}
           className={`${
             yearFilter === 2 ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
         >
           2학년
         </button>
@@ -79,7 +81,7 @@ export default function AdminStudents() {
           onClick={() => controlYearFilter(3)}
           className={`${
             yearFilter === 3 ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
         >
           3학년
         </button>
@@ -91,7 +93,7 @@ export default function AdminStudents() {
                 onClick={() => controlDiplomaFilter(data.name)}
                 className={`${
                   diplomaFilter === data.name ? "bg-slate-800 text-white" : ""
-                } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+                } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
                 key={key}
               >
                 {data.name}

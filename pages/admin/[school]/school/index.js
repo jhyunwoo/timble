@@ -6,14 +6,14 @@ export default function AdminTimetable() {
   const { user } = useUser()
   return (
     <ProtectedPage>
-      <div className="p-4 flex flex-col">
+      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link href={`/admin/${user ? user.admin : null}/school/diploma`}>
-          <div className="bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition duration-200 my-2">
+          <div className="bg-white shadow-md py-6 p-4 rounded-lg hover:shadow-lg transition duration-200">
             <div className="text-2xl font-bold">디플로마</div>
           </div>
         </Link>
         <Link href={`/admin/${user ? user.admin : null}/school/subjects`}>
-          <div className="bg-white shadow-md p-4 rounded-lg hover:shadow-lg transition duration-200 my-2">
+          <div className="bg-white shadow-md py-6 p-4 rounded-lg hover:shadow-lg transition duration-200">
             <div className="text-2xl font-bold">교과목</div>
           </div>
         </Link>

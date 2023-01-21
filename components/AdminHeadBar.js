@@ -21,10 +21,8 @@ export default function AdminHeadBar(props) {
         <div className={"flex items-center"}>
           <Link href={`/admin/${admin}`}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
-                router.asPath === `/admin/${admin}`
-                  ? "bg-slate-900 font-semibold text-white"
-                  : ""
+              className={`rounded-full mx-1 p-1 px-3 text-base ${
+                router.asPath === `/admin/${admin}` ? "bg-slate-900 font-semibold text-white" : ""
               }`}
             >
               홈
@@ -32,7 +30,7 @@ export default function AdminHeadBar(props) {
           </Link>
           <Link href={`/admin/${admin}/school`}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
+              className={`rounded-full mx-1 p-1 px-3 text-base ${
                 router.asPath.replace(`/admin/${admin}/`, "").includes("school")
                   ? "bg-slate-900 font-semibold text-white"
                   : ""
@@ -43,10 +41,8 @@ export default function AdminHeadBar(props) {
           </Link>
           <Link href={`/admin/${admin}/students`}>
             <button
-              className={` rounded-full p-1 px-3 text-base ${
-                router.asPath
-                  .replace(`/admin/${admin}/`, "")
-                  .includes("students")
+              className={`rounded-full mx-1 p-1 px-3 text-base ${
+                router.asPath.replace(`/admin/${admin}/`, "").includes("students")
                   ? "bg-slate-900 font-semibold text-white"
                   : ""
               }`}
