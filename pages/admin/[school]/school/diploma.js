@@ -1,10 +1,6 @@
 import ProtectedPage from "../../../../components/ProtectedPage"
 import useSchool from "../../../../lib/client/useSchool"
-import {
-  PencilSquareIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline"
+import { PencilSquareIcon, SquaresPlusIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
@@ -30,9 +26,7 @@ export default function AdminDiploma() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <div className="w-full px-6 text-left text-2xl font-semibold">
-          디플로마
-        </div>
+        <div className="w-full px-6 text-left text-2xl font-semibold">디플로마</div>
         {diplomas ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
             {diplomas.map((data, key) => (
@@ -112,24 +106,14 @@ export default function AdminDiploma() {
             <div className="flex items-center justify-between">
               <div className="ml-2 text-xl font-semibold">디플로마 수정</div>
 
-              <button
-                onClick={() => setPop(null)}
-                className={
-                  "rounded-md transition duration-150 hover:bg-slate-200"
-                }
-              >
+              <button onClick={() => setPop(null)} className={"rounded-md transition duration-150 hover:bg-slate-200"}>
                 <XMarkIcon className="h-8 w-8" />
               </button>
             </div>
 
             <div className="flex h-full w-full items-center justify-center p-1">
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="relative flex h-full w-full flex-col items-center p-1"
-              >
-                <div className="w-full px-1 text-sm font-semibold">
-                  디플로마
-                </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="relative flex h-full w-full flex-col items-center p-1">
+                <div className="w-full px-1 text-sm font-semibold">디플로마</div>
                 <input
                   {...register("diplomaName", {
                     ...register("diplomaName", {
@@ -153,13 +137,7 @@ export default function AdminDiploma() {
                 />
                 <div className="mt-1">
                   <button
-                    onClick={() =>
-                      postDiploma(
-                        "adminDiplomaDelete",
-                        diplomas[diplomaId].id,
-                        "delete",
-                      )
-                    }
+                    onClick={() => postDiploma("adminDiplomaDelete", diplomas[diplomaId].id, "delete")}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -169,18 +147,14 @@ export default function AdminDiploma() {
                   errors={errors}
                   name="diplomaName"
                   render={({ message }) => (
-                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
-                      {message}
-                    </p>
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}
                 />
                 <ErrorMessage
                   errors={errors}
                   name="diplomaDescription"
                   render={({ message }) => (
-                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
-                      {message}
-                    </p>
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}
                 />
 
@@ -226,12 +200,7 @@ export default function AdminDiploma() {
           <div className="flex h-full w-full flex-col">
             <div className="flex items-center justify-between">
               <div className="ml-2 text-xl font-semibold">디플로마 추가</div>
-              <button
-                onClick={() => setPop(null)}
-                className={
-                  "rounded-md transition duration-150 hover:bg-slate-200"
-                }
-              >
+              <button onClick={() => setPop(null)} className={"rounded-md transition duration-150 hover:bg-slate-200"}>
                 <XMarkIcon className="h-8 w-8" />
               </button>
             </div>
@@ -241,9 +210,7 @@ export default function AdminDiploma() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="relative flex h-full w-full flex-col items-center   p-1"
               >
-                <div className="w-full  px-1 text-sm font-semibold">
-                  디플로마
-                </div>
+                <div className="w-full  px-1 text-sm font-semibold">디플로마</div>
                 <input
                   {...register("diplomaName", {
                     required: {
@@ -267,18 +234,14 @@ export default function AdminDiploma() {
                   errors={errors}
                   name="diplomaName"
                   render={({ message }) => (
-                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
-                      {message}
-                    </p>
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}
                 />
                 <ErrorMessage
                   errors={errors}
                   name="diplomaDescription"
                   render={({ message }) => (
-                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">
-                      {message}
-                    </p>
+                    <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}
                 />
 

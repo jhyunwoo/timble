@@ -1,58 +1,97 @@
 import ProtectedPage from "../../../../components/ProtectedPage"
 import useSchool from "../../../../lib/client/useSchool"
-import useUser from "../../../../lib/client/useUser"
 import { useEffect, useState } from "react"
-import { data } from "autoprefixer"
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ")
-}
 
 export default function AdminStudents() {
   const { students, diplomas } = useSchool()
-  const { user } = useUser()
-  const [filter, setFilter] = useState("")
-  function controlFilter(data) {
-    if (data === filter) {
-      setFilter("")
+  const [yearFilter, setYearFilter] = useState()
+  const [diplomaFilter, setDiplomaFilter] = useState("")
+  const [filteredStudents, setFilteredStudents] = useState([])
+
+  function controlYearFilter(data) {
+    if (data === yearFilter) {
+      setYearFilter(null)
     } else {
-      setFilter(data)
+      setYearFilter(data)
     }
   }
+
+  function controlDiplomaFilter(data) {
+    if (data === diplomaFilter) {
+      setDiplomaFilter(null)
+    } else {
+      setDiplomaFilter(data)
+    }
+  }
+
+  function filterStudents() {
+    let list = students
+    let filtered = []
+    if (yearFilter && diplomaFilter) {
+      list.map((data) => {
+        if (data.year === yearFilter && data.diploma.name === diplomaFilter) {
+          filtered.push(data)
+        }
+      })
+      setFilteredStudents(filtered)
+    } else if (yearFilter) {
+      list.map((data) => {
+        if (data.year === yearFilter) {
+          filtered.push(data)
+        }
+      })
+      setFilteredStudents(filtered)
+    } else if (diplomaFilter) {
+      list.map((data) => {
+        if (data.diploma.name === diplomaFilter) {
+          filtered.push(data)
+        }
+      })
+      setFilteredStudents(filtered)
+    } else {
+      setFilteredStudents(list)
+    }
+  }
+
+  useEffect(() => {
+    filterStudents()
+  }, [students, yearFilter, diplomaFilter])
   return (
     <ProtectedPage>
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         <button
-          onClick={() => controlFilter("1학년")}
+          onClick={() => controlYearFilter(1)}
           className={`${
-            filter === "1학년" ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-800 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+            yearFilter === 1 ? "bg-slate-800 text-white" : ""
+          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
         >
           1학년
         </button>
         <button
-          onClick={() => controlFilter("2학년")}
+          onClick={() => controlYearFilter(2)}
           className={`${
-            filter === "2학년" ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-800 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+            yearFilter === 2 ? "bg-slate-800 text-white" : ""
+          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
         >
           2학년
         </button>
         <button
-          onClick={() => controlFilter("3학년")}
+          onClick={() => controlYearFilter(3)}
           className={`${
-            filter === "3학년" ? "bg-slate-800 text-white" : ""
-          } rounded-md px-4 hover:bg-slate-800 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+            yearFilter === 3 ? "bg-slate-800 text-white" : ""
+          } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
         >
           3학년
         </button>
+      </div>
+      <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
           ? diplomas.map((data, key) => (
               <button
-                onClick={() => controlFilter(data.name)}
+                onClick={() => controlDiplomaFilter(data.name)}
                 className={`${
-                  filter === data.name ? "bg-slate-800 text-white" : ""
-                } rounded-md px-4 hover:bg-slate-800 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
+                  diplomaFilter === data.name ? "bg-slate-800 text-white" : ""
+                } rounded-md px-4 hover:bg-slate-600 hover:border-slate-600 hover:text-white transition duration-200 border-2 border-slate-900 p-1 m-1`}
                 key={key}
               >
                 {data.name}
@@ -66,13 +105,11 @@ export default function AdminStudents() {
           <div>이름</div>
           <div>디플로마</div>
         </div>
-        {students
-          ? students.map((data, key) => (
+        {filteredStudents
+          ? filteredStudents.map((data, key) => (
               <div
                 key={key}
-                className={`grid grid-cols-3 py-1 text-center last:rounded-b-lg ${
-                  key % 2 === 1 ? "bg-slate-100" : ""
-                }`}
+                className={`grid grid-cols-3 py-1 text-center last:rounded-b-lg ${key % 2 === 1 ? "bg-slate-100" : ""}`}
               >
                 <div>{data.year}</div>
                 <div>{data.name}</div>

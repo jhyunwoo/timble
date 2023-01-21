@@ -1,7 +1,3 @@
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-
 import useUser from "../../../lib/client/useUser"
 import useSchool from "../../../lib/client/useSchool"
 
@@ -9,8 +5,6 @@ import ProtectedPage from "../../../components/ProtectedPage"
 import DataCard from "../../../components/DataCard"
 
 export default function SchoolAdminPage() {
-  const { status } = useSession()
-  const router = useRouter()
   const { user } = useUser()
   const { students, school, color, subjects, diplomas } = useSchool()
 
@@ -24,24 +18,15 @@ export default function SchoolAdminPage() {
           <div className="mx-4 text-2xl font-bold">{school}</div>
         </div>
 
-        <DataCard
-          link={`/admin/${user ? user.admin : null}/students`}
-          title={"학생"}
-        >
+        <DataCard link={`/admin/${user ? user.admin : null}/students`} title={"학생"}>
           {students ? students.length : "loading..."}
         </DataCard>
 
-        <DataCard
-          link={`/admin/${user ? user.admin : null}/school/subjects`}
-          title={"교과목"}
-        >
+        <DataCard link={`/admin/${user ? user.admin : null}/school/subjects`} title={"교과목"}>
           {subjects ? subjects.length : "loading..."}
         </DataCard>
 
-        <DataCard
-          link={`/admin/${user ? user.admin : null}/school/diploma`}
-          title={"디플로마"}
-        >
+        <DataCard link={`/admin/${user ? user.admin : null}/school/diploma`} title={"디플로마"}>
           {diplomas ? diplomas.length : "loading..."}
         </DataCard>
       </div>
