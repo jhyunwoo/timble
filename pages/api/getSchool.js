@@ -12,14 +12,14 @@ export default async function getSchool(req, res) {
         where: {
           id: schoolId,
         },
-        select: {
-          id: true,
-          code: true,
-          name: true,
-          color: true,
-          subjects: true,
-          diplomas: true,
-        },
+        // select: {
+        //   id: true,
+        //   code: true,
+        //   name: true,
+        //   color: true,
+        //   subjects: true,
+        //   diplomas: true,
+        // },
       })
       console.log(schoolInfo)
       res.json(schoolInfo)
