@@ -21,11 +21,10 @@ export default async function getSchool(req, res) {
           diplomas: true,
         },
       })
+      res.json(schoolInfo)
     } catch {
       res.status(501)
     }
-
-    res.json(schoolInfo)
   } else {
     res.status(401).json({
       message: 'You must be sign in to view the protected content on this page.',
