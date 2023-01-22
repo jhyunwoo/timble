@@ -88,22 +88,25 @@ model Subject {
   id                   Int              @id @default(autoincrement())
   School               school?          @relation(fields: [schoolId], references: [id])
   schoolId             Int?
-  diploma              diploma?         @relation(fields: [diplomaId], references: [id])
-  diplomaId            String?
+  diplomas             diploma[]
   title                String
   open                 String[]
   prerequisite         Subject[]        @relation("SubjectPrerequisite")
   prerequisiteRelation Subject[]        @relation("SubjectPrerequisite")
-  type                 String
+  type                 subjectType
   target               String
-  relatedMajor         String[]
+  relatedMajor         String
   content              subjectcontent[]
+  subjectArea          subjectAreas
+  targetParticipants   String
+  CSATSubject          Boolean
 }
 
 model subjectcontent {
   id         String   @id @default(cuid())
   subject    Subject? @relation(fields: [subjectId], references: [id])
   subjectId  Int?
+  order      Int
   area       String
   mainTarget String[]
   detail     String
@@ -122,4 +125,22 @@ model diploma {
 enum role {
   USER
   ADMIN
+}
+
+enum subjectType {
+  COMMON
+  SERIES
+  COURSE
+  FREE
+}
+
+enum subjectAreas {
+  EXPLORATION
+  PRO
+  PRO1
+  PRO2
+  CULTURE
+  CARERR
+  FOUNDATION
+  PEANDART
 }

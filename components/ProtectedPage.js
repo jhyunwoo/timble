@@ -1,15 +1,15 @@
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/router"
 
-import Loading from './Loading'
-import Error from './Error'
-import Footer from './Footer'
+import Loading from "./Loading"
+import Error from "./Error"
+import Footer from "./Footer"
 
-import useUser from '../lib/client/useUser'
-import AdminHeadBar from './AdminHeadBar'
-import useSchool from '../lib/client/useSchool'
-import useCheckUserNull from '../lib/client/useCheckUserNull'
-import AccessDenied from './AccessDenied'
+import useUser from "../lib/client/useUser"
+import AdminHeadBar from "./AdminHeadBar"
+import useSchool from "../lib/client/useSchool"
+import useCheckUserNull from "../lib/client/useCheckUserNull"
+import AccessDenied from "./AccessDenied"
 
 export default function ProtectedPage(props) {
   const router = useRouter()
@@ -20,12 +20,13 @@ export default function ProtectedPage(props) {
 
   useCheckUserNull(nullData)
 
-  if (status === 'unauthenticated') {
-    router.push('/signin')
-  } else if (status === 'authenticated') {
-    if (status === 'loading' || isLoadingUser || isLoadingSchool) {
+  if (status === "unauthenticated") {
+    router.push("/signin")
+    return <Loading />
+  } else if (status === "authenticated") {
+    if (status === "loading" || isLoadingUser || isLoadingSchool) {
       return <Loading />
-    } else if (user.role !== 'ADMIN' || !router.asPath.includes(user.admin)) {
+    } else if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
       return <AccessDenied />
     } else {
       return (

@@ -20,10 +20,11 @@ export default function LayOut(props) {
 
   if (status === "loading" || isLoadingUser) {
     return <Loading />
-  } else if (isErrorUser) {
-    return <Error />
   } else if (status === "unauthenticated") {
     router.push("/signin")
+    return <Loading />
+  } else if (isErrorUser) {
+    return <Error />
   } else if (status === "authenticated") {
     return (
       <div className="bg-slate-50 pt-20">

@@ -14,7 +14,7 @@ export default async function getSubjects(req, res) {
       include: {
         prerequisite: true,
         content: true,
-        diploma: true,
+        diplomas: true,
       },
     })
     res.json(schoolSubject)

@@ -58,6 +58,7 @@ export default function AdminStudents() {
   useEffect(() => {
     filterStudents()
   }, [students, yearFilter, diplomaFilter])
+
   return (
     <ProtectedPage>
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
