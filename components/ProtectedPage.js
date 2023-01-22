@@ -16,18 +16,18 @@ export default function ProtectedPage(props) {
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
   const { user, isLoadingUser, isErrorUser, nullData } = useUser()
-  const { isLoadingSchool, isErrorSchool, students } = useSchool()
+  const { isLoadingSchool, isErrorSchool } = useSchool()
 
   useCheckUserNull(nullData)
 
-  if (status === "loading" || isLoadingUser || isLoadingSchool) {
-    return <Loading />
-  } else if (isErrorUser || isErrorSchool) {
-    return <Error />
-  } else if (status === "unauthenticated") {
+  if (status === "unauthenticated") {
     router.push("/signin")
   } else if (status === "authenticated") {
-    if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
+    if (status === "loading" || isLoadingUser || isLoadingSchool) {
+      return <Loading />
+    } else if (isErrorUser || isErrorSchool) {
+      return <Error />
+    } else if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
       return <AccessDenied />
     } else {
       return (
