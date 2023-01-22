@@ -5,7 +5,7 @@ import { unstable_getServerSession } from 'next-auth/next'
 export default async function getSchool(req, res) {
   const { schoolId } = req.body
   const session = await unstable_getServerSession(req, res, authOptions)
-
+  console.log(schoolId)
   if (session) {
     try {
       const schoolInfo = await prisma.school.findUnique({
