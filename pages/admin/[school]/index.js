@@ -4,12 +4,13 @@ import useSchool from "../../../lib/client/useSchool"
 import ProtectedPage from "../../../components/ProtectedPage"
 import DataCard from "../../../components/DataCard"
 import useStudents from "../../../lib/client/useStudents"
+import useSubjects from "../../../lib/client/useSubjects"
 
 export default function SchoolAdminPage() {
   const { user } = useUser()
-  const { school, color, subjects, diplomas } = useSchool()
+  const { school, color, diplomas } = useSchool()
   const { students } = useStudents()
-
+  const { subjects } = useSubjects()
   return (
     <ProtectedPage>
       <div className="sm:grid-cols-24 grid grid-cols-2 gap-4 p-4 lg:grid-cols-6 xl:grid-cols-8">
