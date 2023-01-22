@@ -21,6 +21,7 @@ export default async function getSchool(req, res) {
           diplomas: true,
         },
       })
+      console.log(schoolInfo)
       res.json(schoolInfo)
     } catch {
       res.status(501)
