@@ -11,11 +11,11 @@ export default async function getSubjects(req, res) {
       where: {
         schoolId: schoolId,
       },
-      include: {
-        prerequisite: true,
-        content: true,
-        diploma: true,
-      },
+      // include: {
+      //   prerequisite: true,
+      //   content: true,
+      //   diploma: true,
+      // },
     })
     res.json(schoolSubject)
   } else {
