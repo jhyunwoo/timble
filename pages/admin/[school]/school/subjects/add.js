@@ -3,24 +3,64 @@ import { useForm } from "react-hook-form"
 import useSchool from "../../../../../lib/client/useSchool"
 import { useEffect, useState } from "react"
 import { ErrorMessage } from "@hookform/error-message"
+import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import axios from "axios"
+
 export default function AddSubject() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     setValue,
+    watch,
   } = useForm()
-  const { diplomas, subjects } = useSchool()
+  const { diplomas, subjects, id } = useSchool()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
   const [area, setArea] = useState("")
   const [open, setOpen] = useState([])
-  const [csat, setCsta] = useState(false)
+  const [csat, setCsta] = useState(0)
+  const [contentLength, setContentLength] = useState(1)
 
+  async function postSubject(data, content) {
+    await axios.post("/api/adminPost", {
+      post: "adminPostSubject",
+      schoolId: id,
+      title: data.subjectTitle,
+      type: data.subjectType,
+      diplomaId: data.subjectDiplomas,
+      area: data.subjectArea,
+      csat: data.subjectCSAT,
+      open: data.subjectOpen,
+      prerequisite: data.subjectPrerequisite,
+      relatedMajor: data.subjectRelatedMajor,
+      target: data.subjectTarget,
+      targetParticipants: data.subjectTargetParticipants,
+      contents: content,
+    })
+  }
   const onSubmit = (data) => {
     console.log(data)
+    console.log(contentLength)
+    let unifyContent = []
+    for (let i = 1; i < contentLength; i++) {
+      unifyContent.push({
+        area: data[`contentArea${i}`],
+        mainTarget: data[`contentMainTarget${i}`],
+        detail: data[`contentDetail${i}`],
+      })
+    }
+    console.log(unifyContent)
+    postSubject(data, unifyContent)
+  }
+
+  function range(start, end) {
+    let array = []
+    for (let i = start; i < end; ++i) {
+      array.push(i)
+    }
+    return array
   }
 
   function controlDiplomaSelect(data) {
@@ -77,6 +117,9 @@ export default function AddSubject() {
   useEffect(() => {
     setValue("subjectType", type)
   }, [type])
+  useEffect(() => {
+    setValue("subjectCSAT", csat)
+  }, [csat])
 
   return (
     <ProtectedPage>
@@ -106,10 +149,10 @@ export default function AddSubject() {
                 ? diplomas.map((data, key) => (
                     <button
                       type="button"
-                      onClick={() => controlDiplomaSelect(data.name)}
+                      onClick={() => controlDiplomaSelect(data.id)}
                       key={key}
                       className={`bg-slate-50 p-1 px-2 rounded-md ${
-                        diploma.includes(data.name) ? "bg-slate-800 text-white" : ""
+                        diploma.includes(data.id) ? "bg-slate-800 text-white" : ""
                       }`}
                     >
                       {data.name}
@@ -133,10 +176,10 @@ export default function AddSubject() {
                 ? subjects.map((data, key) => (
                     <button
                       type="button"
-                      onClick={() => controlPrerequisiteSelect(data.title)}
+                      onClick={() => controlPrerequisiteSelect(data.id)}
                       key={key}
                       className={`bg-slate-50 p-1 px-2 rounded-md ${
-                        prerequisite.includes(data.title) ? "bg-slate-800 text-white" : ""
+                        prerequisite.includes(data.id) ? "bg-slate-800 text-white" : ""
                       }`}
                     >
                       {data.title}
@@ -161,29 +204,29 @@ export default function AddSubject() {
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "공통선택" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("공통선택")}
+                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "COMMON" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlTypeSelect("COMMON")}
               >
                 공통선택
               </button>
               <button
                 type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "계열선택" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("계열선택")}
+                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "SERIES" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlTypeSelect("SERIES")}
               >
                 계열선택
               </button>
               <button
                 type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "과정선택" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("과정선택")}
+                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "COURSE" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlTypeSelect("COURSE")}
               >
                 과정선택
               </button>
               <button
                 type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "자유선택" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("자유선택")}
+                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "FREE" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlTypeSelect("FREE")}
               >
                 자유선택
               </button>
@@ -341,24 +384,21 @@ export default function AddSubject() {
               )}
             />
 
-            <div
-              {...register("subjectCSAT", { required: { value: true, message: "수능 과목 여부를 선택하세요" } })}
-              className="text-lg font-semibold mt-2"
-            >
+            <div {...register("subjectCSAT")} className="text-lg font-semibold mt-2">
               수능 과목 여부
             </div>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${csat ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => setCsta(true)}
+                onClick={() => setCsta(1)}
               >
                 예
               </button>
               <button
                 type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${!csat ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => setCsta(false)}
+                onClick={() => setCsta(0)}
               >
                 아니요
               </button>
@@ -391,7 +431,89 @@ export default function AddSubject() {
             />
 
             <div className="text-lg font-semibold mt-2">내용 체계</div>
-            <button type="submit">제출</button>
+            <div className=" w-full ">
+              <div>
+                {range(1, contentLength).map((data) => (
+                  <div key={data} className="bg-slate-50 p-2 m-1 rounded-lg w-full">
+                    <div className="flex justify-between items-center">
+                      <div className="text-lg font-semibold">{data}</div>
+                      <button
+                        onClick={() => setContentLength(contentLength - 1)}
+                        className={`bg-slate-100 p-1 rounded-md hover:bg-slate-200 transition duration-200 ${
+                          data === contentLength - 1 ? "" : "invisible"
+                        }`}
+                      >
+                        <XMarkIcon className="w-6 h-6" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col">
+                      <div>영역</div>
+                      <input
+                        {...register(`contentArea${data}`, { required: { value: true, message: "영역을 입력하세요" } })}
+                      />
+                    </div>
+                    <ErrorMessage
+                      errors={errors}
+                      name={`contentArea${data}`}
+                      render={({ message }) => (
+                        <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">
+                          {message}
+                        </p>
+                      )}
+                    />
+                    <div className="flex flex-col">
+                      <div>주요 목표 ( / 로 구분)</div>
+                      <textarea
+                        {...register(`contentMainTarget${data}`, {
+                          required: { value: true, message: "주요 목표를 입력하세요" },
+                        })}
+                      />
+                    </div>
+                    <ErrorMessage
+                      errors={errors}
+                      name={`contentMainTarget${data}`}
+                      render={({ message }) => (
+                        <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">
+                          {message}
+                        </p>
+                      )}
+                    />
+                    <div className="flex flex-col">
+                      <div>새부 사항</div>
+                      <textarea
+                        {...register(`contentDetail${data}`, {
+                          required: { value: true, message: "세부 사항을 입력하세요" },
+                        })}
+                      />
+                    </div>
+                    <ErrorMessage
+                      errors={errors}
+                      name={`contentDetail${data}`}
+                      render={({ message }) => (
+                        <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">
+                          {message}
+                        </p>
+                      )}
+                    />
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setContentLength(contentLength + 1)}
+                className="mx-auto w-4/5 bg-slate-200 flex justify-center items-center p-1 px-2 rounded-lg"
+              >
+                <PlusCircleIcon className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="w-full flex justify-center items-center p-2">
+              <button
+                type="submit"
+                className="bg-green-500 text-white p-2 px-8 rounded-full hover:bg-green-600 duration-200 transition"
+              >
+                제출
+              </button>
+            </div>
           </form>
         </div>
       </div>

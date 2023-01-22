@@ -6,8 +6,9 @@ export default async function AdminPost(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
-    const { post, dataId, dataType, data } = req.body
+    const { post } = req.body
     if (post === "adminDiplomaUpdate") {
+      const { dataId, data } = req.body
       const updateDiploma = await prisma.diploma.update({
         where: {
           id: dataId,
@@ -19,6 +20,7 @@ export default async function AdminPost(req, res) {
       })
       res.status(200)
     } else if (post === "adminDiplomaCreate") {
+      const { data } = req.body
       const createDiploma = await prisma.diploma.create({
         data: {
           name: data.diplomaName,
@@ -31,7 +33,103 @@ export default async function AdminPost(req, res) {
         },
       })
       res.status(200)
+    } else if (post === "adminPostSubject") {
+      const {
+        schoolId,
+        title,
+        type,
+        diplomaId,
+        area,
+        csat,
+        open,
+        prerequisite,
+        relatedMajor,
+        target,
+        targetParticipants,
+        contents,
+      } = req.body
+      let csatVar
+      if (csat === 0) {
+        csatVar = false
+      } else if (csat === 1) csatVar = true
+
+      const createSubject = await prisma.subject.create({
+        data: {
+          title: title,
+          open: open,
+          type: type,
+          target: target,
+          relatedMajor: relatedMajor,
+          subjectArea: area,
+          targetParticipants: targetParticipants,
+          CSATSubject: csatVar,
+          School: {
+            connect: {
+              id: schoolId,
+            },
+          },
+        },
+      })
+      console.log(createSubject)
+      diplomaId.map(async (data) => {
+        const linkDiploma = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            diplomas: {
+              connect: {
+                id: data,
+              },
+            },
+          },
+        })
+        console.log(linkDiploma)
+      })
+
+      contents.map(async (data, key) => {
+        let splitContentMainTarget
+        splitContentMainTarget = data.mainTarget.split("/")
+        const createSubjectContent = await prisma.subjectcontent.create({
+          data: {
+            order: key,
+            area: data.area,
+            mainTarget: splitContentMainTarget,
+            detail: data.detail,
+          },
+        })
+        const linkSubjectContent = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            content: {
+              connect: {
+                id: createSubjectContent.id,
+              },
+            },
+          },
+        })
+        console.log(createSubjectContent, linkSubjectContent)
+      })
+      prerequisite.map(async (data) => {
+        const linkPrerequisite = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            prerequisite: {
+              connect: {
+                id: data,
+              },
+            },
+          },
+        })
+        console.log(linkPrerequisite)
+      })
+      res.status(200)
     } else if (post === "adminDiplomaDelete") {
+      const { dataId } = req.body
       const disconnectDiploma = await prisma.diploma.update({
         where: {
           id: dataId,
@@ -56,8 +154,7 @@ export default async function AdminPost(req, res) {
       res.status(200)
     } else {
       res.status(403).json({
-        message:
-          "You must be sign in to view the protected content on this page.",
+        message: "You must be sign in to view the protected content on this page.",
       })
     }
     res.end()
