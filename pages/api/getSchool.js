@@ -13,8 +13,20 @@ export default async function getSchool(req, res) {
           id: schoolId,
         },
         include: {
-          subjects: true,
-          diplomas: true,
+          subjects: {
+            id: true,
+            title: true,
+            diplomaId: true,
+            open: true,
+            type: true,
+            target: true,
+            relatedMajor: true,
+          },
+          diplomas: {
+            id: true,
+            name: true,
+            description: true,
+          },
         },
       })
       console.log(schoolInfo)
