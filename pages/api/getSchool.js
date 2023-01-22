@@ -12,11 +12,7 @@ export default async function getSchool(req, res) {
         where: {
           id: schoolId,
         },
-        select: {
-          id: true,
-          code: true,
-          name: true,
-          color: true,
+        include: {
           subjects: true,
           diplomas: true,
         },
