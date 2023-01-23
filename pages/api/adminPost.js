@@ -127,6 +127,106 @@ export default async function AdminPost(req, res) {
         })
       })
       res.status(200)
+    } else if (post === "adminUpdateSubject") {
+      const {
+        id,
+        schoolId,
+        title,
+        type,
+        diplomaId,
+        area,
+        csat,
+        open,
+        prerequisite,
+        relatedMajor,
+        target,
+        targetParticipants,
+        contents,
+        difficulty,
+      } = req.body
+      let csatVar
+      if (csat === 0) {
+        csatVar = false
+      } else if (csat === 1) csatVar = true
+
+      const createSubject = await prisma.subject.update({
+        where: {
+          id: id,
+        },
+        data: {
+          title: title,
+          open: open,
+          type: type,
+          target: target,
+          relatedMajor: relatedMajor,
+          subjectArea: area,
+          targetParticipants: targetParticipants,
+          CSATSubject: csatVar,
+          difficulty: difficulty,
+          School: {
+            connect: {
+              id: schoolId,
+            },
+          },
+        },
+      })
+
+      diplomaId.map(async (data) => {
+        const linkDiploma = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            diplomas: {
+              connect: {
+                id: data,
+              },
+            },
+          },
+        })
+      })
+
+      contents.map(async (data, key) => {
+        let splitContentMainTarget
+        splitContentMainTarget = data.mainTarget.split("/")
+        const createSubjectContent = await prisma.subjectcontent.update({
+          where: {
+            id: data.id,
+          },
+          data: {
+            area: data.area,
+            mainTarget: splitContentMainTarget,
+            detail: data.detail,
+          },
+        })
+        const linkSubjectContent = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            content: {
+              connect: {
+                id: createSubjectContent.id,
+              },
+            },
+          },
+        })
+      })
+      prerequisite.map(async (data) => {
+        const linkPrerequisite = await prisma.subject.update({
+          where: {
+            id: createSubject.id,
+          },
+          data: {
+            prerequisite: {
+              connect: {
+                id: data,
+              },
+            },
+          },
+        })
+      })
+      res.status(200)
     } else if (post === "adminDiplomaDelete") {
       const { dataId } = req.body
       const disconnectDiploma = await prisma.diploma.update({

@@ -1,7 +1,7 @@
 import ProtectedPage from "../../../../../components/ProtectedPage"
-import { useForm } from "react-hook-form"
 import useSchool from "../../../../../lib/client/useSchool"
 import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import axios from "axios"
@@ -12,7 +12,6 @@ export default function AddSubject() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm()
   const { diplomas, subjects, id } = useSchool()
   const [diploma, setDiploma] = useState([])
