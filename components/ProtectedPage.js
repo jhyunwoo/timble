@@ -38,6 +38,6 @@ export default function ProtectedPage(props) {
       )
     }
   } else {
-    return <AccessDenied />
+    return <Loading />
   }
 }

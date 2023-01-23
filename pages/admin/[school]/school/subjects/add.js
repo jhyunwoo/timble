@@ -509,7 +509,7 @@ export default function AddSubject() {
             <div className="w-full flex justify-center items-center p-2">
               <button
                 type="submit"
-                className="bg-green-500 text-white p-2 px-8 rounded-full hover:bg-green-600 duration-200 transition"
+                className="bg-green-500 text-lg font-semibold -mb-4 mt-4  text-white p-2 px-12 rounded-full hover:bg-green-600 duration-200 transition"
               >
                 제출
               </button>
