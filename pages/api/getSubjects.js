@@ -13,7 +13,11 @@ export default async function getSubjects(req, res) {
       },
       include: {
         prerequisite: true,
-        content: true,
+        content: {
+          orderBy: {
+            order: "asc",
+          },
+        },
         diplomas: true,
       },
     })

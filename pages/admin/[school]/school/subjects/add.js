@@ -21,6 +21,7 @@ export default function AddSubject() {
   const [area, setArea] = useState("")
   const [open, setOpen] = useState([])
   const [csat, setCsta] = useState(0)
+  const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
 
   async function postSubject(data, content) {
@@ -38,6 +39,7 @@ export default function AddSubject() {
       target: data.subjectTarget,
       targetParticipants: data.subjectTargetParticipants,
       contents: content,
+      difficulty: difficulty,
     })
   }
   const onSubmit = (data) => {
@@ -101,6 +103,13 @@ export default function AddSubject() {
       setOpen([data, ...open])
     }
   }
+  function controlDifficultySelect(data) {
+    if (data === difficulty) {
+      setDifficulty("")
+    } else {
+      setDifficulty(data)
+    }
+  }
 
   useEffect(() => {
     setValue("subjectArea", area)
@@ -119,6 +128,9 @@ export default function AddSubject() {
   }, [type])
   useEffect(() => {
     setValue("subjectCSAT", csat)
+  }, [csat])
+  useEffect(() => {
+    setValue("subjectDifficulty", csat)
   }, [csat])
 
   return (
@@ -229,6 +241,45 @@ export default function AddSubject() {
                 onClick={() => controlTypeSelect("FREE")}
               >
                 자유선택
+              </button>
+            </div>
+            <ErrorMessage
+              errors={errors}
+              name="subjectType"
+              render={({ message }) => (
+                <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
+              )}
+            />
+
+            <div
+              {...register("subjectDifficulty", { required: { value: true, message: "교과 난이도를 입력하세요" } })}
+              className="text-lg font-semibold mt-2"
+            >
+              교과 난이도
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${difficulty === "BASIC" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlDifficultySelect("BASIC")}
+              >
+                일반
+              </button>
+              <button
+                type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${difficulty === "HONOR" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlDifficultySelect("HONOR")}
+              >
+                고급
+              </button>
+              <button
+                type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${
+                  difficulty === "BILINGUAL" ? "bg-slate-800 text-white" : ""
+                }`}
+                onClick={() => controlDifficultySelect("BILINGUAL")}
+              >
+                이중언어
               </button>
             </div>
             <ErrorMessage

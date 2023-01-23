@@ -47,6 +47,7 @@ export default async function AdminPost(req, res) {
         target,
         targetParticipants,
         contents,
+        difficulty,
       } = req.body
       let csatVar
       if (csat === 0) {
@@ -63,6 +64,7 @@ export default async function AdminPost(req, res) {
           subjectArea: area,
           targetParticipants: targetParticipants,
           CSATSubject: csatVar,
+          difficulty: difficulty,
           School: {
             connect: {
               id: schoolId,
@@ -70,7 +72,7 @@ export default async function AdminPost(req, res) {
           },
         },
       })
-      console.log(createSubject)
+
       diplomaId.map(async (data) => {
         const linkDiploma = await prisma.subject.update({
           where: {
@@ -84,7 +86,6 @@ export default async function AdminPost(req, res) {
             },
           },
         })
-        console.log(linkDiploma)
       })
 
       contents.map(async (data, key) => {
@@ -110,7 +111,6 @@ export default async function AdminPost(req, res) {
             },
           },
         })
-        console.log(createSubjectContent, linkSubjectContent)
       })
       prerequisite.map(async (data) => {
         const linkPrerequisite = await prisma.subject.update({
@@ -125,7 +125,6 @@ export default async function AdminPost(req, res) {
             },
           },
         })
-        console.log(linkPrerequisite)
       })
       res.status(200)
     } else if (post === "adminDiplomaDelete") {

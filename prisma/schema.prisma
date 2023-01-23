@@ -100,6 +100,7 @@ model Subject {
   subjectArea          subjectAreas
   targetParticipants   String
   CSATSubject          Boolean
+  difficulty           difficulties     @default(BASIC)
 }
 
 model subjectcontent {
@@ -143,4 +144,10 @@ enum subjectAreas {
   CARERR
   FOUNDATION
   PEANDART
+}
+
+enum difficulties {
+  BASIC
+  HONOR
+  BILINGUAL
 }
