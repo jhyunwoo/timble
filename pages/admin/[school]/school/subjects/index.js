@@ -6,11 +6,12 @@ import useSchool from "../../../../../lib/client/useSchool"
 import { DocumentPlusIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import MoveBack from "../../../../../components/moveBack"
 
 export default function AdminSubjects() {
   const { subjects } = useSubjects()
   const { user } = useUser()
-  const { diplomas } = useSchool()
+  const { diplomas, code } = useSchool()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredSubjects, setFilteredSubjects] = useState([])
 
@@ -45,6 +46,8 @@ export default function AdminSubjects() {
 
   return (
     <ProtectedPage>
+      <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
           ? diplomas.map((data, key) => (

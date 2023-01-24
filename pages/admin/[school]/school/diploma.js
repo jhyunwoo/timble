@@ -9,11 +9,12 @@ import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
+import MoveBack from "../../../../components/moveBack"
 
 export default function AdminDiploma() {
   const [pop, setPop] = useState()
   const [diplomaId, setDiplomaId] = useState(0)
-  const { diplomas, id } = useSchool()
+  const { diplomas, id, code } = useSchool()
   const { user } = useUser()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
@@ -29,6 +30,7 @@ export default function AdminDiploma() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
+        <MoveBack title={"학교"} link={`/admin/${code}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">디플로마</div>
         {diplomas ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
