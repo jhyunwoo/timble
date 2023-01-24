@@ -413,6 +413,20 @@ export default function AdminSubjectEdit() {
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "COMMON" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlAreaeSelect("COMMON")}
+              >
+                공통
+              </button>
+              <button
+                type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "GENERAL" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlAreaeSelect("GENERAL")}
+              >
+                일반
+              </button>
+              <button
+                type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${area === "FOUNDATION" ? "bg-slate-800 text-white" : ""}`}
                 onClick={() => controlAreaeSelect("FOUNDATION")}
               >
@@ -571,7 +585,7 @@ export default function AdminSubjectEdit() {
 
             <div className="text-lg font-semibold mt-2">목표</div>
             <textarea
-              className="w-full h-20 bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
+              className="w-full h-32 bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
               {...register("subjectTarget", { required: { value: true, message: "목표 입력하세요" } })}
             />
             <ErrorMessage

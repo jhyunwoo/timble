@@ -5,6 +5,11 @@ import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import axios from "axios"
+import { dataUpdateState } from "../../../../../components/recoil/states"
+import { useSetRecoilState } from "recoil"
+import { useRouter } from "next/router"
+import { mutate } from "swr"
+import useUser from "../../../../../lib/client/useUser"
 
 export default function AddSubject() {
   const {
@@ -13,7 +18,7 @@ export default function AddSubject() {
     formState: { errors },
     setValue,
   } = useForm()
-  const { diplomas, subjects, id } = useSchool()
+  const { diplomas, subjects, id, code } = useSchool()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
@@ -22,7 +27,9 @@ export default function AddSubject() {
   const [csat, setCsta] = useState(0)
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
-
+  const controlDataUpdate = useSetRecoilState(dataUpdateState)
+  const router = useRouter()
+  const { user } = useUser()
   async function postSubject(data, content) {
     await axios.post("/api/adminPost", {
       post: "adminPostSubject",
@@ -41,9 +48,14 @@ export default function AddSubject() {
       difficulty: difficulty,
     })
   }
+  function updateData() {
+    function mutateData() {
+      mutate([user ? "/api/getSubjects" : null, user ? user.schoolId : null])
+    }
+    setTimeout(mutateData, 2000)
+  }
   const onSubmit = (data) => {
-    console.log(data)
-    console.log(contentLength)
+    controlDataUpdate(true)
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
       unifyContent.push({
@@ -52,8 +64,10 @@ export default function AddSubject() {
         detail: data[`contentDetail${i}`],
       })
     }
-    console.log(unifyContent)
     postSubject(data, unifyContent)
+    router.push(`/admin/${code}/school/subjects`)
+    updateData()
+    controlDataUpdate(false)
   }
 
   function range(start, end) {
@@ -298,6 +312,20 @@ export default function AddSubject() {
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "COMMON" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlAreaeSelect("COMMON")}
+              >
+                공통
+              </button>
+              <button
+                type="button"
+                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "GENERAL" ? "bg-slate-800 text-white" : ""}`}
+                onClick={() => controlAreaeSelect("GENERAL")}
+              >
+                일반
+              </button>
+              <button
+                type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${area === "FOUNDATION" ? "bg-slate-800 text-white" : ""}`}
                 onClick={() => controlAreaeSelect("FOUNDATION")}
               >
@@ -456,7 +484,7 @@ export default function AddSubject() {
 
             <div className="text-lg font-semibold mt-2">목표</div>
             <textarea
-              className="w-full h-20 bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
+              className="w-full h-32 bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
               {...register("subjectTarget", { required: { value: true, message: "목표 입력하세요" } })}
             />
             <ErrorMessage
@@ -467,7 +495,7 @@ export default function AddSubject() {
               )}
             />
 
-            <div className="text-lg font-semibold mt-2">진로</div>
+            <div className="text-lg font-semibold mt-2">진로 (관련 전공)</div>
             <textarea
               className="w-full h-12 bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
               {...register("subjectRelatedMajor", { required: { value: true, message: "진로를 입력하세요" } })}
@@ -512,7 +540,7 @@ export default function AddSubject() {
                       )}
                     />
                     <div className="flex flex-col">
-                      <div>주요 목표 ( / 로 구분)</div>
+                      <div>핵심 개념 ( / 로 구분)</div>
                       <textarea
                         {...register(`contentMainTarget${data}`, {
                           required: { value: true, message: "주요 목표를 입력하세요" },
@@ -529,7 +557,7 @@ export default function AddSubject() {
                       )}
                     />
                     <div className="flex flex-col">
-                      <div>새부 사항</div>
+                      <div>내용 요소</div>
                       <textarea
                         {...register(`contentDetail${data}`, {
                           required: { value: true, message: "세부 사항을 입력하세요" },

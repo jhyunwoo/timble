@@ -67,9 +67,9 @@ export default function AdminSubjects() {
         <div className={"grid grid-cols-1 p-4 gap-4"}>
           {filteredSubjects.map((data, key) => (
             <Link key={key} href={`/admin/${user ? user.admin : null}/school/subjects/${data.id}`}>
-              <div className="bg-white p-4 hover:bg-slate-800 group hover:text-white shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
+              <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
                 <div>
-                  <div className="text-sm font-normal text-slate-500 group-hover:text-slate-200 transition duration-1000 flex">
+                  <div className="text-sm font-normal text-slate-500 transition duration-1000 flex">
                     {data.diplomas.map((data, key) => (
                       <div key={key} className="mx-1">
                         {data.name}

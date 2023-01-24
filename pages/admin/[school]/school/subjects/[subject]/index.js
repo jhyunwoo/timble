@@ -11,6 +11,7 @@ import {
 import Link from "next/link"
 import useUser from "../../../../../../lib/client/useUser"
 import { PencilSquareIcon } from "@heroicons/react/24/outline"
+import MoveBack from "../../../../../../components/moveBack"
 
 export default function Subject() {
   const router = useRouter()
@@ -44,7 +45,9 @@ export default function Subject() {
 
   return (
     <ProtectedPage>
-      <div className="p-4 grid grid-cols-1 gap-4">
+      <MoveBack title={"교과목"} link={`/admin/${code}/school/subjects`} />
+
+      <div className="p-4 grid grid-cols-1 gap-4 -mt-4">
         <div className="text-2xl font-bold m-2 flex justify-between items-center">
           <div>{subjectInfo.title}</div>
           <Link
