@@ -7,12 +7,15 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
+import { useSetRecoilState } from "recoil"
+import { dataUpdateState } from "../../../../components/recoil/states"
 
 export default function AdminDiploma() {
   const [pop, setPop] = useState()
   const [diplomaId, setDiplomaId] = useState(0)
   const { diplomas, id } = useSchool()
   const { user } = useUser()
+  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
@@ -74,12 +77,14 @@ export default function AdminDiploma() {
     } = useForm()
 
     const onSubmit = (data) => {
+      controlUpdate(true)
       postDiploma("adminDiplomaUpdate", diplomas[diplomaId].id, {
         diplomaName: data.diplomaName,
         diplomaDescription: data.diplomaDescription,
       })
       setPop(false)
       updateData()
+      controlUpdate(false)
     }
 
     async function postDiploma(postData, idData, data) {
@@ -178,6 +183,7 @@ export default function AdminDiploma() {
     } = useForm()
 
     const onSubmit = (data) => {
+      controlUpdate(true)
       postDiploma("adminDiplomaCreate", {
         diplomaName: data.diplomaName,
         diplomaDescription: data.diplomaDescription,
@@ -185,6 +191,7 @@ export default function AdminDiploma() {
       })
       setPop(false)
       updateData()
+      controlUpdate(false)
     }
 
     async function postDiploma(postData, data) {

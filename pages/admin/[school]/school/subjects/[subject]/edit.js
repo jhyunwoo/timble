@@ -1,12 +1,16 @@
 import ProtectedPage from "../../../../../../components/ProtectedPage"
 import useSubjects from "../../../../../../lib/client/useSubjects"
 import useSchool from "../../../../../../lib/client/useSchool"
+import useUser from "../../../../../../lib/client/useUser"
+import { dataUpdateState } from "../../../../../../components/recoil/states"
+import { useSetRecoilState } from "recoil"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { PlusCircleIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline"
 import axios from "axios"
+import { mutate } from "swr"
 
 export default function AdminSubjectEdit() {
   const router = useRouter()
@@ -21,6 +25,7 @@ export default function AdminSubjectEdit() {
   } = useForm()
   const { diplomas, id } = useSchool()
   const { subjects } = useSubjects()
+  const { user } = useUser()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
@@ -29,6 +34,7 @@ export default function AdminSubjectEdit() {
   const [csat, setCsta] = useState(0)
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
+  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function getSubjectInfo() {
     if (subjects && code) {
@@ -60,9 +66,24 @@ export default function AdminSubjectEdit() {
       difficulty: difficulty,
     })
   }
+  async function deleteSubject() {
+    controlUpdate(true)
+    await axios.post("/api/adminPost", {
+      post: "adminDeleteSubject",
+      id: subjectInfo.id,
+    })
+    router.push(`/admin/${code}/school/subjects`)
+    updateData()
+    controlUpdate(false)
+  }
+  function updateData() {
+    function mutateData() {
+      mutate([user ? "/api/getSubjects" : null, user ? user.schoolId : null])
+    }
+    setTimeout(mutateData, 2000)
+  }
+
   const onSubmit = (data) => {
-    console.log(data)
-    console.log(contentLength)
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
       unifyContent.push({
@@ -72,8 +93,8 @@ export default function AdminSubjectEdit() {
         detail: data[`contentDetail${i}`],
       })
     }
-    console.log(unifyContent)
     updateSubject(data, unifyContent)
+    router.push(`/admin/${code}/school/subjects/${subjectInfo.id}`)
   }
 
   function range(start, end) {
@@ -149,8 +170,8 @@ export default function AdminSubjectEdit() {
     setValue("subjectCSAT", csat)
   }, [csat])
   useEffect(() => {
-    setValue("subjectDifficulty", csat)
-  }, [csat])
+    setValue("subjectDifficulty", difficulty)
+  }, [difficulty])
 
   useEffect(() => {
     getSubjectInfo()
@@ -171,22 +192,29 @@ export default function AdminSubjectEdit() {
       }
     }
   }, [
-    contentLength,
-    diplomas,
-    reset,
-    setValue,
     subjectInfo.content,
     subjectInfo.relatedMajor,
     subjectInfo.target,
     subjectInfo.targetParticipants,
     subjectInfo.title,
+    diplomas,
+    reset,
+    contentLength,
+    setValue,
   ])
+
   useEffect(() => {
     if (subjectInfo.diplomas) {
-      subjectInfo.diplomas.map((data) => controlDiplomaSelect([data.id, ...diploma]))
+      let setDip = []
+      subjectInfo.diplomas.map((data) => {
+        setDip.push(data.id)
+      })
+      setDiploma(setDip)
     }
     if (subjectInfo.prerequisite) {
-      subjectInfo.prerequisite.map((data) => controlPrerequisiteSelect([data.id, ...prerequisite]))
+      let setPre = []
+      subjectInfo.prerequisite.map((data) => setPre.push(data.id))
+      setPrerequisite(setPre)
     }
     if (subjectInfo.type) {
       setType(subjectInfo.type)
@@ -198,7 +226,8 @@ export default function AdminSubjectEdit() {
       setArea(subjectInfo.subjectArea)
     }
     if (subjectInfo.open) {
-      subjectInfo.open.map((data) => controlOpenSelect([data, ...prerequisite]))
+      setOpen(subjectInfo.open)
+      console.log("set open")
     }
     if (subjectInfo.CSATSubject) {
       setCsta(subjectInfo.CSATSubject)
@@ -207,11 +236,20 @@ export default function AdminSubjectEdit() {
       setContentLength(subjectInfo.content.length + 1)
     }
   }, [subjectInfo.diplomas])
+
   return (
     <ProtectedPage>
       <div className="w-full h-full p-4">
-        <div className="text-2xl font-bold mx-2 mb-2" onClick={() => console.log(subjectInfo)}>
-          교과목 수정
+        <div className="flex justify-between items-center  p-2">
+          <div className="text-2xl font-bold">교과목 수정</div>
+          <button
+            className="w-10 h-10"
+            onClick={() => {
+              deleteSubject()
+            }}
+          >
+            <TrashIcon className=" p-2 rounded-lg bg-red-500 hover:bg-red-600 transition duration-200 text-white" />
+          </button>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit(onSubmit)}>

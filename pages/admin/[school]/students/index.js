@@ -89,7 +89,7 @@ export default function AdminStudents() {
       </div>
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
-          ? diplomas.map((data, key) => (
+          ? diplomas.sort().map((data, key) => (
               <button
                 onClick={() => controlDiplomaFilter(data.name)}
                 className={`${

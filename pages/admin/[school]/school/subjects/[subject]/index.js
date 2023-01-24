@@ -126,7 +126,7 @@ export default function Subject() {
             {subjectInfo.CSATSubject ? "예" : "아니요"}
           </p>
         </div>
-        <div className="bg-white rounded-lg flex flex-col">
+        <div className="bg-white rounded-lg flex flex-col p-2">
           <div className="text-xl font-semibold m-4">내용 체계</div>
           <div className="grid grid-cols-1 gap-2">
             {subjectInfo.content
