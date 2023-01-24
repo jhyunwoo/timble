@@ -3,19 +3,14 @@ import { authOptions } from "./auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function getSubjects(req, res) {
-  const { schoolId } = req.body
+  const { subjectId } = req.body
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
-    const schoolSubject = await prisma.subject.findMany({
+    const subject = await prisma.subject.findUnique({
       where: {
-        schoolId: schoolId,
+        id: subjectId,
       },
-      orderBy: [
-        {
-          id: "asc",
-        },
-      ],
       include: {
         prerequisite: true,
         content: {
@@ -26,7 +21,7 @@ export default async function getSubjects(req, res) {
         diplomas: true,
       },
     })
-    res.json(schoolSubject)
+    res.json(subject)
   } else {
     res.status(401).json({
       message: "You must be sign in to view the protected content on this page.",

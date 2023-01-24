@@ -68,13 +68,19 @@ export default function AdminSubjects() {
           {filteredSubjects.map((data, key) => (
             <Link key={key} href={`/admin/${user ? user.admin : null}/school/subjects/${data.id}`}>
               <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
-                <div>
-                  <div className="text-sm font-normal text-slate-500 transition duration-1000 flex">
-                    {data.diplomas.map((data, key) => (
+                <div className="my-1 w-full">
+                  <div className="text-sm font-normal text-slate-500 transition duration-1000 grid-cols-3 grid sm:grid-cols-4 w-full ">
+                    {data.diplomas.length !== diplomas.length ? (
+                      data.diplomas.map((data, key) => (
+                        <div key={key} className="mx-1">
+                          {data.name}
+                        </div>
+                      ))
+                    ) : (
                       <div key={key} className="mx-1">
-                        {data.name}
+                        모든 과정
                       </div>
-                    ))}
+                    )}
                   </div>
                   <div className="text-xl mt-1 font-semibold text-slate-900 group-hover:text-slate-50 transition duration-200">
                     {data.title}

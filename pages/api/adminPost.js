@@ -171,19 +171,30 @@ export default async function AdminPost(req, res) {
         },
       })
 
-      diplomaId.map(async (data) => {
-        const linkDiploma = await prisma.subject.update({
-          where: {
-            id: createSubject.id,
+      let connectDiploma = []
+      diplomaId.map((data) => {
+        connectDiploma.push({ id: data })
+      })
+
+      const disconnectAll = await prisma.subject.update({
+        where: {
+          id: createSubject.id,
+        },
+        data: {
+          diplomas: {
+            set: [],
           },
-          data: {
-            diplomas: {
-              connect: {
-                id: data,
-              },
-            },
+        },
+      })
+      const linkDiploma = await prisma.subject.update({
+        where: {
+          id: createSubject.id,
+        },
+        data: {
+          diplomas: {
+            connect: connectDiploma,
           },
-        })
+        },
       })
 
       contents.map(async (data, key) => {

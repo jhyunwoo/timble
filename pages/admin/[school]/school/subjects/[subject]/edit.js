@@ -11,11 +11,12 @@ import { ErrorMessage } from "@hookform/error-message"
 import { PlusCircleIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline"
 import axios from "axios"
 import { mutate } from "swr"
+import useSubject from "../../../../../../lib/client/useSubject"
+import MoveBack from "../../../../../../components/moveBack"
 
 export default function AdminSubjectEdit() {
   const router = useRouter()
   const { code } = useSchool()
-  const [subjectInfo, setSubjectInfo] = useState({})
   const {
     register,
     handleSubmit,
@@ -35,22 +36,17 @@ export default function AdminSubjectEdit() {
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
   const controlUpdate = useSetRecoilState(dataUpdateState)
+  const { subject } = useSubject(subjectID())
 
-  function getSubjectInfo() {
-    if (subjects && code) {
-      let subjectId = router.asPath.replace(`/admin/${code}/school/subjects/`, "")
-      subjectId = subjectId.replace("/edit", "")
-      subjects.map((data) => {
-        if (data.id === Number(subjectId)) {
-          setSubjectInfo(data)
-        }
-      })
-    }
+  function subjectID() {
+    let beforeEdit = router.asPath.replace(`/admin/${code}/school/subjects/`, "")
+    return Number(beforeEdit.replace("/edit", ""))
   }
+
   async function updateSubject(data, content) {
     await axios.post("/api/adminPost", {
       post: "adminUpdateSubject",
-      id: subjectInfo.id,
+      id: subject.id,
       schoolId: id,
       title: data.subjectTitle,
       type: data.subjectType,
@@ -70,7 +66,7 @@ export default function AdminSubjectEdit() {
     controlUpdate(true)
     await axios.post("/api/adminPost", {
       post: "adminDeleteSubject",
-      id: subjectInfo.id,
+      id: subject.id,
     })
     router.push(`/admin/${code}/school/subjects`)
     updateData()
@@ -87,14 +83,14 @@ export default function AdminSubjectEdit() {
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
       unifyContent.push({
-        id: subjectInfo.content[i - 1].id,
+        id: subject.content[i - 1].id,
         area: data[`contentArea${i}`],
         mainTarget: data[`contentMainTarget${i}`],
         detail: data[`contentDetail${i}`],
       })
     }
     updateSubject(data, unifyContent)
-    router.push(`/admin/${code}/school/subjects/${subjectInfo.id}`)
+    router.push(`/admin/${code}/school/subjects/${subject.id}`)
   }
 
   function range(start, end) {
@@ -174,71 +170,45 @@ export default function AdminSubjectEdit() {
   }, [difficulty])
 
   useEffect(() => {
-    getSubjectInfo()
-  }, [subjects, router, code])
-
-  useEffect(() => {
     if (diplomas) {
       reset({
-        subjectTitle: subjectInfo.title,
-        subjectTargetParticipants: subjectInfo.targetParticipants,
-        subjectTarget: subjectInfo.target,
-        subjectRelatedMajor: subjectInfo.relatedMajor,
+        subjectTitle: subject.title,
+        subjectTargetParticipants: subject.targetParticipants,
+        subjectTarget: subject.target,
+        subjectRelatedMajor: subject.relatedMajor,
       })
       for (let i = 1; i < contentLength; i++) {
-        setValue(`contentArea${i}`, subjectInfo.content[i - 1].area)
-        setValue(`contentDetail${i}`, subjectInfo.content[i - 1].detail)
-        setValue(`contentMainTarget${i}`, subjectInfo.content[i - 1].mainTarget.join("/"))
+        setValue(`contentArea${i}`, subject.content[i - 1].area)
+        setValue(`contentDetail${i}`, subject.content[i - 1].detail)
+        setValue(`contentMainTarget${i}`, subject.content[i - 1].mainTarget.join("/"))
       }
     }
-  }, [
-    subjectInfo.content,
-    subjectInfo.relatedMajor,
-    subjectInfo.target,
-    subjectInfo.targetParticipants,
-    subjectInfo.title,
-    diplomas,
-    reset,
-    contentLength,
-    setValue,
-  ])
+  }, [diplomas, reset, contentLength, setValue])
 
   useEffect(() => {
-    if (subjectInfo.diplomas) {
+    if (subject) {
       let setDip = []
-      subjectInfo.diplomas.map((data) => {
+      subject.diplomas.map((data) => {
         setDip.push(data.id)
       })
       setDiploma(setDip)
     }
-    if (subjectInfo.prerequisite) {
+    if (subject) {
       let setPre = []
-      subjectInfo.prerequisite.map((data) => setPre.push(data.id))
+      subject.prerequisite.map((data) => setPre.push(data.id))
       setPrerequisite(setPre)
+      setType(subject.type)
+      setDifficulty(subject.difficulty)
+      setArea(subject.subjectArea)
+      setOpen(subject.open)
+      setCsta(subject.CSATSubject)
+      setContentLength(subject.content.length + 1)
     }
-    if (subjectInfo.type) {
-      setType(subjectInfo.type)
-    }
-    if (subjectInfo.difficulty) {
-      setDifficulty(subjectInfo.difficulty)
-    }
-    if (subjectInfo.subjectArea) {
-      setArea(subjectInfo.subjectArea)
-    }
-    if (subjectInfo.open) {
-      setOpen(subjectInfo.open)
-      console.log("set open")
-    }
-    if (subjectInfo.CSATSubject) {
-      setCsta(subjectInfo.CSATSubject)
-    }
-    if (subjectInfo.content) {
-      setContentLength(subjectInfo.content.length + 1)
-    }
-  }, [subjectInfo.diplomas])
+  }, [subject])
 
   return (
     <ProtectedPage>
+      <MoveBack title={`${subject ? subject.title : ""}`} link={`/admin/${code}/school/subjects/${subjectID()}`} />
       <div className="w-full h-full p-4">
         <div className="flex justify-between items-center  p-2">
           <div className="text-2xl font-bold">교과목 수정</div>

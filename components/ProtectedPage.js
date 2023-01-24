@@ -11,6 +11,7 @@ import useSchool from "../lib/client/useSchool"
 import useCheckUserNull from "../lib/client/useCheckUserNull"
 import { dataUpdateState } from "./recoil/states"
 import AccessDenied from "./AccessDenied"
+import useSubjects from "../lib/client/useSubjects"
 
 export default function ProtectedPage(props) {
   const router = useRouter()
@@ -18,15 +19,15 @@ export default function ProtectedPage(props) {
   const { status } = useSession()
   const { user, isLoadingUser, nullData } = useUser()
   const { isLoadingSchool } = useSchool()
+  const { isLoadingSubjects } = useSubjects()
   const isDataUpdate = useRecoilValue(dataUpdateState)
-
   useCheckUserNull(nullData)
 
   if (status === "unauthenticated") {
     router.push("/signin")
     return <Loading />
   } else if (status === "authenticated") {
-    if (status === "loading" || isLoadingUser || isLoadingSchool || isDataUpdate) {
+    if (status === "loading" || isLoadingUser || isLoadingSchool || isDataUpdate || isLoadingSubjects) {
       return <Loading />
     } else if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
       return <AccessDenied />

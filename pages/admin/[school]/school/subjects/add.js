@@ -527,6 +527,7 @@ export default function AddSubject() {
                     <div className="flex flex-col">
                       <div>영역</div>
                       <input
+                        className="p-1 rounded-lg"
                         {...register(`contentArea${data}`, { required: { value: true, message: "영역을 입력하세요" } })}
                       />
                     </div>
@@ -542,6 +543,7 @@ export default function AddSubject() {
                     <div className="flex flex-col">
                       <div>핵심 개념 ( / 로 구분)</div>
                       <textarea
+                        className="p-1 rounded-lg"
                         {...register(`contentMainTarget${data}`, {
                           required: { value: true, message: "주요 목표를 입력하세요" },
                         })}
@@ -559,6 +561,7 @@ export default function AddSubject() {
                     <div className="flex flex-col">
                       <div>내용 요소</div>
                       <textarea
+                        className="p-1 rounded-lg"
                         {...register(`contentDetail${data}`, {
                           required: { value: true, message: "세부 사항을 입력하세요" },
                         })}
