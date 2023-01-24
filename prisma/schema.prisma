@@ -75,13 +75,16 @@ model Timetable {
 }
 
 model school {
-  id       Int       @id @default(autoincrement())
-  code     String    @unique
-  name     String
-  color    String?
-  subjects Subject[]
-  students User[]
-  diplomas diploma[]
+  id          Int           @id @default(autoincrement())
+  code        String        @unique
+  name        String
+  color       String?
+  subjects    Subject[]
+  students    User[]
+  diplomas    diploma[]
+  subjectType subjectType[]
+  subjectArea subjectArea[]
+  difficulty  difficulty[]
 }
 
 model Subject {
@@ -93,14 +96,17 @@ model Subject {
   open                 String[]
   prerequisite         Subject[]        @relation("SubjectPrerequisite")
   prerequisiteRelation Subject[]        @relation("SubjectPrerequisite")
-  type                 subjectType
+  type                 subjectType      @relation(fields: [subjectTypeId], references: [id])
+  subjectTypeId        String
   target               String
   relatedMajor         String
   content              subjectcontent[]
-  subjectArea          subjectAreas
+  subjectArea          subjectArea      @relation(fields: [subjectAreaId], references: [id])
+  subjectAreaId        String
   targetParticipants   String
   CSATSubject          Boolean
-  difficulty           difficulties     @default(BASIC)
+  difficulty           difficulty       @relation(fields: [difficultyId], references: [id])
+  difficultyId         String
 }
 
 model subjectcontent {
@@ -123,33 +129,31 @@ model diploma {
   students    User[]
 }
 
+model subjectType {
+  id       String    @id @default(cuid())
+  name     String
+  school   school    @relation(fields: [schoolId], references: [id])
+  Subject  Subject[]
+  schoolId Int
+}
+
+model subjectArea {
+  id       String    @id @default(cuid())
+  school   school    @relation(fields: [schoolId], references: [id])
+  schoolId Int
+  Subject  Subject[]
+  name     String
+}
+
+model difficulty {
+  id       String    @id @default(cuid())
+  school   school    @relation(fields: [schoolId], references: [id])
+  schoolId Int
+  Subject  Subject[]
+  name     String
+}
+
 enum role {
   USER
   ADMIN
-}
-
-enum subjectType {
-  COMMON
-  SERIES
-  COURSE
-  FREE
-}
-
-enum subjectAreas {
-  EXPLORATION
-  PRO
-  PRO1
-  PRO2
-  CULTURE
-  CARERR
-  FOUNDATION
-  PEANDART
-  COMMON
-  GENERAL
-}
-
-enum difficulties {
-  BASIC
-  HONOR
-  BILINGUAL
 }

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Subject" ALTER COLUMN "difficultyId" DROP DEFAULT,
+ALTER COLUMN "subjectAreaId" DROP DEFAULT,
+ALTER COLUMN "subjectTypeId" DROP DEFAULT;

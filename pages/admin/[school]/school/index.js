@@ -17,6 +17,21 @@ export default function AdminTimetable() {
             <div className="text-2xl font-bold">교과목</div>
           </div>
         </Link>
+        <Link href={`/admin/${user ? user.admin : null}/school/types`}>
+          <div className="bg-white shadow-md py-6 p-4 rounded-lg hover:shadow-lg transition duration-200">
+            <div className="text-2xl font-bold">교과 종류</div>
+          </div>
+        </Link>
+        <Link href={`/admin/${user ? user.admin : null}/school/areas`}>
+          <div className="bg-white shadow-md py-6 p-4 rounded-lg hover:shadow-lg transition duration-200">
+            <div className="text-2xl font-bold">교과 영역</div>
+          </div>
+        </Link>
+        <Link href={`/admin/${user ? user.admin : null}/school/difficulties`}>
+          <div className="bg-white shadow-md py-6 p-4 rounded-lg hover:shadow-lg transition duration-200">
+            <div className="text-2xl font-bold">교과 난이도</div>
+          </div>
+        </Link>
       </div>
     </ProtectedPage>
   )

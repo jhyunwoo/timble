@@ -18,6 +18,9 @@ export default async function getSchool(req, res) {
         color: true,
         diplomas: true,
         subjects: true,
+        subjectType: true,
+        subjectArea: true,
+        difficulty: true,
       },
     })
     res.json(schoolInfo)

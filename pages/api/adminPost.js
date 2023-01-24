@@ -292,6 +292,132 @@ export default async function AdminPost(req, res) {
         },
       })
       res.status(200)
+    } else if (post === "adminSubjectAreaUpdate") {
+      const { data, dataId } = req.body
+      const updateSubjectArea = await prisma.subjectArea.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          name: data.areaName,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminSubjectAreaDelete") {
+      const { dataId } = req.body
+      const disconnectSubjectArea = await prisma.subjectArea.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          Subject: {
+            set: [],
+          },
+        },
+      })
+      const deleteSubjectArea = await prisma.subjectArea.delete({
+        where: {
+          id: dataId,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminSubjectAreaCreate") {
+      const { data } = req.body
+      const createSubjectArea = await prisma.subjectArea.create({
+        data: {
+          name: data.areaName,
+          school: {
+            connect: {
+              id: data.schoolId,
+            },
+          },
+        },
+      })
+      res.status(200)
+    } else if (post === "adminSubjectTypeUpdate") {
+      const { data, dataId } = req.body
+      const updateSubjectType = await prisma.subjectType.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          name: data.typeName,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminSubjectTypeDelete") {
+      const { dataId } = req.body
+      const disconnectSubjectType = await prisma.subjectType.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          Subject: {
+            set: [],
+          },
+        },
+      })
+      const deleteSubjectType = await prisma.subjectType.delete({
+        where: {
+          id: dataId,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminSubjectTypeCreate") {
+      const { data } = req.body
+      const createSubjectType = await prisma.subjectType.create({
+        data: {
+          name: data.typeName,
+          school: {
+            connect: {
+              id: data.schoolId,
+            },
+          },
+        },
+      })
+      res.status(200)
+    } else if (post === "adminDifficultyUpdate") {
+      const { data, dataId } = req.body
+      const updateDifficulty = await prisma.difficulty.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          name: data.difficultyName,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminDifficultyDelete") {
+      const { dataId } = req.body
+      const disconnectDifficulty = await prisma.difficulty.update({
+        where: {
+          id: dataId,
+        },
+        data: {
+          Subject: {
+            set: [],
+          },
+        },
+      })
+      const deleteDifficulty = await prisma.difficulty.delete({
+        where: {
+          id: dataId,
+        },
+      })
+      res.status(200)
+    } else if (post === "adminDifficultyCreate") {
+      const { data } = req.body
+      const createDifficulty = await prisma.difficulty.create({
+        data: {
+          name: data.difficultyName,
+          school: {
+            connect: {
+              id: data.schoolId,
+            },
+          },
+        },
+      })
+      res.status(200)
     } else {
       res.status(403).json({
         message: "You must be sign in to view the protected content on this page.",
