@@ -19,6 +19,10 @@ export default async function getSubjects(req, res) {
           },
         },
         diplomas: true,
+        type: true,
+        subjectArea: true,
+        type: true,
+        difficulty: true,
       },
     })
     res.json(subject)

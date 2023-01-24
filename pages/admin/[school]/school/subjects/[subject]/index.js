@@ -94,21 +94,23 @@ export default function Subject() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
-            <div className="text-xl font-semibold my-1">교과 난이도</div>
+            <div className="text-xl font-semibold my-1" onClick={() => console.log(subject)}>
+              교과 난이도
+            </div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.difficulty ? translateSubjectDifficulty(subject.difficulty) : ""}
+              {subject.difficulty ? subject.difficulty.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 유형</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.type ? translateSubjectType(subject.type) : ""}
+              {subject.type ? subject.type.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 영역</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.subjectArea ? translateSubjectArea(subject.subjectArea) : ""}
+              {subject.subjectArea ? subject.subjectArea.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg">

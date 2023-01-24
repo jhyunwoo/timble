@@ -52,19 +52,33 @@ export default async function AdminPost(req, res) {
       let csatVar
       if (csat === 0) {
         csatVar = false
-      } else if (csat === 1) csatVar = true
+      } else if (csat === 1) {
+        csatVar = true
+      }
 
       const createSubject = await prisma.subject.create({
         data: {
           title: title,
           open: open,
-          type: type,
+          type: {
+            connect: {
+              id: type,
+            },
+          },
           target: target,
           relatedMajor: relatedMajor,
-          subjectArea: area,
+          subjectArea: {
+            connect: {
+              id: area,
+            },
+          },
           targetParticipants: targetParticipants,
           CSATSubject: csatVar,
-          difficulty: difficulty,
+          difficulty: {
+            connect: {
+              id: difficulty,
+            },
+          },
           School: {
             connect: {
               id: schoolId,
@@ -156,13 +170,25 @@ export default async function AdminPost(req, res) {
         data: {
           title: title,
           open: open,
-          type: type,
+          type: {
+            connect: {
+              id: type,
+            },
+          },
           target: target,
           relatedMajor: relatedMajor,
-          subjectArea: area,
+          subjectArea: {
+            connect: {
+              id: area,
+            },
+          },
           targetParticipants: targetParticipants,
           CSATSubject: csatVar,
-          difficulty: difficulty,
+          difficulty: {
+            connect: {
+              id: difficulty,
+            },
+          },
           School: {
             connect: {
               id: schoolId,
@@ -197,32 +223,66 @@ export default async function AdminPost(req, res) {
         },
       })
 
+      const disconnectAllContents = await prisma.subject.update({
+        where: {
+          id: createSubject.id,
+        },
+        data: {
+          content: {
+            set: [],
+          },
+        },
+      })
       contents.map(async (data, key) => {
         let splitContentMainTarget
         splitContentMainTarget = data.mainTarget.split("/")
-        const createSubjectContent = await prisma.subjectcontent.update({
-          where: {
-            id: data.id,
-          },
-          data: {
-            area: data.area,
-            mainTarget: splitContentMainTarget,
-            detail: data.detail,
-          },
-        })
-        const linkSubjectContent = await prisma.subject.update({
-          where: {
-            id: createSubject.id,
-          },
-          data: {
-            content: {
-              connect: {
-                id: createSubjectContent.id,
+        if (data.id === "newContent") {
+          const createContent = await prisma.subjectcontent.create({
+            data: {
+              area: data.area,
+              mainTarget: splitContentMainTarget,
+              detail: data.detail,
+              order: key + 1,
+            },
+          })
+          const linkSubjectContent = await prisma.subject.update({
+            where: {
+              id: createSubject.id,
+            },
+            data: {
+              content: {
+                connect: {
+                  id: createContent.id,
+                },
               },
             },
-          },
-        })
+          })
+        } else {
+          const updateSubjectContent = await prisma.subjectcontent.update({
+            where: {
+              id: data.id,
+            },
+            data: {
+              area: data.area,
+              mainTarget: splitContentMainTarget,
+              detail: data.detail,
+            },
+          })
+          const linkSubjectContent = await prisma.subject.update({
+            where: {
+              id: createSubject.id,
+            },
+            data: {
+              content: {
+                connect: {
+                  id: updateSubjectContent.id,
+                },
+              },
+            },
+          })
+        }
       })
+
       prerequisite.map(async (data) => {
         const linkPrerequisite = await prisma.subject.update({
           where: {

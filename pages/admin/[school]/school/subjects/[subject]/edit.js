@@ -24,7 +24,7 @@ export default function AdminSubjectEdit() {
     setValue,
     reset,
   } = useForm()
-  const { diplomas, id } = useSchool()
+  const { diplomas, id, subjectAreas, subjectTypes, difficulties } = useSchool()
   const { subjects } = useSubjects()
   const { user } = useUser()
   const [diploma, setDiploma] = useState([])
@@ -80,10 +80,11 @@ export default function AdminSubjectEdit() {
   }
 
   const onSubmit = (data) => {
+    console.log(data)
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
       unifyContent.push({
-        id: subject.content[i - 1].id,
+        id: subject.content[i - 1] ? subject.content[i - 1].id : "newContent",
         area: data[`contentArea${i}`],
         mainTarget: data[`contentMainTarget${i}`],
         detail: data[`contentDetail${i}`],
@@ -170,7 +171,7 @@ export default function AdminSubjectEdit() {
   }, [difficulty])
 
   useEffect(() => {
-    if (diplomas) {
+    if (subject) {
       reset({
         subjectTitle: subject.title,
         subjectTargetParticipants: subject.targetParticipants,
@@ -178,12 +179,14 @@ export default function AdminSubjectEdit() {
         subjectRelatedMajor: subject.relatedMajor,
       })
       for (let i = 1; i < contentLength; i++) {
-        setValue(`contentArea${i}`, subject.content[i - 1].area)
-        setValue(`contentDetail${i}`, subject.content[i - 1].detail)
-        setValue(`contentMainTarget${i}`, subject.content[i - 1].mainTarget.join("/"))
+        if (subject.content[i - 1]) {
+          setValue(`contentArea${i}`, subject.content[i - 1].area)
+          setValue(`contentDetail${i}`, subject.content[i - 1].detail)
+          setValue(`contentMainTarget${i}`, subject.content[i - 1].mainTarget.join("/"))
+        }
       }
     }
-  }, [diplomas, reset, contentLength, setValue])
+  }, [contentLength, reset, setValue, subject])
 
   useEffect(() => {
     if (subject) {
@@ -197,9 +200,9 @@ export default function AdminSubjectEdit() {
       let setPre = []
       subject.prerequisite.map((data) => setPre.push(data.id))
       setPrerequisite(setPre)
-      setType(subject.type)
-      setDifficulty(subject.difficulty)
-      setArea(subject.subjectArea)
+      setType(subject.type.id)
+      setDifficulty(subject.difficulty.id)
+      setArea(subject.subjectArea.id)
       setOpen(subject.open)
       setCsta(subject.CSATSubject)
       setContentLength(subject.content.length + 1)
@@ -210,15 +213,15 @@ export default function AdminSubjectEdit() {
     <ProtectedPage>
       <MoveBack title={`${subject ? subject.title : ""}`} link={`/admin/${code}/school/subjects/${subjectID()}`} />
       <div className="w-full h-full p-4">
-        <div className="flex justify-between items-center  p-2">
+        <div className="flex justify-between items-center p-2">
           <div className="text-2xl font-bold">교과목 수정</div>
           <button
-            className="w-10 h-10"
+            className="w-8 h-8 bg-red-500 hover:bg-red-600 transition duration-200 rounded-lg p-2"
             onClick={() => {
               deleteSubject()
             }}
           >
-            <TrashIcon className=" p-2 rounded-lg bg-red-500 hover:bg-red-600 transition duration-200 text-white" />
+            <TrashIcon className="  text-white" />
           </button>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-lg">
@@ -298,34 +301,18 @@ export default function AdminSubjectEdit() {
               종류
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "COMMON" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("COMMON")}
-              >
-                공통선택
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "SERIES" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("SERIES")}
-              >
-                계열선택
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "COURSE" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("COURSE")}
-              >
-                과정선택
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${type === "FREE" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlTypeSelect("FREE")}
-              >
-                자유선택
-              </button>
+              {subjectTypes
+                ? subjectTypes.map((data, key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`bg-slate-50 p-1 px-2 rounded-md ${type === data.id ? "bg-slate-800 text-white" : ""}`}
+                      onClick={() => controlTypeSelect(data.id)}
+                    >
+                      {data.name}
+                    </button>
+                  ))
+                : ""}
             </div>
             <ErrorMessage
               errors={errors}
@@ -342,29 +329,20 @@ export default function AdminSubjectEdit() {
               교과 난이도
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${difficulty === "BASIC" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlDifficultySelect("BASIC")}
-              >
-                일반
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${difficulty === "HONOR" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlDifficultySelect("HONOR")}
-              >
-                고급
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${
-                  difficulty === "BILINGUAL" ? "bg-slate-800 text-white" : ""
-                }`}
-                onClick={() => controlDifficultySelect("BILINGUAL")}
-              >
-                이중언어
-              </button>
+              {difficulties
+                ? difficulties.map((data, key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`bg-slate-50 p-1 px-2 rounded-md ${
+                        difficulty === data.id ? "bg-slate-800 text-white" : ""
+                      }`}
+                      onClick={() => controlDifficultySelect(data.id)}
+                    >
+                      {data.name}
+                    </button>
+                  ))
+                : ""}
             </div>
             <ErrorMessage
               errors={errors}
@@ -381,76 +359,18 @@ export default function AdminSubjectEdit() {
               교과 영역
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "COMMON" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("COMMON")}
-              >
-                공통
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "GENERAL" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("GENERAL")}
-              >
-                일반
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "FOUNDATION" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("FOUNDATION")}
-              >
-                기초
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "PRO" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("PRO")}
-              >
-                전문
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "PRO1" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("PRO1")}
-              >
-                전문 1
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "PRO2" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("PRO2")}
-              >
-                전문 2
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "EXPLORATION" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("EXPLORATION")}
-              >
-                탐구
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "CLUTURE" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("CLUTURE")}
-              >
-                생활•교양
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "CARERR" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("CARERR")}
-              >
-                진로
-              </button>
-              <button
-                type="button"
-                className={`bg-slate-50 p-1 px-2 rounded-md ${area === "PEANDART" ? "bg-slate-800 text-white" : ""}`}
-                onClick={() => controlAreaeSelect("PEANDART")}
-              >
-                예술체육
-              </button>
+              {subjectAreas
+                ? subjectAreas.map((data, key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`bg-slate-50 p-1 px-2 rounded-md ${area === data.id ? "bg-slate-800 text-white" : ""}`}
+                      onClick={() => controlAreaeSelect(data.id)}
+                    >
+                      {data.name}
+                    </button>
+                  ))
+                : ""}
             </div>
             <ErrorMessage
               errors={errors}
