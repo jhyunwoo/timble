@@ -1,19 +1,21 @@
 import { signIn, useSession } from "next-auth/react"
-import GoogleLogin from "../public/google-logo.svg"
-import AppleLogin from "../public/apple-logo.png"
-import NaverLogin from "../public/naver-logo.png"
+import GoogleLogin from "../../public/google-logo.svg"
+import AppleLogin from "../../public/apple-logo.png"
+import NaverLogin from "../../public/naver-logo.png"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import { useEffect } from "react"
+import useSchool from "../../lib/client/useSchool"
 
 export default function Signin() {
   const { data: session } = useSession()
+  const { code } = useSchool()
   const router = useRouter()
 
   // check user auth
   useEffect(() => {
     if (session) {
-      router.push("/lobby")
+      router.push(`/admin/${code}`)
     }
   })
 

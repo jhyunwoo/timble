@@ -8,7 +8,6 @@ import Footer from "./Footer"
 import useUser from "../lib/client/useUser"
 import AdminHeadBar from "./AdminHeadBar"
 import useSchool from "../lib/client/useSchool"
-import useCheckUserNull from "../lib/client/useCheckUserNull"
 import { dataUpdateState } from "./recoil/states"
 import AccessDenied from "./AccessDenied"
 import useSubjects from "../lib/client/useSubjects"
@@ -17,15 +16,14 @@ export default function ProtectedPage(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
-  const { user, isLoadingUser, nullData } = useUser()
+  const { user, isLoadingUser } = useUser()
   const { isLoadingSchool } = useSchool()
   const { isLoadingSubjects } = useSubjects()
   const { isLoadingSubject } = useSchool()
   const isDataUpdate = useRecoilValue(dataUpdateState)
-  useCheckUserNull(nullData)
 
   if (status === "unauthenticated") {
-    router.push("/signin")
+    router.push("/admin/signin")
     return <Loading />
   } else if (status === "authenticated") {
     if (

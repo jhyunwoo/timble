@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react"
-import { useEffect } from "react"
 import { useRouter } from "next/router"
 
 import HeadBar from "./HeadBar"
@@ -14,8 +13,12 @@ export default function LayOut(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
   const { status } = useSession()
-  const { isLoadingUser, isErrorUser, nullData } = useUser()
-
+  const { isLoadingUser, isErrorUser, nullData, user } = useUser()
+  if (user) {
+    if (user.role === "ADMIN") {
+      router.push("/admin")
+    }
+  }
   useCheckUserNull(nullData)
 
   if (status === "loading" || isLoadingUser) {

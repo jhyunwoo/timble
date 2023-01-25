@@ -8,6 +8,7 @@ import { useSWRConfig } from "swr"
 import useUser from "../../lib/client/useUser"
 import Loading from "../../components/Loading"
 import useSchool from "../../lib/client/useSchool"
+import useAllSchools from "../../lib/client/useAllSchools"
 
 export default function Userinfo() {
   // router 설정
@@ -16,6 +17,7 @@ export default function Userinfo() {
   const { mutate } = useSWRConfig()
   // 사용자 로그인 정보 가져오기
   const { data: session } = useSession()
+  const { allSchools } = useAllSchools()
   const { diplomas } = useSchool()
   const [school, setSchool] = useState(null)
   const [diploma, setDiploma] = useState(null)
@@ -24,7 +26,6 @@ export default function Userinfo() {
   const [loading, setLoading] = useState(false)
 
   const { nullData, isLoadingUser } = useUser()
-
   // react hook form 설정
   const {
     register,
@@ -122,11 +123,7 @@ export default function Userinfo() {
         {nullData[0] === "diploma" ? <DiplomaForm /> : ""}
         {nullData[0] === "name" ? <NameForm /> : ""}
         {warn ? (
-          <div
-            className={
-              "m-4 flex animate-pulse items-center justify-center rounded-xl bg-red-400 p-4"
-            }
-          >
+          <div className={"m-4 flex animate-pulse items-center justify-center rounded-xl bg-red-400 p-4"}>
             <div className={"text-lg font-semibold text-white"}>
               {nullData[0] === "school" ? "학교를" : null}
               {nullData[0] === "diploma" ? "디플로마를" : null}
@@ -144,18 +141,22 @@ export default function Userinfo() {
   function SchoolForm() {
     return (
       <div>
-        <div className={"p-4 pt-8 text-center text-2xl font-semibold"}>
-          학교
-        </div>
+        <div className={"p-4 pt-8 text-center text-2xl font-semibold"}>학교</div>
         <div className={"grid w-full grid-cols-1 gap-6 p-4"}>
-          <button
-            className={`${
-              school === "cnsa" ? "bg-green-500 text-white" : ""
-            }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
-            onClick={() => controlSchool("cnsa")}
-          >
-            충남삼성고등학교
-          </button>
+          {allSchools
+            ? allSchools.map((data, key) => (
+                <button
+                  key={key}
+                  className={`${
+                    school === "cnsa" ? "bg-green-500 text-white" : ""
+                  }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
+                  onClick={() => controlSchool(data.code)}
+                >
+                  {data.name}
+                </button>
+              ))
+            : ""}
+
           <button
             className={
               "  rounded-xl bg-white p-4 text-xl font-semibold shadow-lg  transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4"
@@ -172,10 +173,7 @@ export default function Userinfo() {
   function DiplomaForm() {
     return (
       <div>
-        <div
-          className={"p-4 text-center text-2xl font-semibold "}
-          onClick={() => console.log(diplomas)}
-        >
+        <div className={"p-4 text-center text-2xl font-semibold "} onClick={() => console.log(diplomas)}>
           디플로마
         </div>
         <div className={"grid grid-cols-2 gap-4 p-4"}>
@@ -329,22 +327,12 @@ export default function Userinfo() {
             className={"m-4 rounded-xl p-4 text-center text-xl"}
           />
           {errors.name && (
-            <div
-              className={
-                "m-4 flex animate-pulse items-center justify-center rounded-xl bg-red-400 p-4"
-              }
-            >
-              <div className={"text-lg font-semibold text-white"}>
-                {errors.name.message}
-              </div>
+            <div className={"m-4 flex animate-pulse items-center justify-center rounded-xl bg-red-400 p-4"}>
+              <div className={"text-lg font-semibold text-white"}>{errors.name.message}</div>
             </div>
           )}
 
-          <div
-            className={
-              "absolute bottom-0 flex w-full items-center justify-center pb-4"
-            }
-          >
+          <div className={"absolute bottom-0 flex w-full items-center justify-center pb-4"}>
             <input
               type="submit"
               value={"다음"}
@@ -360,11 +348,7 @@ export default function Userinfo() {
 
   function NextButton() {
     return (
-      <div
-        className={
-          "absolute bottom-0 flex w-full items-center justify-center pb-4"
-        }
-      >
+      <div className={"absolute bottom-0 flex w-full items-center justify-center pb-4"}>
         <button
           className={
             "w-4/5 rounded-2xl bg-green-500 py-4 text-2xl font-semibold tracking-wider text-white shadow-xl transition duration-200 hover:bg-green-600 "

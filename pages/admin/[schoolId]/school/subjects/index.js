@@ -69,7 +69,7 @@ export default function AdminSubjects() {
             <Link key={key} href={`/admin/${user ? user.admin : null}/school/subjects/${data.id}`}>
               <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
                 <div className="my-1 w-full">
-                  <div className="text-sm font-normal text-slate-500 transition duration-1000 grid-cols-3 grid sm:flex w-full ">
+                  <div className="text-sm font-normal text-slate-500 transition duration-1000 flex flex-row w-full flex-wrap">
                     {data.diplomas.length !== diplomas.length ? (
                       data.diplomas.map((data, key) => (
                         <div key={key} className="mx-1">

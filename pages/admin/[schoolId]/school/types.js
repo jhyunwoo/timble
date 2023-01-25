@@ -11,10 +11,10 @@ import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
 
-export default function AdminSubjectAreas() {
+export default function AdminSubjectTypes() {
   const [pop, setPop] = useState()
-  const [areaId, setAreaId] = useState(0)
-  const { id, code, subjectAreas } = useSchool()
+  const [typeId, setTypeId] = useState(0)
+  const { id, code, subjectTypes } = useSchool()
   const { user } = useUser()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
@@ -31,13 +31,13 @@ export default function AdminSubjectAreas() {
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
         <MoveBack title={"학교"} link={`/admin/${code}/school`} />
-        <div className="w-full px-6 text-left text-2xl font-semibold">교과 영역</div>
-        {subjectAreas ? (
+        <div className="w-full px-6 text-left text-2xl font-semibold">교과 종류</div>
+        {subjectTypes ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
-            {subjectAreas.map((data, key) => (
+            {subjectTypes.map((data, key) => (
               <div
                 key={key}
-                className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-lg transition duration-200 hover:shadow-xl"
+                className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-sm transition duration-200 hover:shadow-xl"
               >
                 <div className="  py-4 pl-4 pr-2">
                   <div className="text-lg font-bold">{data.name}</div>
@@ -46,7 +46,7 @@ export default function AdminSubjectAreas() {
                   <button
                     onClick={() => {
                       setPop("edit")
-                      setAreaId(key)
+                      setTypeId(key)
                     }}
                     className="h-8 w-8 rounded-md bg-slate-100 p-1 transition duration-150 hover:bg-slate-200"
                   >
@@ -79,8 +79,8 @@ export default function AdminSubjectAreas() {
 
     const onSubmit = (data) => {
       controlUpdate(true)
-      postArea("adminSubjectAreaUpdate", subjectAreas[areaId].id, {
-        areaName: data.areaName,
+      postArea("adminSubjectTypeUpdate", subjectTypes[typeId].id, {
+        typeName: data.typeName,
       })
       setPop(false)
       updateData()
@@ -96,8 +96,8 @@ export default function AdminSubjectAreas() {
     }
 
     useEffect(() => {
-      if (subjectAreas) {
-        setValue("areaName", subjectAreas[areaId].name)
+      if (subjectTypes) {
+        setValue("typeName", subjectTypes[typeId].name)
       }
     }, [setValue])
 
@@ -106,7 +106,7 @@ export default function AdminSubjectAreas() {
         <div className="h-3/5 w-5/6 rounded-xl bg-white p-4">
           <div className="flex h-full w-full flex-col">
             <div className="flex items-center justify-between">
-              <div className="ml-2 text-xl font-semibold">교과 영역 수정</div>
+              <div className="ml-2 text-xl font-semibold">교과 종류 수정</div>
 
               <button onClick={() => setPop(null)} className={"rounded-md transition duration-150 hover:bg-slate-200"}>
                 <XMarkIcon className="h-8 w-8" />
@@ -115,12 +115,12 @@ export default function AdminSubjectAreas() {
 
             <div className="flex h-full w-full items-center justify-center p-1">
               <form onSubmit={handleSubmit(onSubmit)} className="relative flex h-full w-full flex-col items-center p-1">
-                <div className="w-full px-1 text-sm font-semibold">교과 영역</div>
+                <div className="w-full px-1 text-sm font-semibold">교과 종류</div>
                 <input
-                  {...register("areaName", {
+                  {...register("typeName", {
                     required: {
                       value: true,
-                      message: "교과 영역를 입력하세요",
+                      message: "교과 종류를 입력하세요",
                     },
                   })}
                   className="m-1 w-full rounded-md bg-slate-100 p-1 text-lg font-medium"
@@ -128,7 +128,7 @@ export default function AdminSubjectAreas() {
 
                 <div className="mt-1">
                   <button
-                    onClick={() => postArea("adminSubjectAreaDelete", subjectAreas[areaId].id, "delete")}
+                    onClick={() => postArea("adminSubjectTypeDelete", subjectTypes[typeId].id, "delete")}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -136,7 +136,7 @@ export default function AdminSubjectAreas() {
                 </div>
                 <ErrorMessage
                   errors={errors}
-                  name="areaName"
+                  name="typeName"
                   render={({ message }) => (
                     <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}
@@ -163,8 +163,8 @@ export default function AdminSubjectAreas() {
 
     const onSubmit = (data) => {
       controlUpdate(true)
-      postArea("adminSubjectAreaCreate", {
-        areaName: data.areaName,
+      postArea("adminSubjectTypeCreate", {
+        typeName: data.typeName,
         schoolId: id,
       })
       setPop(false)
@@ -184,7 +184,7 @@ export default function AdminSubjectAreas() {
         <div className="h-3/5 w-5/6 rounded-xl bg-white p-4">
           <div className="flex h-full w-full flex-col">
             <div className="flex items-center justify-between">
-              <div className="ml-2 text-xl font-semibold">교과 영역 추가</div>
+              <div className="ml-2 text-xl font-semibold">교과 종류 추가</div>
               <button onClick={() => setPop(null)} className={"rounded-md transition duration-150 hover:bg-slate-200"}>
                 <XMarkIcon className="h-8 w-8" />
               </button>
@@ -195,9 +195,9 @@ export default function AdminSubjectAreas() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="relative flex h-full w-full flex-col items-center   p-1"
               >
-                <div className="w-full  px-1 text-sm font-semibold">교과 영역</div>
+                <div className="w-full  px-1 text-sm font-semibold">교과 종류</div>
                 <input
-                  {...register("areaName", {
+                  {...register("typeName", {
                     required: {
                       value: true,
                       message: "교과 종류를 입력하세요",
@@ -208,7 +208,7 @@ export default function AdminSubjectAreas() {
 
                 <ErrorMessage
                   errors={errors}
-                  name="areaName"
+                  name="typeName"
                   render={({ message }) => (
                     <p className="m-1 rounded-full bg-red-500 p-1 px-2 text-center text-white">{message}</p>
                   )}

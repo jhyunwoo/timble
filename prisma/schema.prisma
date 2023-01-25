@@ -78,7 +78,6 @@ model school {
   id          Int           @id @default(autoincrement())
   code        String        @unique
   name        String
-  color       String?
   subjects    Subject[]
   students    User[]
   diplomas    diploma[]
@@ -156,4 +155,5 @@ model difficulty {
 enum role {
   USER
   ADMIN
+  SUPERADMIN
 }
