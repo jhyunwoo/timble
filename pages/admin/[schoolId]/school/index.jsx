@@ -10,6 +10,7 @@ export default function AdminTimetable() {
       <div className="p-4 grid grid-cols-2 gap-4">
         <SchoolName />
         <ConfigList title={"학생 그룹 설정"} link={`/admin/${user ? user.admin : null}/school/student-group`} />
+        <ConfigList title={"학생 그룹"} link={`/admin/${user ? user.admin : null}/school/groups`} />
         <ConfigList title={"디플로마"} link={`/admin/${user ? user.admin : null}/school/diploma`} />
         <ConfigList title={"교과목"} link={`/admin/${user ? user.admin : null}/school/subjects`} />
         <ConfigList title={"교과 종류"} link={`/admin/${user ? user.admin : null}/school/types`} />
