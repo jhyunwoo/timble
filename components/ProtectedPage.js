@@ -20,6 +20,7 @@ export default function ProtectedPage(props) {
   const { user, isLoadingUser, nullData } = useUser()
   const { isLoadingSchool } = useSchool()
   const { isLoadingSubjects } = useSubjects()
+  const { isLoadingSubject } = useSchool()
   const isDataUpdate = useRecoilValue(dataUpdateState)
   useCheckUserNull(nullData)
 
@@ -27,7 +28,14 @@ export default function ProtectedPage(props) {
     router.push("/signin")
     return <Loading />
   } else if (status === "authenticated") {
-    if (status === "loading" || isLoadingUser || isLoadingSchool || isDataUpdate || isLoadingSubjects) {
+    if (
+      status === "loading" ||
+      isLoadingUser ||
+      isLoadingSchool ||
+      isDataUpdate ||
+      isLoadingSubjects ||
+      isLoadingSubject
+    ) {
       return <Loading />
     } else if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
       return <AccessDenied />

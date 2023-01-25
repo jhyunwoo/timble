@@ -30,25 +30,37 @@ export default function AdminStudents() {
     let list = students
     let filtered = []
     if (yearFilter && diplomaFilter) {
-      list.map((data) => {
-        if (data.year === yearFilter && data.diploma.name === diplomaFilter) {
-          filtered.push(data)
-        }
-      })
+      try {
+        list.map((data) => {
+          if (data.year === yearFilter && data.diploma.name === diplomaFilter) {
+            filtered.push(data)
+          }
+        })
+      } catch {
+        console.log("error on filtering year and diploma")
+      }
       setFilteredStudents(filtered)
     } else if (yearFilter) {
-      list.map((data) => {
-        if (data.year === yearFilter) {
-          filtered.push(data)
-        }
-      })
+      try {
+        list.map((data) => {
+          if (data.year === yearFilter) {
+            filtered.push(data)
+          }
+        })
+      } catch {
+        console.log("error on filtering year")
+      }
       setFilteredStudents(filtered)
     } else if (diplomaFilter) {
-      list.map((data) => {
-        if (data.diploma.name === diplomaFilter) {
-          filtered.push(data)
-        }
-      })
+      try {
+        list.map((data) => {
+          if (data.diploma.name === diplomaFilter) {
+            filtered.push(data)
+          }
+        })
+      } catch {
+        console.log("error on filtering diploma")
+      }
       setFilteredStudents(filtered)
     } else {
       setFilteredStudents(list)
@@ -114,9 +126,9 @@ export default function AdminStudents() {
                 key={key}
                 className={`grid grid-cols-3 py-1 text-center last:rounded-b-lg ${key % 2 === 1 ? "bg-slate-100" : ""}`}
               >
-                <div>{data.year}</div>
-                <div>{data.name}</div>
-                <div>{data.diploma["name"]}</div>
+                <div>{data.year ? data.year : "..."}</div>
+                <div>{data.name ? data.name : "..."}</div>
+                <div>{data.diploma ? data.diploma.name : "..."}</div>
               </div>
             ))
           : ""}

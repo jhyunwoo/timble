@@ -5,21 +5,31 @@ import ProtectedPage from "../../../components/ProtectedPage"
 import DataCard from "../../../components/DataCard"
 import useStudents from "../../../lib/client/useStudents"
 import useSubjects from "../../../lib/client/useSubjects"
+import { useState, useEffect } from "react"
 
 export default function SchoolAdminPage() {
   const { user } = useUser()
   const { school, color, diplomas } = useSchool()
   const { students } = useStudents()
   const { subjects } = useSubjects()
+  const [schoolColor, setSchoolColor] = useState("#0ea5e9")
+  useEffect(() => {
+    if (color) {
+      setSchoolColor(color)
+    }
+  }, [color])
   return (
     <ProtectedPage>
       <div className="sm:grid-cols-24 grid grid-cols-2 gap-4 p-4 lg:grid-cols-6 xl:grid-cols-8">
-        <div
-          className={`col-span-2 flex items-center justify-center rounded-lg bg-blue-500 p-4 text-white shadow-lg transition duration-200 hover:shadow-xl`}
-          onClick={() => console.log(color)}
-        >
-          <div className="mx-4 text-2xl font-bold">{school}</div>
-        </div>
+        {color ? (
+          <div className={`bg-[${schoolColor}] col-span-2 rounded-lg p-4 text-center text-white font-bold text-2xl`}>
+            <div>{school}</div>
+          </div>
+        ) : (
+          <div className={`bg-sky-500 col-span-2 rounded-lg p-4 text-center text-white font-bold text-2xl`}>
+            <div>{school}</div>
+          </div>
+        )}
 
         <DataCard link={`/admin/${user ? user.admin : null}/students`} title={"학생"}>
           {students ? students.length : "..."}
