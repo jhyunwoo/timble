@@ -75,7 +75,7 @@ export default function AdminHeadBar(props) {
             )}
           </div>
           <div className="mt-2 flex">
-            <Link href="/user/myinfo">내 정보 관리</Link>
+            <Link href={`/admin/${admin}/myinfo`}>내 정보 관리</Link>
             <div className="mx-2">|</div>
             <button onClick={() => signOut()}>로그아웃</button>
           </div>

@@ -6,7 +6,7 @@ export default function SchoolName() {
   return (
     <div className={`w-full h-40 col-span-2 flex justify-center items-center text-2xl font-bold  rounded-xl`}>
       <div
-        className={`text-transparent tracking-wide text-3xl font-extrabold bg-clip-text bg-gradient-to-r from-cnsablue-200 via-cnsablue-300 to-cnsablue-200`}
+        className={`text-transparent tracking-wide text-3xl font-bold bg-clip-text bg-gradient-to-r from-cnsablue-200 via-cnsablue-300 to-cnsablue-200`}
       >
         {school}
       </div>

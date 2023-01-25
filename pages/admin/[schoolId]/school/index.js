@@ -14,7 +14,6 @@ export default function AdminTimetable() {
         <ConfigList title={"교과 종류"} link={`/admin/${user ? user.admin : null}/school/types`} />
         <ConfigList title={"교과 영역"} link={`/admin/${user ? user.admin : null}/school/areas`} />
         <ConfigList title={"교과 난이도"} link={`/admin/${user ? user.admin : null}/school/difficulties`} />
-        <ConfigList title={"학교 기본 정보"} link={`/admin/${user ? user.admin : null}/school/info`} />
       </div>
     </ProtectedPage>
   )

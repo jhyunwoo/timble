@@ -7,19 +7,18 @@ export default async function getUserInfo(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
-    const userInfo = await prisma.user.findUnique({
+    const userInfo = await prisma.user.update({
       where: {
         email: userEmail,
       },
-      select: {
-        name: true,
-        email: true,
-        schoolId: true,
-        year: true,
-        diploma: true,
-        role: true,
-        admin: true,
-        School: true,
+      data: {
+        diploma: {
+          disconnect: true,
+        },
+        year: null,
+        School: {
+          disconnect: true,
+        },
       },
     })
     res.json(userInfo)
