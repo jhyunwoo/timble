@@ -24,7 +24,7 @@ export default function MyInfo() {
             <UserInfoDetail title={"이름"} content={user.name} />
             <UserInfoDetail title={"이메일"} content={user.email} />
             <UserInfoDetail title={"학교"} content={user.School.name} />
-            <UserInfoDetail title={"학년"} content={`${user.year}학년`} />
+            <UserInfoDetail title={"학생 그룹"} content={`${user.studentgroup.name}`} />
             <UserInfoDetail title={"디플로마"} content={user.diploma.name} />
 
             <button

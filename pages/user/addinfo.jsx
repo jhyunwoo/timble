@@ -18,10 +18,10 @@ export default function Userinfo() {
   // 사용자 로그인 정보 가져오기
   const { data: session } = useSession()
   const { allSchools } = useAllSchools()
-  const { diplomas } = useSchool()
+  const { diplomas, groups } = useSchool()
   const [school, setSchool] = useState(null)
   const [diploma, setDiploma] = useState(null)
-  const [year, setYear] = useState(0)
+  const [group, setGroup] = useState(null)
   const [warn, setWarn] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -57,13 +57,13 @@ export default function Userinfo() {
     }
   }
 
-  // year control
-  function controlYear(value) {
-    if (year === 0 || year !== value) {
-      setYear(value)
+  // group control
+  function controlGroup(value) {
+    if (group === 0 || group !== value) {
+      setGroup(value)
       setWarn(false)
     } else {
-      setYear(0)
+      setGroup(null)
     }
   }
 
@@ -95,11 +95,11 @@ export default function Userinfo() {
         postUserInfo(nullData[0], diploma)
         setWarn(false)
       }
-    } else if (nullData[0] === "year") {
-      if (year === 0) {
+    } else if (nullData[0] === "studentgroup") {
+      if (group === null) {
         setWarn(true)
       } else {
-        postUserInfo(nullData[0], year)
+        postUserInfo(nullData[0], group)
         setWarn(false)
       }
     } else {
@@ -119,7 +119,7 @@ export default function Userinfo() {
     return (
       <div className={"flex h-screen w-full flex-col bg-slate-50"}>
         {nullData[0] === "schoolId" ? <SchoolForm /> : ""}
-        {nullData[0] === "year" ? <YearForm /> : ""}
+        {nullData[0] === "studentgroup" ? <GroupForm /> : ""}
         {nullData[0] === "diploma" ? <DiplomaForm /> : ""}
         {nullData[0] === "name" ? <NameForm /> : ""}
         {warn ? (
@@ -127,7 +127,7 @@ export default function Userinfo() {
             <div className={"text-lg font-semibold text-white"}>
               {nullData[0] === "school" ? "학교를" : null}
               {nullData[0] === "diploma" ? "디플로마를" : null}
-              {nullData[0] === "year" ? "학년을" : null} 선택해주세요
+              {nullData[0] === "studentgroup" ? "학생 그룹을" : null} 선택해주세요
             </div>
           </div>
         ) : (
@@ -149,7 +149,7 @@ export default function Userinfo() {
                   key={key}
                   className={`${
                     school === "cnsa" ? "bg-green-500 text-white" : ""
-                  }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
+                  }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:ring-offset-4`}
                   onClick={() => controlSchool(data.code)}
                 >
                   {data.name}
@@ -196,116 +196,25 @@ export default function Userinfo() {
       </div>
     )
   }
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("자연과학")
-  //   }}
-  //   className={`${
-  //     diploma === "자연과학" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   자연과학
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("공학")
-  //   }}
-  //   className={`${
-  //     diploma === "공학" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   공학
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("IT")
-  //   }}
-  //   className={`${
-  //     diploma === "IT" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   IT
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("생명과학")
-  //   }}
-  //   className={`${
-  //     diploma === "생명과학" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   생명과학
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("국제인문")
-  //   }}
-  //   className={`${
-  //     diploma === "국제인문" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   국제인문
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("사회과학")
-  //   }}
-  //   className={`${
-  //     diploma === "사회과학" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   사회과학
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("경제경영")
-  //   }}
-  //   className={`${
-  //     diploma === "경제경영" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   경제경영
-  // </button>
-  // <button
-  //   onClick={() => {
-  //     controlDiploma("예술체육")
-  //   }}
-  //   className={`${
-  //     diploma === "예술체육" ? "bg-green-500 text-white" : ""
-  //   }   p-2 text-xl font-medium rounded-xl hover:ring-offset-2 hover:bg-green-500 hover:text-white duration-200 transition shadow-lg`}
-  // >
-  //   예술체육
-  // </button>
 
-  function YearForm() {
+  function GroupForm() {
     return (
       <div>
-        <div className={" p-4 text-center text-2xl font-semibold "}>학년</div>
+        <div className={" p-4 text-center text-2xl font-semibold "}>학생 그룹</div>
         <div className={"grid w-full grid-cols-1 gap-6 p-4"}>
-          <button
-            className={`${
-              year === 1 ? "bg-green-500 text-white" : ""
-            }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
-            onClick={() => controlYear(1)}
-          >
-            1학년
-          </button>
-          <button
-            className={`${
-              year === 2 ? "bg-green-500 text-white" : ""
-            }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
-            onClick={() => controlYear(2)}
-          >
-            2학년
-          </button>
-          <button
-            className={`${
-              year === 3 ? "bg-green-500 text-white" : ""
-            }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:bg-green-500 hover:text-white hover:ring-offset-4`}
-            onClick={() => controlYear(3)}
-          >
-            3학년
-          </button>
+          {groups
+            ? groups.map((data, key) => (
+                <button
+                  key={key}
+                  className={`${
+                    group === data.id ? "bg-green-500 text-white" : ""
+                  }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:ring-offset-4`}
+                  onClick={() => controlGroup(data.id)}
+                >
+                  {data.name}
+                </button>
+              ))
+            : ""}
         </div>
       </div>
     )

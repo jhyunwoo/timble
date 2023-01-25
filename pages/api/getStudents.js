@@ -14,6 +14,7 @@ export default async function getStudents(req, res) {
       },
       include: {
         diploma: true,
+        studentgroup: true,
       },
     })
     res.json(schoolStudents)

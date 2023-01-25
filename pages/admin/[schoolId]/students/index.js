@@ -4,17 +4,17 @@ import { useEffect, useState } from "react"
 import useStudents from "../../../../lib/client/useStudents"
 
 export default function AdminStudents() {
-  const { diplomas } = useSchool()
+  const { diplomas, groups } = useSchool()
   const { students } = useStudents()
-  const [yearFilter, setYearFilter] = useState()
+  const [groupFilter, setGroupFilter] = useState()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredStudents, setFilteredStudents] = useState([])
 
-  function controlYearFilter(data) {
-    if (data === yearFilter) {
-      setYearFilter(null)
+  function controlGroupFilter(data) {
+    if (data === groupFilter) {
+      setGroupFilter(null)
     } else {
-      setYearFilter(data)
+      setGroupFilter(data)
     }
   }
 
@@ -29,10 +29,10 @@ export default function AdminStudents() {
   function filterStudents() {
     let list = students
     let filtered = []
-    if (yearFilter && diplomaFilter) {
+    if (groupFilter && diplomaFilter) {
       try {
         list.map((data) => {
-          if (data.year === yearFilter && data.diploma.name === diplomaFilter) {
+          if (data.year === groupFilter && data.diploma.name === diplomaFilter) {
             filtered.push(data)
           }
         })
@@ -40,10 +40,10 @@ export default function AdminStudents() {
         console.log("error on filtering year and diploma")
       }
       setFilteredStudents(filtered)
-    } else if (yearFilter) {
+    } else if (groupFilter) {
       try {
         list.map((data) => {
-          if (data.year === yearFilter) {
+          if (data.studentgroup.id === groupFilter) {
             filtered.push(data)
           }
         })
@@ -69,35 +69,24 @@ export default function AdminStudents() {
 
   useEffect(() => {
     filterStudents()
-  }, [students, yearFilter, diplomaFilter])
+  }, [students, groupFilter, diplomaFilter])
 
   return (
     <ProtectedPage>
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
-        <button
-          onClick={() => controlYearFilter(1)}
-          className={`${
-            yearFilter === 1 ? "bg-slate-800 text-white" : ""
-          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
-        >
-          1학년
-        </button>
-        <button
-          onClick={() => controlYearFilter(2)}
-          className={`${
-            yearFilter === 2 ? "bg-slate-800 text-white" : ""
-          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
-        >
-          2학년
-        </button>
-        <button
-          onClick={() => controlYearFilter(3)}
-          className={`${
-            yearFilter === 3 ? "bg-slate-800 text-white" : ""
-          } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
-        >
-          3학년
-        </button>
+        {groups
+          ? groups.map((data, key) => (
+              <button
+                key={key}
+                onClick={() => controlGroupFilter(data.id)}
+                className={`${
+                  groupFilter === data.id ? "bg-slate-800 text-white" : ""
+                } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
+              >
+                {data.name}
+              </button>
+            ))
+          : ""}
       </div>
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
@@ -126,7 +115,7 @@ export default function AdminStudents() {
                 key={key}
                 className={`grid grid-cols-3 py-1 text-center last:rounded-b-lg ${key % 2 === 1 ? "bg-slate-100" : ""}`}
               >
-                <div>{data.year ? data.year : "..."}</div>
+                <div>{data.studentgroup ? data.studentgroup.name : "..."}</div>
                 <div>{data.name ? data.name : "..."}</div>
                 <div>{data.diploma ? data.diploma.name : "..."}</div>
               </div>

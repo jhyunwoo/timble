@@ -34,22 +34,23 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  name          String?
-  email         String      @unique
-  emailVerified DateTime?
-  image         String?
-  School        school?     @relation(fields: [schoolId], references: [id])
-  schoolId      Int?
-  year          Int?
-  diploma       diploma?    @relation(fields: [diplomaId], references: [id])
-  diplomaId     String?
-  admin         String?
-  createdAt     DateTime    @default(now())
-  role          role        @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  Timetable     Timetable[]
+  id             String        @id @default(cuid())
+  name           String?
+  email          String        @unique
+  emailVerified  DateTime?
+  image          String?
+  School         school?       @relation(fields: [schoolId], references: [id])
+  schoolId       Int?
+  diploma        diploma?      @relation(fields: [diplomaId], references: [id])
+  diplomaId      String?
+  admin          String?
+  createdAt      DateTime      @default(now())
+  role           role          @default(USER)
+  accounts       Account[]
+  sessions       Session[]
+  Timetable      Timetable[]
+  studentgroup   studentgroup? @relation(fields: [studentgroupId], references: [id])
+  studentgroupId String?
 }
 
 model VerificationToken {
@@ -80,15 +81,25 @@ model period {
 }
 
 model school {
-  id          Int           @id @default(autoincrement())
-  code        String        @unique
+  id          Int            @id @default(autoincrement())
+  code        String         @unique
   name        String
+  groups      studentgroup[]
   subjects    Subject[]
   students    User[]
   diplomas    diploma[]
   subjectType subjectType[]
   subjectArea subjectArea[]
   difficulty  difficulty[]
+}
+
+model studentgroup {
+  id       String @id @default(cuid())
+  school   school @relation(fields: [schoolId], references: [id])
+  schoolId Int
+  name     String
+  entrance Int
+  students User[]
 }
 
 model Subject {

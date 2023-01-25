@@ -1,13 +1,13 @@
-import prisma from '../../lib/prismadb'
-import { authOptions } from '../api/auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth/next'
+import prisma from "../../lib/prismadb"
+import { authOptions } from "../api/auth/[...nextauth]"
+import { unstable_getServerSession } from "next-auth/next"
 
 export default async function getUserNullData(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
     const { post, userEmail, data } = req.body
-    if (post === 'schoolId') {
+    if (post === "schoolId") {
       try {
         const postSchool = await prisma.school.update({
           where: {
@@ -22,10 +22,10 @@ export default async function getUserNullData(req, res) {
           },
         })
       } catch {
-        const postSchool = 'no data'
+        const postSchool = "no data"
       }
       res.status(200)
-    } else if (post === 'diploma') {
+    } else if (post === "diploma") {
       const postDiploma = await prisma.diploma.update({
         where: {
           id: data,
@@ -39,17 +39,21 @@ export default async function getUserNullData(req, res) {
         },
       })
       res.status(200)
-    } else if (post === 'year') {
-      const postYear = await prisma.user.update({
+    } else if (post === "studentgroup") {
+      const postGroup = await prisma.user.update({
         where: {
           email: userEmail,
         },
         data: {
-          year: data,
+          studentgroup: {
+            connect: {
+              id: data,
+            },
+          },
         },
       })
       res.status(200)
-    } else if (post === 'name') {
+    } else if (post === "name") {
       const postName = await prisma.user.update({
         where: {
           email: userEmail,
@@ -62,7 +66,7 @@ export default async function getUserNullData(req, res) {
     }
   } else {
     res.status(403).json({
-      message: 'You must be sign in to view the protected content on this page.',
+      message: "You must be sign in to view the protected content on this page.",
     })
   }
   res.end()

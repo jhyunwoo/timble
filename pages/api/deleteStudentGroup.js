@@ -2,27 +2,17 @@ import prisma from "../../lib/prismadb"
 import { authOptions } from "./auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
-export default async function getUserInfo(req, res) {
-  const { userEmail } = req.body
+export default async function deleteStudentGroup(req, res) {
+  const { data } = req.body
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
-    const userInfo = await prisma.user.findUnique({
+    const update = await prisma.studentgroup.delete({
       where: {
-        email: userEmail,
-      },
-      select: {
-        name: true,
-        email: true,
-        schoolId: true,
-        diploma: true,
-        role: true,
-        admin: true,
-        School: true,
-        studentgroup: true,
+        id: data.id,
       },
     })
-    res.json(userInfo)
+    res.status(200)
   } else {
     res.status(401).json({
       message: "You must be sign in to view the protected content on this page.",
