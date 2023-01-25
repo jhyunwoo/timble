@@ -1,28 +1,15 @@
 import { useRouter } from "next/router"
-import useSchool from "../../../../../../lib/client/useSchool"
-import ProtectedPage from "../../../../../../components/ProtectedPage"
-import { useEffect } from "react"
-import Link from "next/link"
-import useUser from "../../../../../../lib/client/useUser"
-import { PencilSquareIcon } from "@heroicons/react/24/outline"
-import MoveBack from "../../../../../../components/moveBack"
-import useSubject from "../../../../../../lib/client/useSubject"
-import { mutate } from "swr"
+import LayOut from "../../../components/LayOut"
+import MoveBack from "../../../components/moveBack"
+import useSubject from "../../../lib/client/useSubject"
 
-export default function Subject() {
+export default function SubjectInfo() {
   const router = useRouter()
-  const { code } = useSchool()
-  const { user } = useUser()
   const { subject } = useSubject(subjectID())
   function subjectID() {
-    return Number(router.asPath.replace(`/admin/${code}/school/subjects/`, ""))
+    return Number(router.asPath.replace(`/timetable/class/`, ""))
   }
-  function updateData() {
-    function mutateData() {
-      mutate([subjectID() ? "/api/getSubject" : null, subjectID() ? subjectID() : null])
-    }
-    setTimeout(mutateData, 2000)
-  }
+
   function BasicInfo(props) {
     return (
       <div className="bg-white p-4 rounded-lg">
@@ -32,24 +19,14 @@ export default function Subject() {
     )
   }
 
-  useEffect(() => {
-    updateData()
-  }, [router])
-
   return (
-    <ProtectedPage>
-      <MoveBack title={"교과목"} link={`/admin/${code}/school/subjects`} />
+    <LayOut>
+      <MoveBack title={"교과목"} link={`/timetable/class`} />
 
       {subject ? (
         <div className="p-4 grid grid-cols-1 gap-4 -mt-4">
           <div className="text-2xl font-bold m-2 flex justify-between items-center">
             <div>{subject.title}</div>
-            <Link
-              href={`/admin/${user ? user.admin : null}/school/subjects/${subject.id}/edit`}
-              className="bg-slate-100 flex justify-center items-center rounded-lg w-10 h-10 hover:bg-slate-200 transition duration-200"
-            >
-              <PencilSquareIcon className="w-8 h-8" />
-            </Link>
           </div>
           <BasicInfo title={"목표"} content={subject.target} />
           <div className="bg-white p-4 rounded-lg">
@@ -156,6 +133,6 @@ export default function Subject() {
       ) : (
         ""
       )}
-    </ProtectedPage>
+    </LayOut>
   )
 }

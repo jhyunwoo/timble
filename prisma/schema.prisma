@@ -61,17 +61,22 @@ model VerificationToken {
 }
 
 model Timetable {
-  id     String  @id @default(cuid())
-  year   Int?
-  semi   Int?
-  userId String
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  class1 String?
-  class2 String?
-  class3 String?
-  class4 String?
-  class5 String?
-  class6 String?
+  id      String   @id @default(cuid())
+  year    Int
+  semi    Int
+  name    String
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  periods period[]
+}
+
+model period {
+  id          String    @id @default(cuid())
+  timetable   Timetable @relation(fields: [timetableId], references: [id])
+  timetableId String
+  period      Int
+  subject     Subject   @relation(fields: [subjectId], references: [id])
+  subjectId   Int
 }
 
 model school {
@@ -106,6 +111,7 @@ model Subject {
   CSATSubject          Boolean
   difficulty           difficulty       @relation(fields: [difficultyId], references: [id])
   difficultyId         String
+  period               period[]
 }
 
 model subjectcontent {
