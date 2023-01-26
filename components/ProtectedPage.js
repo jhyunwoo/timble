@@ -24,7 +24,6 @@ import useTypes from "../lib/client/useTypes"
 export default function ProtectedPage(props) {
   const router = useRouter()
   const { user } = useUser()
-  console.log(user)
   // 사용자 로그인 정보 가져오기
   const { status, data: session } = useSession()
   const { isLoadingAreas } = useAreas()

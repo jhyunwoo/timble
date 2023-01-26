@@ -16,7 +16,7 @@ export default function AdminHome() {
               <br /> 관리자 페이지
             </div>
             <div className={"mx-auto my-2 mt-6 rounded-xl bg-green-500 p-2 px-4 text-white"}>
-              <Link href={`/${session ? `admin/${school.code}` : "admin/signin"}`}>
+              <Link href={`/${school ? `admin/${school.code}` : "admin/signin"}`}>
                 <p className={"text-center text-xl"}>시작하기</p>
               </Link>
             </div>
