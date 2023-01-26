@@ -39,18 +39,18 @@ model User {
   email          String        @unique
   emailVerified  DateTime?
   image          String?
-  School         school?       @relation(fields: [schoolId], references: [id])
-  schoolId       Int?
-  diploma        diploma?      @relation(fields: [diplomaId], references: [id])
-  diplomaId      String?
-  admin          String?
   createdAt      DateTime      @default(now())
   role           role          @default(USER)
-  accounts       Account[]
-  sessions       Session[]
-  Timetable      Timetable[]
+  admin          String?
+  school         school?       @relation(fields: [schoolId], references: [id])
+  schoolId       Int?
   studentgroup   studentgroup? @relation(fields: [studentgroupId], references: [id])
   studentgroupId String?
+  diploma        diploma?      @relation(fields: [diplomaId], references: [id])
+  diplomaId      String?
+  timetable      timetable[]
+  accounts       Account[]
+  sessions       Session[]
 }
 
 model VerificationToken {
@@ -61,73 +61,75 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Timetable {
-  id      String   @id @default(cuid())
-  year    Int
-  semi    Int
-  name    String
-  userId  String
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  periods period[]
+model timetable {
+  id       String   @id @default(cuid())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  name     String
+  semester String
+  periods  period[]
 }
 
 model period {
   id          String    @id @default(cuid())
-  timetable   Timetable @relation(fields: [timetableId], references: [id])
+  timetable   timetable @relation(fields: [timetableId], references: [id])
   timetableId String
   period      Int
-  subject     Subject   @relation(fields: [subjectId], references: [id])
+  subject     subject   @relation(fields: [subjectId], references: [id])
   subjectId   Int
 }
 
 model school {
-  id          Int            @id @default(autoincrement())
-  code        String         @unique
-  name        String
-  groups      studentgroup[]
-  subjects    Subject[]
-  students    User[]
-  diplomas    diploma[]
-  subjectType subjectType[]
-  subjectArea subjectArea[]
-  difficulty  difficulty[]
+  id           Int            @id @default(autoincrement())
+  code         String         @unique
+  name         String
+  types        subjectType[]
+  areas        subjectArea[]
+  difficulties difficulty[]
+  groups       studentgroup[]
+  subjects     subject[]
+  diplomas     diploma[]
+  students     User[]
 }
 
 model studentgroup {
-  id       String @id @default(cuid())
-  school   school @relation(fields: [schoolId], references: [id])
+  id       String    @id @default(cuid())
+  school   school    @relation(fields: [schoolId], references: [id])
   schoolId Int
   name     String
   entrance Int
   students User[]
+  subjects subject[]
 }
 
-model Subject {
+model subject {
   id                   Int              @id @default(autoincrement())
-  School               school?          @relation(fields: [schoolId], references: [id])
+  school               school?          @relation(fields: [schoolId], references: [id])
   schoolId             Int?
   diplomas             diploma[]
   title                String
   open                 String[]
-  prerequisite         Subject[]        @relation("SubjectPrerequisite")
-  prerequisiteRelation Subject[]        @relation("SubjectPrerequisite")
-  type                 subjectType      @relation(fields: [subjectTypeId], references: [id])
-  subjectTypeId        String
-  target               String
-  relatedMajor         String
-  content              subjectcontent[]
-  subjectArea          subjectArea      @relation(fields: [subjectAreaId], references: [id])
-  subjectAreaId        String
-  targetParticipants   String
-  CSATSubject          Boolean
+  prerequisite         subject[]        @relation("SubjectPrerequisite")
+  prerequisiteRelation subject[]        @relation("SubjectPrerequisite")
   difficulty           difficulty       @relation(fields: [difficultyId], references: [id])
   difficultyId         String
-  period               period[]
+  area                 subjectArea      @relation(fields: [areaId], references: [id])
+  areaId               String
+  type                 subjectType      @relation(fields: [typeId], references: [id])
+  typeId               String
+  target               String
+  relatedMajor         String
+  targetParticipants   String
+  CSATSubject          Boolean
+  contents             subjectcontent[]
+  periods              period[]
+  studentgroup         studentgroup?    @relation(fields: [studentgroupId], references: [id])
+  studentgroupId       String?
 }
 
 model subjectcontent {
   id         String   @id @default(cuid())
-  subject    Subject? @relation(fields: [subjectId], references: [id])
+  subject    subject? @relation(fields: [subjectId], references: [id])
   subjectId  Int?
   order      Int
   area       String
@@ -139,7 +141,7 @@ model diploma {
   id          String    @id @default(cuid())
   name        String
   description String?
-  subjects    Subject[]
+  subjects    subject[]
   school      school?   @relation(fields: [schoolId], references: [id])
   schoolId    Int?
   students    User[]
@@ -148,8 +150,8 @@ model diploma {
 model subjectType {
   id       String    @id @default(cuid())
   name     String
+  subject  subject[]
   school   school    @relation(fields: [schoolId], references: [id])
-  Subject  Subject[]
   schoolId Int
 }
 
@@ -157,15 +159,15 @@ model subjectArea {
   id       String    @id @default(cuid())
   school   school    @relation(fields: [schoolId], references: [id])
   schoolId Int
-  Subject  Subject[]
   name     String
+  subject  subject[]
 }
 
 model difficulty {
   id       String    @id @default(cuid())
   school   school    @relation(fields: [schoolId], references: [id])
   schoolId Int
-  Subject  Subject[]
+  subject  subject[]
   name     String
 }
 

@@ -1,14 +1,20 @@
-import prisma from "../../../lib/prismadb"
-import { authOptions } from "../auth/[...nextauth]"
+import prisma from "../../../../lib/prismadb"
+import { authOptions } from "../../auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function handler(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
-
   if (session) {
+    const { code } = req.query
     if (req.method === "GET") {
-      const getSchools = await prisma.school.findMany()
-      res.status(200).json(getSchools)
+      const getDifficulties = await prisma.difficulty.findMany({
+        where: {
+          school: {
+            code: code,
+          },
+        },
+      })
+      res.status(200).json(getDifficulties)
     }
   } else {
     res.status(401).json({
