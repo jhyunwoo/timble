@@ -4,14 +4,14 @@ import useUser from "../../lib/client/useUser"
 import axios from "axios"
 import { useRouter } from "next/router"
 import UserInfoDetail from "../../components/UserInfoDetail"
+import useSchool from "../../lib/client/useSchool"
 
 export default function MyInfo() {
   const { user } = useUser()
+  const { school } = useSchool()
   const router = useRouter()
   async function updateUserInfo() {
-    await axios.post("/api/updateUserInfo", {
-      userEmail: user.email,
-    })
+    await axios.put("/api/users/reset")
     router.push("/lobby")
   }
   return (
@@ -23,7 +23,7 @@ export default function MyInfo() {
           <div className="bg-white shadow-sm rounded-lg p-4 mt-4">
             <UserInfoDetail title={"이름"} content={user.name} />
             <UserInfoDetail title={"이메일"} content={user.email} />
-            <UserInfoDetail title={"학교"} content={user.School.name} />
+            <UserInfoDetail title={"학교"} content={school ? school.name : null} />
             <UserInfoDetail title={"학생 그룹"} content={`${user.studentgroup.name}`} />
             <UserInfoDetail title={"디플로마"} content={user.diploma.name} />
 

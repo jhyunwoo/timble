@@ -7,14 +7,18 @@ export default async function handler(req, res) {
   if (session) {
     const { code } = req.query
     if (req.method === "GET") {
-      const getGroups = await prisma.studentgroup.findMany({
-        where: {
-          school: {
-            code: code,
+      if (session.user.school.code === code) {
+        const getGroups = await prisma.studentgroup.findMany({
+          where: {
+            school: {
+              code: code,
+            },
           },
-        },
-      })
-      res.status(200).json(getGroups)
+        })
+        res.status(200).json(getGroups)
+      } else {
+        res.status(400)
+      }
     }
   } else {
     res.status(401).json({

@@ -27,11 +27,23 @@ export const authOptions = {
   },
   secret: process.env.NEXT_SECRET,
   callbacks: {
-
     async session(session) {
+      let userData = await prisma.user.findUnique({
+        where: {
+          email: session.user.email,
+        },
+        select: {
+          studentgroup: true,
+          school: true,
+          diploma: true,
+        },
+      })
+      session.user.school = userData.school
+      session.user.diploma = userData.diploma
+      session.user.studentgroup = userData.studentgroup
       return session
-    }
-  }
+    },
+  },
 }
 
 export default NextAuth(authOptions)

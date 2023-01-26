@@ -10,6 +10,11 @@ import { useSetRecoilState } from "recoil"
 import { useRouter } from "next/router"
 import { mutate } from "swr"
 import useUser from "../../../../../lib/client/useUser"
+import useDiplomas from "../../../../../lib/client/useDiplomas"
+import useSubjects from "../../../../../lib/client/useSubjects"
+import useAreas from "../../../../../lib/client/useAreas"
+import useTypes from "../../../../../lib/client/useTypes"
+import useDifficulties from "../../../../../lib/client/useDifficulties"
 
 export default function AddSubject() {
   const {
@@ -18,7 +23,12 @@ export default function AddSubject() {
     formState: { errors },
     setValue,
   } = useForm()
-  const { diplomas, subjects, id, code, subjectAreas, subjectTypes, difficulties } = useSchool()
+  const { school } = useSchool()
+  const { diplomas } = useDiplomas()
+  const { areas } = useAreas()
+  const { types } = useTypes()
+  const { difficulties } = useDifficulties()
+  const { subjects } = useSubjects()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
@@ -29,28 +39,29 @@ export default function AddSubject() {
   const [contentLength, setContentLength] = useState(1)
   const controlDataUpdate = useSetRecoilState(dataUpdateState)
   const router = useRouter()
-  const { user } = useUser()
+
   async function postSubject(data, content) {
-    await axios.post("/api/adminPost", {
-      post: "adminPostSubject",
-      schoolId: id,
-      title: data.subjectTitle,
-      type: data.subjectType,
-      diplomaId: data.subjectDiplomas,
-      area: data.subjectArea,
-      csat: data.subjectCSAT,
-      open: data.subjectOpen,
-      prerequisite: data.subjectPrerequisite,
-      relatedMajor: data.subjectRelatedMajor,
-      target: data.subjectTarget,
-      targetParticipants: data.subjectTargetParticipants,
-      contents: content,
-      difficulty: difficulty,
+    await axios.post("/api/schools/subjects", {
+      data: {
+        code: school.code,
+        title: data.subjectTitle,
+        type: data.subjectType,
+        diplomaId: data.subjectDiplomas,
+        area: data.subjectArea,
+        csat: data.subjectCSAT,
+        open: data.subjectOpen,
+        prerequisite: data.subjectPrerequisite,
+        relatedMajor: data.subjectRelatedMajor,
+        target: data.subjectTarget,
+        targetParticipants: data.subjectTargetParticipants,
+        contents: content,
+        difficulty: difficulty,
+      },
     })
   }
   function updateData() {
     function mutateData() {
-      mutate([user ? "/api/getSubjects" : null, user ? user.schoolId : null])
+      mutate(`/api/schools/subjects?id=${subject ? subject.id : null}`)
     }
     setTimeout(mutateData, 2000)
   }
@@ -65,7 +76,7 @@ export default function AddSubject() {
       })
     }
     postSubject(data, unifyContent)
-    router.push(`/admin/${code}/school/subjects`)
+    router.push(`/admin/${school ? school.code : null}/school/subjects`)
     updateData()
     controlDataUpdate(false)
   }
@@ -227,8 +238,8 @@ export default function AddSubject() {
               종류
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {subjectTypes
-                ? subjectTypes.map((data, key) => (
+              {types
+                ? types.map((data, key) => (
                     <button
                       key={key}
                       type="button"
@@ -285,8 +296,8 @@ export default function AddSubject() {
               교과 영역
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {subjectAreas
-                ? subjectAreas.map((data, key) => (
+              {areas
+                ? areas.map((data, key) => (
                     <button
                       key={key}
                       type="button"

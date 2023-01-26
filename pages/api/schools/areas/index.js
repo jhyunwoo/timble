@@ -18,6 +18,47 @@ export default async function handler(req, res) {
         const getAreas = await prisma.subjectArea.findMany()
         res.status(200).json(getAreas)
       }
+    } else if (req.method === "PUT") {
+      const { data } = req.body
+      const putAreaById = await prisma.subjectArea.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: data.name,
+        },
+      })
+      res.status(200)
+    } else if (req.method === "POST") {
+      const { data } = req.body
+      const postAreaById = await prisma.subjectArea.create({
+        data: {
+          name: data.name,
+          school: {
+            connect: {
+              code: data.code,
+            },
+          },
+        },
+      })
+      res.status(201)
+    } else if (req.method === "DELETE") {
+      const disconnectArea = await prisma.subjectArea.update({
+        where: {
+          id: id,
+        },
+        data: {
+          subject: {
+            set: [],
+          },
+        },
+      })
+      const deleteAreaById = await prisma.subjectArea.delete({
+        where: {
+          id: id,
+        },
+      })
+      res.status(204)
     }
   } else {
     res.status(401).json({

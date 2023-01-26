@@ -2,12 +2,14 @@ import ProtectedPage from "../../../../../components/ProtectedPage"
 import useSchool from "../../../../../lib/client/useSchool"
 import Link from "next/link"
 import MoveBack from "../../../../../components/moveBack"
+import useGroups from "../../../../../lib/client/useGroups"
 
 export default function StudentGroup() {
-  const { groups, code } = useSchool()
+  const { school } = useSchool()
+  const { groups } = useGroups()
   return (
     <ProtectedPage>
-      <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
       <div className="p-4">
         <div className="text-2xl font-bold mb-4">학생 그룹</div>
         <div className="grid grid-cols-1 gap-4">
@@ -16,7 +18,7 @@ export default function StudentGroup() {
                 <Link
                   className="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition duration-200"
                   key={key}
-                  href={`/admin/${code}/school/groups/${data.id}`}
+                  href={`/admin/${school.code}/school/groups/${data.id}`}
                 >
                   <div className="text-xl font-semibold my-1">{data.name}</div>
                   <div className="text-base font-medium">{data.entrance}년 입학</div>

@@ -1,6 +1,5 @@
 import ProtectedPage from "../../../../../components/ProtectedPage"
 import useSchool from "../../../../../lib/client/useSchool"
-import useUser from "../../../../../lib/client/useUser"
 import MoveBack from "../../../../../components/moveBack"
 import Link from "next/link"
 import { DocumentPlusIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
@@ -11,24 +10,25 @@ import { ErrorMessage } from "@hookform/error-message"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../../components/recoil/states"
 import axios from "axios"
+import useGroups from "../../../../../lib/client/useGroups"
 
 export default function StudentGroup() {
-  const { groups } = useSchool()
-  const { user } = useUser()
+  const { groups } = useGroups()
+  const { school } = useSchool()
   const [groupKey, setGroupKey] = useState()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
   const [pop, setPop] = useState(false)
   function updateData() {
     function mutateData() {
-      mutate(["/api/getSchool", user ? user.schoolId : null])
+      mutate(`/api/schools/groups/${school.code}`)
     }
     setTimeout(mutateData, 2000)
   }
   return (
     <ProtectedPage>
       {pop ? <EditPopUp /> : ""}
-      <MoveBack title={"학교"} link={`/admin/${user ? user.admin : null}/school`} />
+      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
       <div className="p-4">
         <div className="text-2xl font-bold my-4">학생 그룹 설정</div>
         <div className="grid grid-cols-1 gap-4">
@@ -57,7 +57,7 @@ export default function StudentGroup() {
               ))
             : ""}
           <Link
-            href={`/admin/${user ? user.admin : null}/school/student-group/add`}
+            href={`/admin/${school ? school.code : null}/school/student-group/add`}
             className="bg-white flex shadow-sm justify-center items-center p-4 hover:bg-slate-700 transition duration-200 rounded-lg hover:text-white"
           >
             <DocumentPlusIcon className="w-6 h-6" />
@@ -76,11 +76,7 @@ export default function StudentGroup() {
 
     async function deleteGroup() {
       controlUpdate(true)
-      await axios.post("/api/deleteStudentGroup", {
-        data: {
-          id: groups[groupKey].id,
-        },
-      })
+      await axios.delete(`/api/schools/groups?id=${groups[groupKey].id}`)
       setPop(false)
       updateData()
       controlUpdate(false)
@@ -88,9 +84,8 @@ export default function StudentGroup() {
 
     const onSubmit = async (data) => {
       controlUpdate(true)
-      await axios.post("/api/updateStudentGroup", {
+      await axios.put(`/api/schools/groups?id=${groups[groupKey].id}`, {
         data: {
-          id: groups[groupKey].id,
           name: data.groupName,
           entrance: Number(data.groupEntrance),
         },
@@ -142,6 +137,7 @@ export default function StudentGroup() {
                 />
                 <div className="mt-1">
                   <button
+                    type="button"
                     onClick={() => deleteGroup()}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >

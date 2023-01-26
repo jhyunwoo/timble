@@ -1,0 +1,69 @@
+import prisma from "../../../lib/prismadb"
+import { authOptions } from "../auth/[...nextauth]"
+import { unstable_getServerSession } from "next-auth/next"
+
+export default async function handler(req, res) {
+  const session = await unstable_getServerSession(req, res, authOptions)
+  if (session.user.role === "SUPERADMIN") {
+    const { id, which } = req.query
+    if (req.method === "GET") {
+      if (id) {
+        const getUserById = await prisma.user.findUnique({
+          where: {
+            id: id,
+          },
+        })
+        res.status(200).json(getUserById)
+      } else {
+        const getUsers = await prisma.user.findMany()
+        res.status(200).json(getUsers)
+      }
+    }
+  } else if (session) {
+    const { id, which } = req.query
+    console.log(id, which)
+    if (req.method === "PUT") {
+      const { data } = req.body
+      const postUser = await prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          school: {
+            connect: {
+              code: data.code,
+            },
+          },
+          studentgroup: {
+            connect: {
+              id: data.studentgroupId,
+            },
+          },
+          diploma: {
+            connect: {
+              id: data.diplomaId,
+            },
+          },
+        },
+      })
+    } else if (req.method === "GET") {
+      const getUser = await prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+        include: {
+          school: true,
+          studentgroup: true,
+          diploma: true,
+          timetable: true,
+        },
+      })
+      res.status(200).json(getUser)
+    }
+  } else {
+    res.status(401).json({
+      message: "You must be sign in to view the protected content on this page.",
+    })
+  }
+  res.end()
+}

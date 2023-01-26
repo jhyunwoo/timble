@@ -1,6 +1,5 @@
 import MoveBack from "../../../../../components/moveBack"
 import ProtectedPage from "../../../../../components/ProtectedPage"
-import useUser from "../../../../../lib/client/useUser"
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
 import axios from "axios"
@@ -8,8 +7,7 @@ import useSchool from "../../../../../lib/client/useSchool"
 import { useRouter } from "next/router"
 
 export default function StudentGroupAdd() {
-  const { user } = useUser()
-  const { id } = useSchool()
+  const { school } = useSchool()
   const router = useRouter()
   const {
     register,
@@ -17,18 +15,18 @@ export default function StudentGroupAdd() {
     formState: { errors },
   } = useForm()
   const onSubmit = async (data) => {
-    await axios.post("/api/createStudentGroup", {
+    await axios.post(`/api/schools/groups`, {
       data: {
         name: data.groupName,
         entrance: Number(data.groupEntrance),
-        schoolId: id,
+        code: school.code,
       },
     })
-    router.push(`/admin/${user ? user.admin : null}/school/student-group`)
+    router.push(`/admin/${school ? school.code : null}/school/student-group`)
   }
   return (
     <ProtectedPage>
-      <MoveBack title={"학생 그룹"} link={`/admin/${user ? user.admin : null}/school/student-group`} />
+      <MoveBack title={"학생 그룹"} link={`/admin/${school ? school.code : null}/school/student-group`} />
       <div className="p-4">
         <div className="text-xl font-semibold m-2">학생 그룹 추가</div>
         <div>

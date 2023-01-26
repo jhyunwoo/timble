@@ -111,12 +111,12 @@ model subject {
   open                 String[]
   prerequisite         subject[]        @relation("SubjectPrerequisite")
   prerequisiteRelation subject[]        @relation("SubjectPrerequisite")
-  difficulty           difficulty       @relation(fields: [difficultyId], references: [id])
-  difficultyId         String
-  area                 subjectArea      @relation(fields: [areaId], references: [id])
-  areaId               String
-  type                 subjectType      @relation(fields: [typeId], references: [id])
-  typeId               String
+  difficulty           difficulty?      @relation(fields: [difficultyId], references: [id])
+  difficultyId         String?
+  area                 subjectArea?     @relation(fields: [areaId], references: [id])
+  areaId               String?
+  type                 subjectType?     @relation(fields: [typeId], references: [id])
+  typeId               String?
   target               String
   relatedMajor         String
   targetParticipants   String

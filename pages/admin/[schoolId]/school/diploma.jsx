@@ -5,22 +5,22 @@ import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
+import useDiplomas from "../../../../lib/client/useDiplomas"
 
 export default function AdminDiploma() {
   const [pop, setPop] = useState()
   const [diplomaId, setDiplomaId] = useState(0)
-  const { diplomas, id, code } = useSchool()
-  const { user } = useUser()
+  const { school } = useSchool()
+  const { diplomas } = useDiplomas()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
-      mutate(["/api/getSchool", user ? user.schoolId : null])
+      mutate(`/api/schools/diplomas/${school.code}`)
     }
     setTimeout(mutateData, 2000)
   }
@@ -30,7 +30,7 @@ export default function AdminDiploma() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+        <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">디플로마</div>
         {diplomas ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
@@ -78,23 +78,25 @@ export default function AdminDiploma() {
       reset,
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postDiploma("adminDiplomaUpdate", diplomas[diplomaId].id, {
-        diplomaName: data.diplomaName,
-        diplomaDescription: data.diplomaDescription,
+      await axios.put(`/api/schools/diplomas?id=${diplomas[diplomaId].id}`, {
+        data: {
+          name: data.diplomaName,
+          description: data.diplomaDescription,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
     }
 
-    async function postDiploma(postData, idData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        dataId: idData,
-        data: data,
-      })
+    async function deleteDiploma() {
+      controlUpdate(true)
+      await axios.delete(`/api/schools/diplomas?id=${diplomas[diplomaId].id}`)
+      setPop(false)
+      updateData()
+      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -144,7 +146,8 @@ export default function AdminDiploma() {
                 />
                 <div className="mt-1">
                   <button
-                    onClick={() => postDiploma("adminDiplomaDelete", diplomas[diplomaId].id, "delete")}
+                    type="button"
+                    onClick={() => deleteDiploma()}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -184,23 +187,18 @@ export default function AdminDiploma() {
       formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postDiploma("adminDiplomaCreate", {
-        diplomaName: data.diplomaName,
-        diplomaDescription: data.diplomaDescription,
-        schoolId: id,
+      await axios.post(`/api/schools/diplomas`, {
+        data: {
+          name: data.diplomaName,
+          description: data.diplomaDescription,
+          code: school.code,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
-    }
-
-    async function postDiploma(postData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        data: data,
-      })
     }
 
     return (

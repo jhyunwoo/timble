@@ -9,13 +9,13 @@ import useSchool from "../../lib/client/useSchool"
 
 export default function Signin() {
   const { data: session } = useSession()
-  const { code } = useSchool()
+  const { school } = useSchool()
   const router = useRouter()
 
   // check user auth
   useEffect(() => {
     if (session) {
-      router.push(`/admin/${code}`)
+      router.push(`/admin/${school ? school.code : null}`)
     }
   })
 

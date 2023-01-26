@@ -10,17 +10,18 @@ import { mutate } from "swr"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
+import useAreas from "../../../../lib/client/useAreas"
 
 export default function AdminSubjectAreas() {
   const [pop, setPop] = useState()
   const [areaId, setAreaId] = useState(0)
-  const { id, code, subjectAreas } = useSchool()
-  const { user } = useUser()
+  const { school } = useSchool()
+  const { areas } = useAreas()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
-      mutate(["/api/getSchool", user ? user.schoolId : null])
+      mutate(`/api/schools/areas/${school ? school.code : null}`)
     }
     setTimeout(mutateData, 2000)
   }
@@ -30,11 +31,11 @@ export default function AdminSubjectAreas() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+        <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">교과 영역</div>
-        {subjectAreas ? (
+        {areas ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
-            {subjectAreas.map((data, key) => (
+            {areas.map((data, key) => (
               <div
                 key={key}
                 className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-sm transition duration-200 hover:shadow-xl"
@@ -77,27 +78,29 @@ export default function AdminSubjectAreas() {
       setValue,
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postArea("adminSubjectAreaUpdate", subjectAreas[areaId].id, {
-        areaName: data.areaName,
+      await axios.put(`/api/schools/areas?id=${areas[areaId].id}`, {
+        data: {
+          name: data.areaName,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
     }
 
-    async function postArea(postData, idData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        dataId: idData,
-        data: data,
-      })
+    async function deleteArea() {
+      controlUpdate(true)
+      await axios.delete(`/api/schools/areas?id=${areas[areaId].id}`)
+      setPop(false)
+      updateData()
+      controlUpdate(false)
     }
 
     useEffect(() => {
-      if (subjectAreas) {
-        setValue("areaName", subjectAreas[areaId].name)
+      if (areas) {
+        setValue("areaName", areas[areaId].name)
       }
     }, [setValue])
 
@@ -128,7 +131,8 @@ export default function AdminSubjectAreas() {
 
                 <div className="mt-1">
                   <button
-                    onClick={() => postArea("adminSubjectAreaDelete", subjectAreas[areaId].id, "delete")}
+                    type="button"
+                    onClick={() => deleteArea()}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -161,22 +165,17 @@ export default function AdminSubjectAreas() {
       formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postArea("adminSubjectAreaCreate", {
-        areaName: data.areaName,
-        schoolId: id,
+      await axios.post(`/api/schools/areas`, {
+        data: {
+          name: data.areaName,
+          code: school.code,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
-    }
-
-    async function postArea(postData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        data: data,
-      })
     }
 
     return (

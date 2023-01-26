@@ -4,22 +4,41 @@ import { useRecoilValue } from "recoil"
 
 import Loading from "./Loading"
 import Footer from "./Footer"
-
-import useUser from "../lib/client/useUser"
 import AdminHeadBar from "./AdminHeadBar"
-import useSchool from "../lib/client/useSchool"
 import { dataUpdateState } from "./recoil/states"
 import AccessDenied from "./AccessDenied"
+
+import useUser from "../lib/client/useUser"
+import useAreas from "../lib/client/useAreas"
+import useDifficulties from "../lib/client/useDifficulties"
+import useDiplomas from "../lib/client/useDiplomas"
+import useGroup from "../lib/client/useGroup"
+import useGroups from "../lib/client/useGroups"
+import useSchool from "../lib/client/useSchool"
+import useSchools from "../lib/client/useSchools"
+import useStudents from "../lib/client/useStudents"
+import useSubject from "../lib/client/useSubject"
 import useSubjects from "../lib/client/useSubjects"
+import useTypes from "../lib/client/useTypes"
 
 export default function ProtectedPage(props) {
   const router = useRouter()
+  const { user } = useUser()
+  console.log(user)
   // 사용자 로그인 정보 가져오기
-  const { status } = useSession()
-  const { user, isLoadingUser } = useUser()
-  const { isLoadingSchool } = useSchool()
+  const { status, data: session } = useSession()
+  const { isLoadingAreas } = useAreas()
+  const { isLoadingDifficulties } = useDifficulties()
+  const { isLoadingDiplomas } = useDiplomas()
+  const { isLoadingGroup } = useGroup()
+  const { isLoadingGroups } = useGroups()
+  const { isLoadingSchool, school } = useSchool()
+  const { isLoadingSchools } = useSchools()
+  const { isLoadingStudents } = useStudents()
+  const { isLoadingSubject } = useSubject()
   const { isLoadingSubjects } = useSubjects()
-  const { isLoadingSubject } = useSchool()
+  const { isLoadingTypes } = useTypes()
+  const { isLoadingUser } = useUser()
   const isDataUpdate = useRecoilValue(dataUpdateState)
 
   if (status === "unauthenticated") {
@@ -28,14 +47,22 @@ export default function ProtectedPage(props) {
   } else if (status === "authenticated") {
     if (
       status === "loading" ||
-      isLoadingUser ||
+      isLoadingAreas ||
+      isLoadingDifficulties ||
+      isLoadingDiplomas ||
+      isLoadingGroup ||
+      isLoadingGroups ||
       isLoadingSchool ||
-      isDataUpdate ||
+      isLoadingSchools ||
+      isLoadingStudents ||
+      isLoadingSubject ||
       isLoadingSubjects ||
-      isLoadingSubject
+      isLoadingTypes ||
+      isLoadingUser ||
+      isDataUpdate
     ) {
       return <Loading />
-    } else if (user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
+    } else if (session.user.role !== "ADMIN" || !router.asPath.includes(user.admin)) {
       return <AccessDenied />
     } else {
       return (

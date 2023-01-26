@@ -7,11 +7,13 @@ import { DocumentPlusIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import MoveBack from "../../../../../components/moveBack"
+import useDiplomas from "../../../../../lib/client/useDiplomas"
 
 export default function AdminSubjects() {
   const { subjects } = useSubjects()
+  const { school } = useSchool()
   const { user } = useUser()
-  const { diplomas, code } = useSchool()
+  const { diplomas } = useDiplomas()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredSubjects, setFilteredSubjects] = useState([])
 
@@ -46,7 +48,7 @@ export default function AdminSubjects() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
 
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
@@ -70,7 +72,7 @@ export default function AdminSubjects() {
               <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
                 <div className="my-1 w-full">
                   <div className="text-sm font-normal text-slate-500 transition duration-1000 flex flex-row w-full flex-wrap">
-                    {data.diplomas.length !== diplomas.length ? (
+                    {diplomas && data.diplomas.length !== diplomas.length ? (
                       data.diplomas.map((data, key) => (
                         <div key={key} className="mx-1">
                           {data.name}

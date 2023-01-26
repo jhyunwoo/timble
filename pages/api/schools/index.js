@@ -6,9 +6,25 @@ export default async function handler(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
 
   if (session) {
-    if (req.method === "GET") {
-      const getSchools = await prisma.school.findMany()
-      res.status(200).json(getSchools)
+    const { code } = req.query
+    if (code) {
+      if (req.method === "GET") {
+        if (session.user.school.code === code) {
+          const getSchool = await prisma.school.findUnique({
+            where: {
+              code: code,
+            },
+          })
+          res.status(200).json(getSchool)
+        } else {
+          res.status(400)
+        }
+      }
+    } else {
+      if (req.method === "GET") {
+        const getSchools = await prisma.school.findMany()
+        res.status(200).json(getSchools)
+      }
     }
   } else {
     res.status(401).json({

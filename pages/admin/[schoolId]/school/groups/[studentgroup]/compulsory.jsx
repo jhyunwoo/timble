@@ -5,17 +5,20 @@ import useGroup from "../../../../../../lib/client/useGroup"
 import useSchool from "../../../../../../lib/client/useSchool"
 import { useForm } from "react-hook-form"
 export default function CompulsorySubjects() {
-  const { code } = useSchool()
+  const { school } = useSchool()
   const router = useRouter()
-  const { groupData } = useGroup(getGroupId())
+  const { group } = useGroup(getGroupId())
   function getGroupId() {
-    let id = router.asPath.replace(`/admin/${code}/school/groups/`, "")
+    let id = router.asPath.replace(`/admin/${school ? school.code : null}/school/groups/`, "")
     id = id.replace("/compulsory", "")
     return id
   }
   return (
     <ProtectedPage>
-      <MoveBack title={groupData.name} link={`/admin/${code}/school/groups/${getGroupId()}`} />
+      <MoveBack
+        title={group ? group.name : null}
+        link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`}
+      />
       <div className="p-4 grid grid-cols-1 gap-4">
         <div className="text-xl font-semibold mx-2">필수 이수 과목 설정</div>
         <AddCompulsory year={1} />

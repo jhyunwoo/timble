@@ -11,11 +11,10 @@ import { mutate } from "swr"
 
 export default function Subject() {
   const router = useRouter()
-  const { code } = useSchool()
-  const { user } = useUser()
+  const { school } = useSchool()
   const { subject } = useSubject(subjectID())
   function subjectID() {
-    return Number(router.asPath.replace(`/admin/${code}/school/subjects/`, ""))
+    return router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
   }
   function updateData() {
     function mutateData() {
@@ -38,14 +37,14 @@ export default function Subject() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"교과목"} link={`/admin/${code}/school/subjects`} />
+      <MoveBack title={"교과목"} link={`/admin/${school ? school.code : null}/school/subjects`} />
 
       {subject ? (
         <div className="p-4 grid grid-cols-1 gap-4 -mt-4">
           <div className="text-2xl font-bold m-2 flex justify-between items-center">
             <div>{subject.title}</div>
             <Link
-              href={`/admin/${user ? user.admin : null}/school/subjects/${subject.id}/edit`}
+              href={`/admin/${school ? school.code : null}/school/subjects/${subject.id}/edit`}
               className="bg-slate-100 flex justify-center items-center rounded-lg w-10 h-10 hover:bg-slate-200 transition duration-200"
             >
               <PencilSquareIcon className="w-8 h-8" />
@@ -88,9 +87,7 @@ export default function Subject() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
-            <div className="text-xl font-semibold my-1" onClick={() => console.log(subject)}>
-              교과 난이도
-            </div>
+            <div className="text-xl font-semibold my-1">교과 난이도</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
               {subject.difficulty ? subject.difficulty.name : ""}
             </p>
@@ -104,7 +101,7 @@ export default function Subject() {
           <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 영역</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.subjectArea ? subject.subjectArea.name : ""}
+              {subject.area ? subject.area.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg">
@@ -128,8 +125,8 @@ export default function Subject() {
           <div className="bg-white rounded-lg flex flex-col p-2">
             <div className="text-xl font-semibold m-4">내용 체계</div>
             <div className="grid grid-cols-1 gap-2">
-              {subject.content
-                ? subject.content.map((data, key) => (
+              {subject.contents
+                ? subject.contents.map((data, key) => (
                     <div key={key} className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2">
                       <div className="flex flex-col bg-white rounded-md p-2">
                         <div className="text-lg font-semibold">영역</div>

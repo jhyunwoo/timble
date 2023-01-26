@@ -6,9 +6,11 @@ import useSubject from "../../../lib/client/useSubject"
 export default function SubjectInfo() {
   const router = useRouter()
   const { subject } = useSubject(subjectID())
+  console.log(subject)
   function subjectID() {
-    return Number(router.asPath.replace(`/timetable/class/`, ""))
+    return router.asPath.replace(`/timetable/class/`, "")
   }
+  console.log(subjectID())
 
   function BasicInfo(props) {
     return (
@@ -81,7 +83,7 @@ export default function SubjectInfo() {
           <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 영역</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.subjectArea ? subject.subjectArea.name : ""}
+              {subject.area ? subject.area.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg">
@@ -105,8 +107,8 @@ export default function SubjectInfo() {
           <div className="bg-white rounded-lg flex flex-col p-2">
             <div className="text-xl font-semibold m-4">내용 체계</div>
             <div className="grid grid-cols-1 gap-2">
-              {subject.content
-                ? subject.content.map((data, key) => (
+              {subject.contents
+                ? subject.contents.map((data, key) => (
                     <div key={key} className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2">
                       <div className="flex flex-col bg-white rounded-md p-2">
                         <div className="text-lg font-semibold">영역</div>

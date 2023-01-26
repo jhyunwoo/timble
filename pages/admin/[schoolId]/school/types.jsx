@@ -5,22 +5,22 @@ import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
+import useTypes from "../../../../lib/client/useTypes"
 
 export default function AdminSubjectTypes() {
   const [pop, setPop] = useState()
   const [typeId, setTypeId] = useState(0)
-  const { id, code, subjectTypes } = useSchool()
-  const { user } = useUser()
+  const { school } = useSchool()
+  const { types } = useTypes()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
-      mutate(["/api/getSchool", user ? user.schoolId : null])
+      mutate(`/api/schools/types/${school.code}`)
     }
     setTimeout(mutateData, 2000)
   }
@@ -30,11 +30,11 @@ export default function AdminSubjectTypes() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+        <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">교과 종류</div>
-        {subjectTypes ? (
+        {types ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
-            {subjectTypes.map((data, key) => (
+            {types.map((data, key) => (
               <div
                 key={key}
                 className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-sm transition duration-200 hover:shadow-xl"
@@ -77,27 +77,29 @@ export default function AdminSubjectTypes() {
       setValue,
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postArea("adminSubjectTypeUpdate", subjectTypes[typeId].id, {
-        typeName: data.typeName,
+      await axios.put(`/api/schools/types?id=${types[typeId].id}`, {
+        data: {
+          name: data.typeName,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
     }
 
-    async function postArea(postData, idData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        dataId: idData,
-        data: data,
-      })
+    async function deleteType() {
+      controlUpdate(true)
+      await axios.delete(`/api/schools/types?id=${types[typeId].id}`)
+      setPop(false)
+      updateData()
+      controlUpdate(false)
     }
 
     useEffect(() => {
-      if (subjectTypes) {
-        setValue("typeName", subjectTypes[typeId].name)
+      if (types) {
+        setValue("typeName", types[typeId].name)
       }
     }, [setValue])
 
@@ -128,7 +130,8 @@ export default function AdminSubjectTypes() {
 
                 <div className="mt-1">
                   <button
-                    onClick={() => postArea("adminSubjectTypeDelete", subjectTypes[typeId].id, "delete")}
+                    type="button"
+                    onClick={() => deleteType()}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -161,22 +164,17 @@ export default function AdminSubjectTypes() {
       formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postArea("adminSubjectTypeCreate", {
-        typeName: data.typeName,
-        schoolId: id,
+      await axios.post(`/api/schools/types`, {
+        data: {
+          name: data.typeName,
+          code: school.code,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
-    }
-
-    async function postArea(postData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        data: data,
-      })
     }
 
     return (

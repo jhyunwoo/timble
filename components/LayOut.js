@@ -7,7 +7,6 @@ import Loading from "./Loading"
 import Error from "./Error"
 
 import useUser from "../lib/client/useUser"
-import useCheckUserNull from "../lib/client/useCheckUserNull"
 
 export default function LayOut(props) {
   const router = useRouter()
@@ -19,7 +18,9 @@ export default function LayOut(props) {
       router.push("/admin")
     }
   }
-  useCheckUserNull(nullData)
+  if (nullData.length > 0) {
+    router.push("/user/addinfo")
+  }
 
   if (status === "loading" || isLoadingUser) {
     return <Loading />

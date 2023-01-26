@@ -10,17 +10,18 @@ import { mutate } from "swr"
 import { useSetRecoilState } from "recoil"
 import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
+import useDifficulites from "../../../../lib/client/useDifficulties"
 
 export default function AdminSubjectDifficulties() {
   const [pop, setPop] = useState()
   const [difficultyId, setDifficultyId] = useState(0)
-  const { id, code, difficulties } = useSchool()
-  const { user } = useUser()
+  const { school } = useSchool()
+  const { difficulties } = useDifficulites()
   const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
-      mutate(["/api/getSchool", user ? user.schoolId : null])
+      mutate(`/api/schools/difficulties/${school ? school.code : null}`)
     }
     setTimeout(mutateData, 2000)
   }
@@ -30,7 +31,7 @@ export default function AdminSubjectDifficulties() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <MoveBack title={"학교"} link={`/admin/${code}/school`} />
+        <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">교과 난이도</div>
         {difficulties ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">
@@ -77,22 +78,24 @@ export default function AdminSubjectDifficulties() {
       setValue,
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postDifficulty("adminDifficultyUpdate", difficulties[difficultyId].id, {
-        difficultyName: data.difficultyName,
+      await axios.put(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`, {
+        data: {
+          name: data.difficultyName,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
     }
 
-    async function postDifficulty(postData, idData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        dataId: idData,
-        data: data,
-      })
+    async function deleteDifficulty() {
+      controlUpdate(true)
+      await axios.delete(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`)
+      setPop(false)
+      updateData()
+      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -128,7 +131,8 @@ export default function AdminSubjectDifficulties() {
 
                 <div className="mt-1">
                   <button
-                    onClick={() => postDifficulty("adminDifficultyDelete", difficulties[difficultyId].id, "delete")}
+                    type="button"
+                    onClick={() => deleteDifficulty()}
                     className="rounded-full bg-red-400 p-1 px-4 text-white transition duration-200 hover:bg-red-500"
                   >
                     삭제
@@ -161,22 +165,17 @@ export default function AdminSubjectDifficulties() {
       formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       controlUpdate(true)
-      postDifficulty("adminDifficultyCreate", {
-        difficultyName: data.difficultyName,
-        schoolId: id,
+      await axios.post(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`, {
+        data: {
+          name: data.difficultyName,
+          code: school.code,
+        },
       })
       setPop(false)
       updateData()
       controlUpdate(false)
-    }
-
-    async function postDifficulty(postData, data) {
-      await axios.post("/api/adminPost", {
-        post: postData,
-        data: data,
-      })
     }
 
     return (

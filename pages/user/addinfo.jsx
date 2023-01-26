@@ -7,18 +7,20 @@ import { useSWRConfig } from "swr"
 
 import useUser from "../../lib/client/useUser"
 import Loading from "../../components/Loading"
-import useSchool from "../../lib/client/useSchool"
-import useAllSchools from "../../lib/client/useAllSchools"
+import useSchools from "../../lib/client/useSchools"
+import useGroups from "../../lib/client/useGroups"
+import useDiplomas from "../../lib/client/useDiplomas"
+import { mutate } from "swr"
 
 export default function Userinfo() {
   // router 설정
   const router = useRouter()
 
-  const { mutate } = useSWRConfig()
   // 사용자 로그인 정보 가져오기
   const { data: session } = useSession()
-  const { allSchools } = useAllSchools()
-  const { diplomas, groups } = useSchool()
+  const { schools } = useSchools()
+  const { groups } = useGroups()
+  const { diplomas } = useDiplomas()
   const [school, setSchool] = useState(null)
   const [diploma, setDiploma] = useState(null)
   const [group, setGroup] = useState(null)
@@ -34,17 +36,19 @@ export default function Userinfo() {
   } = useForm()
 
   const onSubmit = (data) => {
-    postUserInfo(nullData[0], data.name)
+    putUserName(data.name)
   }
 
   // school control
   function controlSchool(value) {
-    if (school === "" || school !== value) {
+    console.log(value)
+    if (school !== value) {
       setSchool(value)
       setWarn(false)
     } else {
       setSchool(null)
     }
+    console.log(school)
   }
 
   // diploma control
@@ -66,17 +70,41 @@ export default function Userinfo() {
       setGroup(null)
     }
   }
-
+  function updateData() {
+    window.location.reload()
+  }
   // 사용자 데이터 서버에 수정
-  async function postUserInfo(pageData, userData) {
+  async function putUserSchool(data) {
     setLoading(true)
-    await axios.post("/api/postUserInfo", {
-      post: pageData,
-      userEmail: session.user.email,
-      data: userData,
+    await axios.put(`/api/users/school?id=${session.user.id}`, {
+      data,
     })
     setLoading(false)
-    mutate(["/api/getUserInfo", session.user.email])
+    updateData()
+  }
+  async function putUserDiploma(data) {
+    setLoading(true)
+    await axios.put(`/api/users/diploma?id=${session.user.id}`, {
+      data,
+    })
+    setLoading(false)
+    updateData()
+  }
+  async function putUserGroup(data) {
+    setLoading(true)
+    await axios.put(`/api/users/group?id=${session.user.id}`, {
+      data,
+    })
+    setLoading(false)
+    updateData()
+  }
+  async function putUserName(data) {
+    setLoading(true)
+    await axios.put(`/api/users/name?id=${session.user.id}`, {
+      data,
+    })
+    setLoading(false)
+    updateData()
   }
 
   // nullData에서 다음 클릭시 다음장으로 이동
@@ -85,21 +113,21 @@ export default function Userinfo() {
       if (school === null) {
         setWarn(true)
       } else {
-        postUserInfo(nullData[0], school)
+        putUserSchool(school)
         setWarn(false)
       }
     } else if (nullData[0] === "diploma") {
       if (diploma === null) {
         setWarn(true)
       } else {
-        postUserInfo(nullData[0], diploma)
+        putUserDiploma(diploma)
         setWarn(false)
       }
     } else if (nullData[0] === "studentgroup") {
       if (group === null) {
         setWarn(true)
       } else {
-        postUserInfo(nullData[0], group)
+        putUserGroup(group)
         setWarn(false)
       }
     } else {
@@ -143,12 +171,12 @@ export default function Userinfo() {
       <div>
         <div className={"p-4 pt-8 text-center text-2xl font-semibold"}>학교</div>
         <div className={"grid w-full grid-cols-1 gap-6 p-4"}>
-          {allSchools
-            ? allSchools.map((data, key) => (
+          {schools
+            ? schools.map((data, key) => (
                 <button
                   key={key}
                   className={`${
-                    school === "cnsa" ? "bg-green-500 text-white" : ""
+                    school === data.code ? "bg-green-500 text-white" : ""
                   }   rounded-xl p-4 text-xl font-semibold shadow-lg transition duration-200 hover:ring-offset-4`}
                   onClick={() => controlSchool(data.code)}
                 >

@@ -2,9 +2,12 @@ import ProtectedPage from "../../../../components/ProtectedPage"
 import useSchool from "../../../../lib/client/useSchool"
 import { useEffect, useState } from "react"
 import useStudents from "../../../../lib/client/useStudents"
+import useDiplomas from "../../../../lib/client/useDiplomas"
+import useGroups from "../../../../lib/client/useGroups"
 
 export default function AdminStudents() {
-  const { diplomas, groups } = useSchool()
+  const { diplomas } = useDiplomas()
+  const { groups } = useGroups()
   const { students } = useStudents()
   const [groupFilter, setGroupFilter] = useState()
   const [diplomaFilter, setDiplomaFilter] = useState("")
@@ -32,7 +35,7 @@ export default function AdminStudents() {
     if (groupFilter && diplomaFilter) {
       try {
         list.map((data) => {
-          if (data.year === groupFilter && data.diploma.name === diplomaFilter) {
+          if (data.studentgroup.id === groupFilter && data.diploma.name === diplomaFilter) {
             filtered.push(data)
           }
         })

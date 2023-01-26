@@ -13,6 +13,10 @@ import axios from "axios"
 import { mutate } from "swr"
 import useSubject from "../../../../../../lib/client/useSubject"
 import MoveBack from "../../../../../../components/moveBack"
+import useDiplomas from "../../../../../../lib/client/useDiplomas"
+import useAreas from "../../../../../../lib/client/useAreas"
+import useTypes from "../../../../../../lib/client/useTypes"
+import useDifficulties from "../../../../../../lib/client/useDifficulties"
 
 export default function AdminSubjectEdit() {
   const router = useRouter()
@@ -24,7 +28,11 @@ export default function AdminSubjectEdit() {
     setValue,
     reset,
   } = useForm()
-  const { diplomas, id, subjectAreas, subjectTypes, difficulties } = useSchool()
+  const { school } = useSchool()
+  const { areas } = useAreas()
+  const { types } = useTypes()
+  const { difficulties } = useDifficulties()
+  const { diplomas } = useDiplomas()
   const { subjects } = useSubjects()
   const { user } = useUser()
   const [diploma, setDiploma] = useState([])
@@ -39,27 +47,27 @@ export default function AdminSubjectEdit() {
   const { subject } = useSubject(subjectID())
 
   function subjectID() {
-    let beforeEdit = router.asPath.replace(`/admin/${code}/school/subjects/`, "")
-    return Number(beforeEdit.replace("/edit", ""))
+    let beforeEdit = router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
+    return beforeEdit.replace("/edit", "")
   }
 
   async function updateSubject(data, content) {
-    await axios.post("/api/adminPost", {
-      post: "adminUpdateSubject",
-      id: subject.id,
-      schoolId: id,
-      title: data.subjectTitle,
-      type: data.subjectType,
-      diplomaId: data.subjectDiplomas,
-      area: data.subjectArea,
-      csat: data.subjectCSAT,
-      open: data.subjectOpen,
-      prerequisite: data.subjectPrerequisite,
-      relatedMajor: data.subjectRelatedMajor,
-      target: data.subjectTarget,
-      targetParticipants: data.subjectTargetParticipants,
-      contents: content,
-      difficulty: difficulty,
+    await axios.put(`/api/schools/subjects?id=${subject.id}`, {
+      data: {
+        code: school.code,
+        title: data.subjectTitle,
+        type: data.subjectType,
+        diplomaId: data.subjectDiplomas,
+        area: data.subjectArea,
+        csat: data.subjectCSAT,
+        open: data.subjectOpen,
+        prerequisite: data.subjectPrerequisite,
+        relatedMajor: data.subjectRelatedMajor,
+        target: data.subjectTarget,
+        targetParticipants: data.subjectTargetParticipants,
+        contents: content,
+        difficulty: difficulty,
+      },
     })
   }
   async function deleteSubject() {
@@ -68,30 +76,29 @@ export default function AdminSubjectEdit() {
       post: "adminDeleteSubject",
       id: subject.id,
     })
-    router.push(`/admin/${code}/school/subjects`)
+    router.push(`/admin/${school ? school.code : null}/school/subjects`)
     updateData()
     controlUpdate(false)
   }
   function updateData() {
     function mutateData() {
-      mutate([user ? "/api/getSubjects" : null, user ? user.schoolId : null])
+      mutate(`/api/schools/subjects?id=${subject ? subject.id : null}`)
     }
     setTimeout(mutateData, 2000)
   }
 
   const onSubmit = (data) => {
-    console.log(data)
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
       unifyContent.push({
-        id: subject.content[i - 1] ? subject.content[i - 1].id : "newContent",
+        id: subject.contents[i - 1] ? subject.contents[i - 1].id : "newContent",
         area: data[`contentArea${i}`],
         mainTarget: data[`contentMainTarget${i}`],
         detail: data[`contentDetail${i}`],
       })
     }
     updateSubject(data, unifyContent)
-    router.push(`/admin/${code}/school/subjects/${subject.id}`)
+    router.push(`/admin/${school ? school.code : null}/school/subjects/${subject.id}`)
   }
 
   function range(start, end) {
@@ -179,10 +186,10 @@ export default function AdminSubjectEdit() {
         subjectRelatedMajor: subject.relatedMajor,
       })
       for (let i = 1; i < contentLength; i++) {
-        if (subject.content[i - 1]) {
-          setValue(`contentArea${i}`, subject.content[i - 1].area)
-          setValue(`contentDetail${i}`, subject.content[i - 1].detail)
-          setValue(`contentMainTarget${i}`, subject.content[i - 1].mainTarget.join("/"))
+        if (subject.contents[i - 1]) {
+          setValue(`contentArea${i}`, subject.contents[i - 1].area)
+          setValue(`contentDetail${i}`, subject.contents[i - 1].detail)
+          setValue(`contentMainTarget${i}`, subject.contents[i - 1].mainTarget.join("/"))
         }
       }
     }
@@ -202,16 +209,19 @@ export default function AdminSubjectEdit() {
       setPrerequisite(setPre)
       setType(subject.type.id)
       setDifficulty(subject.difficulty.id)
-      setArea(subject.subjectArea.id)
+      setArea(subject.area.id)
       setOpen(subject.open)
       setCsta(subject.CSATSubject)
-      setContentLength(subject.content.length + 1)
+      setContentLength(subject.contents.length + 1)
     }
   }, [subject])
 
   return (
     <ProtectedPage>
-      <MoveBack title={`${subject ? subject.title : ""}`} link={`/admin/${code}/school/subjects/${subjectID()}`} />
+      <MoveBack
+        title={`${subject ? subject.title : ""}`}
+        link={`/admin/${school ? school.code : null}/school/subjects/${subjectID()}`}
+      />
       <div className="w-full h-full p-4">
         <div className="flex justify-between items-center p-2">
           <div className="text-2xl font-bold">교과목 수정</div>
@@ -301,8 +311,8 @@ export default function AdminSubjectEdit() {
               종류
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {subjectTypes
-                ? subjectTypes.map((data, key) => (
+              {types
+                ? types.map((data, key) => (
                     <button
                       key={key}
                       type="button"
@@ -359,8 +369,8 @@ export default function AdminSubjectEdit() {
               교과 영역
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {subjectAreas
-                ? subjectAreas.map((data, key) => (
+              {areas
+                ? areas.map((data, key) => (
                     <button
                       key={key}
                       type="button"

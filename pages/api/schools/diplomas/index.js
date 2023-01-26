@@ -3,59 +3,96 @@ import { authOptions } from "../../auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function handler(req, res) {
-    const session = await unstable_getServerSession(req, res, authOptions)
-    if (session) {
-        const { id } = req.query
-        if (req.method === "GET") {
-            if (id) {
-                const getDiplomaById = await prisma.diploma.findUnique({
-                    where: {
-                        id: id,
-                    },
-                    select:{
-                        id:true,
-                        name:true,
-                        description:true,
-                        subjects:true,
-                        school:true,
-                        students:{
-                            select:{
-                                id:true,
-                                name:true,
-                                diploma:true,
-                                email:true,
-                                school:true
-                            }
-                        }
-                    }
-                })
-                res.status(200).json(getDiplomaById)
-            } else {
-                const getDiplomas = await prisma.diploma.findMany({
-                    select:{
-                        id:true,
-                        name:true,
-                        description:true,
-                        subjects:true,
-                        school:true,
-                        students:{
-                            select:{
-                                id:true,
-                                name:true,
-                                diploma:true,
-                                email:true,
-                                school:true
-                            }
-                        }
-                    }
-                })
-                res.status(200).json(getDiplomas)
-            }
-        }
-    } else {
-        res.status(401).json({
-            message: "You must be sign in to view the protected content on this page.",
+  const session = await unstable_getServerSession(req, res, authOptions)
+  if (session) {
+    const { id } = req.query
+    if (req.method === "GET") {
+      if (id) {
+        const getDiplomaById = await prisma.diploma.findUnique({
+          where: {
+            id: id,
+          },
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            subjects: true,
+            school: true,
+            students: {
+              select: {
+                id: true,
+                name: true,
+                diploma: true,
+                email: true,
+                school: true,
+              },
+            },
+          },
         })
+        res.status(200).json(getDiplomaById)
+      } else {
+        const getDiplomas = await prisma.diploma.findMany({
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            subjects: true,
+            school: true,
+            students: {
+              select: {
+                id: true,
+                name: true,
+                diploma: true,
+                email: true,
+                school: true,
+              },
+            },
+          },
+        })
+        res.status(200).json(getDiplomas)
+      }
+    } else if (req.method === "PUT") {
+      const { data } = req.body
+      const putDiplomaById = await prisma.diploma.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: data.name,
+          description: data.description,
+        },
+      })
+      res.status(200)
+    } else if (req.method === "POST") {
+      const { data } = req.body
+      console.log(data)
+      const postDiplomaById = await prisma.diploma.create({
+        data: {
+          name: data.name,
+          description: data.description,
+          school: {
+            connect: {
+              code: data.code,
+            },
+          },
+        },
+        include: {
+          school: true,
+        },
+      })
+      res.status(201)
+    } else if (req.method === "DELETE") {
+      const deleteDiplomaById = await prisma.diploma.delete({
+        where: {
+          id: id,
+        },
+      })
+      res.status(204)
     }
-    res.end()
+  } else {
+    res.status(401).json({
+      message: "You must be sign in to view the protected content on this page.",
+    })
+  }
+  res.end()
 }
