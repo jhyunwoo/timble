@@ -12,7 +12,6 @@ export default async function handler(req, res) {
           where: {
             id: id,
           },
-<<<<<<< HEAD
           include: {
             school: true,
             diplomas: true,
@@ -23,8 +22,6 @@ export default async function handler(req, res) {
             contents: true,
             studentgroup: true,
           },
-=======
->>>>>>> origin/main
         })
         res.status(200).json(getSubjectById)
       } else {
