@@ -26,6 +26,12 @@ export const authOptions = {
     signIn: "/signin",
   },
   secret: process.env.NEXT_SECRET,
+  callbacks: {
+
+    async session(session) {
+      return session
+    }
+  }
 }
 
 export default NextAuth(authOptions)
