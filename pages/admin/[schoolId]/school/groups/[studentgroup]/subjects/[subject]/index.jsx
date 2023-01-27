@@ -4,7 +4,7 @@ import ProtectedPage from "../../../../../../../../components/ProtectedPage"
 import { useEffect } from "react"
 import Link from "next/link"
 import { PencilSquareIcon } from "@heroicons/react/24/outline"
-import MoveBack from "../../../../../../../../components/moveBack"
+import MoveBack from "../../../../../../../../components/MoveBack"
 import useSubject from "../../../../../../../../lib/client/useSubject"
 import { mutate } from "swr"
 

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import MoveBack from "../../../../../../components/moveBack"
+import MoveBack from "../../../../../../components/MoveBack"
 import ProtectedPage from "../../../../../../components/ProtectedPage"
 import useGroup from "../../../../../../lib/client/useGroup"
 import useSchool from "../../../../../../lib/client/useSchool"

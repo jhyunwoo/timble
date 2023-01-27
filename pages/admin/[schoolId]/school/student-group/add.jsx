@@ -1,4 +1,4 @@
-import MoveBack from "../../../../../components/moveBack"
+import MoveBack from "../../../../../components/MoveBack"
 import ProtectedPage from "../../../../../components/ProtectedPage"
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"

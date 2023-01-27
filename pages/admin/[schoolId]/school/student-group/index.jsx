@@ -1,6 +1,6 @@
 import ProtectedPage from "../../../../../components/ProtectedPage"
 import useSchool from "../../../../../lib/client/useSchool"
-import MoveBack from "../../../../../components/moveBack"
+import MoveBack from "../../../../../components/MoveBack"
 import Link from "next/link"
 import { DocumentPlusIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { useState, useEffect } from "react"

@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import ProtectedPage from "../../../../../../components/ProtectedPage"
 import useSchool from "../../../../../../lib/client/useSchool"
 import useGroup from "../../../../../../lib/client/useGroup"
-import MoveBack from "../../../../../../components/moveBack"
+import MoveBack from "../../../../../../components/MoveBack"
 import Link from "next/link"
 
 export default function StudentGroupDetail() {

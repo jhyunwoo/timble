@@ -10,7 +10,7 @@ import { PlusCircleIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outlin
 import axios from "axios"
 import { mutate } from "swr"
 import useSubject from "../../../../../../../../lib/client/useSubject"
-import MoveBack from "../../../../../../../../components/moveBack"
+import MoveBack from "../../../../../../../../components/MoveBack"
 import useDiplomas from "../../../../../../../../lib/client/useDiplomas"
 import useAreas from "../../../../../../../../lib/client/useAreas"
 import useTypes from "../../../../../../../../lib/client/useTypes"

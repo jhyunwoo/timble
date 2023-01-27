@@ -5,9 +5,8 @@ import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
-import MoveBack from "../../../../components/moveBack"
+import MoveBack from "../../../../components/MoveBack"
 import useDifficulites from "../../../../lib/client/useDifficulties"
 
 export default function AdminSubjectDifficulties() {

@@ -1,4 +1,4 @@
-import MoveBack from "../../components/moveBack"
+import MoveBack from "../../components/MoveBack"
 import LayOut from "../../components/LayOut"
 import useUser from "../../lib/client/useUser"
 import axios from "axios"

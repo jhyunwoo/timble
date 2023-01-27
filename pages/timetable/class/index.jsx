@@ -1,6 +1,5 @@
 import LayOut from "../../../components/LayOut"
-import MoveBack from "../../../components/moveBack"
-import useSchool from "../../../lib/client/useSchool"
+import MoveBack from "../../../components/MoveBack"
 import useSubjects from "../../../lib/client/useSubjects"
 import Link from "next/link"
 import useDiplomas from "../../../lib/client/useDiplomas"

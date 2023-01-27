@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import LayOut from "../../../components/LayOut"
-import MoveBack from "../../../components/moveBack"
+import MoveBack from "../../../components/MoveBack"
 import useSubject from "../../../lib/client/useSubject"
 
 export default function SubjectInfo() {

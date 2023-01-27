@@ -1,4 +1,4 @@
-import MoveBack from "../../../components/moveBack"
+import MoveBack from "../../../components/MoveBack"
 import ProtectedPage from "../../../components/ProtectedPage"
 import UserInfoDetail from "../../../components/UserInfoDetail"
 import useSchool from "../../../lib/client/useSchool"

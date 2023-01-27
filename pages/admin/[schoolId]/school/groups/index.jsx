@@ -1,7 +1,7 @@
 import ProtectedPage from "../../../../../components/ProtectedPage"
 import useSchool from "../../../../../lib/client/useSchool"
 import Link from "next/link"
-import MoveBack from "../../../../../components/moveBack"
+import MoveBack from "../../../../../components/MoveBack"
 import useGroups from "../../../../../lib/client/useGroups"
 
 export default function StudentGroup() {
