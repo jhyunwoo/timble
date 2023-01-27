@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { mutate } from "swr"
 
-import MoveBack from "../../../../components/moveBack"
+import MoveBack from "../../../../components/MoveBack"
 import useAreas from "../../../../lib/client/useAreas"
 
 export default function AdminSubjectAreas() {
