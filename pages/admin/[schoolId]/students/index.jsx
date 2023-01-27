@@ -1,5 +1,4 @@
 import ProtectedPage from "../../../../components/ProtectedPage"
-import useSchool from "../../../../lib/client/useSchool"
 import { useEffect, useState } from "react"
 import useStudents from "../../../../lib/client/useStudents"
 import useDiplomas from "../../../../lib/client/useDiplomas"

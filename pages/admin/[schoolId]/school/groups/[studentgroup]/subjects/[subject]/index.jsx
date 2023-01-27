@@ -1,11 +1,11 @@
 import { useRouter } from "next/router"
-import useSchool from "../../../../../../lib/client/useSchool"
-import ProtectedPage from "../../../../../../components/ProtectedPage"
+import useSchool from "../../../../../../../../lib/client/useSchool"
+import ProtectedPage from "../../../../../../../../components/ProtectedPage"
 import { useEffect } from "react"
 import Link from "next/link"
 import { PencilSquareIcon } from "@heroicons/react/24/outline"
-import MoveBack from "../../../../../../components/moveBack"
-import useSubject from "../../../../../../lib/client/useSubject"
+import MoveBack from "../../../../../../../../components/moveBack"
+import useSubject from "../../../../../../../../lib/client/useSubject"
 import { mutate } from "swr"
 
 export default function Subject() {
@@ -13,7 +13,17 @@ export default function Subject() {
   const { school } = useSchool()
   const { subject } = useSubject(subjectID())
   function subjectID() {
-    return router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
+    let id = router.asPath.replace("/admin/cnsa/school/groups/", "")
+    id = id.replace("/subjects/", "")
+    id = id.substr(25)
+    return id
+  }
+  function getGroupId() {
+    let path = router.asPath
+    path = path.replace("/admin/cnsa/school/groups/", "")
+    path = path.replace("/subjects/", "")
+    path = path.substr(0, 25)
+    return path
   }
   function updateData() {
     function mutateData() {
@@ -36,14 +46,17 @@ export default function Subject() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"교과목"} link={`/admin/${school ? school.code : null}/school/subjects`} />
+      <MoveBack
+        title={"교과목"}
+        link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects`}
+      />
 
       {subject ? (
         <div className="p-4 grid grid-cols-1 gap-4 -mt-4">
           <div className="text-2xl font-bold m-2 flex justify-between items-center">
             <div>{subject.title}</div>
             <Link
-              href={`/admin/${school ? school.code : null}/school/subjects/${subject.id}/edit`}
+              href={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}/edit`}
               className="bg-slate-100 flex justify-center items-center rounded-lg w-10 h-10 hover:bg-slate-200 transition duration-200"
             >
               <PencilSquareIcon className="w-8 h-8" />
@@ -86,12 +99,6 @@ export default function Subject() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
-            <div className="text-xl font-semibold my-1">학생 그룹</div>
-            <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.studentgroup ? subject.studentgroup.name : ""}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 난이도</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
               {subject.difficulty ? subject.difficulty.name : ""}
@@ -106,7 +113,7 @@ export default function Subject() {
           <div className="bg-white p-4 rounded-lg flex flex-col">
             <div className="text-xl font-semibold my-1">교과 영역</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
-              {subject.area ? subject.area.name : "미정"}
+              {subject.area ? subject.area.name : ""}
             </p>
           </div>
           <div className="bg-white p-4 rounded-lg">

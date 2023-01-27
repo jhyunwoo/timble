@@ -1,14 +1,16 @@
-import Loading from "../../../../../components/Loading"
-import ProtectedPage from "../../../../../components/ProtectedPage"
-import useSubjects from "../../../../../lib/client/useSubjects"
-import useUser from "../../../../../lib/client/useUser"
-import useSchool from "../../../../../lib/client/useSchool"
+import Loading from "../../../../../../../components/Loading"
+import ProtectedPage from "../../../../../../../components/ProtectedPage"
+import useSubjects from "../../../../../../../lib/client/useSubjects"
+import useUser from "../../../../../../../lib/client/useUser"
+import useSchool from "../../../../../../../lib/client/useSchool"
 import { DocumentPlusIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import MoveBack from "../../../../../components/moveBack"
-import useDiplomas from "../../../../../lib/client/useDiplomas"
+import MoveBack from "../../../../../../../components/moveBack"
+import useDiplomas from "../../../../../../../lib/client/useDiplomas"
+import useGroupSubjects from "../../../../../../../lib/client/useGroupSubjects"
 import { useRouter } from "next/router"
+import useGroup from "../../../../../../../lib/client/useGroup"
 
 export default function AdminSubjects() {
   const router = useRouter()
@@ -17,7 +19,8 @@ export default function AdminSubjects() {
   const { diplomas } = useDiplomas()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredSubjects, setFilteredSubjects] = useState([])
-  const { subjects } = useSubjects()
+  const { groupSubjects } = useGroupSubjects(getGroupId())
+  const { group } = useGroup(getGroupId())
 
   function getGroupId() {
     let path = router.asPath
@@ -34,7 +37,7 @@ export default function AdminSubjects() {
     }
   }
   function filterSubjects() {
-    let list = subjects
+    let list = groupSubjects
     let filtered = []
     if (diplomaFilter) {
       list.map((data) => {
@@ -53,11 +56,14 @@ export default function AdminSubjects() {
 
   useEffect(() => {
     filterSubjects()
-  }, [diplomaFilter, subjects])
+  }, [diplomaFilter, groupSubjects])
 
   return (
     <ProtectedPage>
-      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`} />
+      <MoveBack
+        title={group ? group.name : ""}
+        link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`}
+      />
 
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas
@@ -77,7 +83,10 @@ export default function AdminSubjects() {
       {filteredSubjects ? (
         <div className={"grid grid-cols-1 p-4 gap-4"}>
           {filteredSubjects.map((data, key) => (
-            <Link key={key} href={`/admin/${user ? user.admin : null}/school/subjects/${data.id}`}>
+            <Link
+              key={key}
+              href={`/admin/${user ? user.admin : null}/school/groups/${getGroupId()}/subjects/${data.id}`}
+            >
               <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
                 <div className="my-1 w-full">
                   <div className="text-sm font-normal text-slate-500 transition duration-1000 flex flex-row w-full flex-wrap">

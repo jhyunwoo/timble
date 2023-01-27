@@ -7,8 +7,6 @@ import { useState, useEffect } from "react"
 import { mutate } from "swr"
 import { useForm } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
-import { useSetRecoilState } from "recoil"
-import { dataUpdateState } from "../../../../../components/recoil/states"
 import axios from "axios"
 import useGroups from "../../../../../lib/client/useGroups"
 
@@ -16,7 +14,6 @@ export default function StudentGroup() {
   const { groups } = useGroups()
   const { school } = useSchool()
   const [groupKey, setGroupKey] = useState()
-  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   const [pop, setPop] = useState(false)
   function updateData() {

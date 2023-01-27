@@ -1,6 +1,7 @@
-import ProtectedPage from "../../../../../../components/ProtectedPage"
-import useSubjects from "../../../../../../lib/client/useSubjects"
-import useSchool from "../../../../../../lib/client/useSchool"
+import ProtectedPage from "../../../../../../../../components/ProtectedPage"
+import useSubjects from "../../../../../../../../lib/client/useSubjects"
+import useSchool from "../../../../../../../../lib/client/useSchool"
+import useUser from "../../../../../../../../lib/client/useUser"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -8,13 +9,13 @@ import { ErrorMessage } from "@hookform/error-message"
 import { PlusCircleIcon, XMarkIcon, TrashIcon } from "@heroicons/react/24/outline"
 import axios from "axios"
 import { mutate } from "swr"
-import useSubject from "../../../../../../lib/client/useSubject"
-import MoveBack from "../../../../../../components/moveBack"
-import useDiplomas from "../../../../../../lib/client/useDiplomas"
-import useAreas from "../../../../../../lib/client/useAreas"
-import useTypes from "../../../../../../lib/client/useTypes"
-import useDifficulties from "../../../../../../lib/client/useDifficulties"
-import useGroups from "../../../../../../lib/client/useGroups"
+import useSubject from "../../../../../../../../lib/client/useSubject"
+import MoveBack from "../../../../../../../../components/moveBack"
+import useDiplomas from "../../../../../../../../lib/client/useDiplomas"
+import useAreas from "../../../../../../../../lib/client/useAreas"
+import useTypes from "../../../../../../../../lib/client/useTypes"
+import useDifficulties from "../../../../../../../../lib/client/useDifficulties"
+import useGroups from "../../../../../../../../lib/client/useGroups"
 
 export default function AdminSubjectEdit() {
   const router = useRouter()
@@ -42,11 +43,21 @@ export default function AdminSubjectEdit() {
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
   const { subject } = useSubject(subjectID())
-  console.log(subject)
 
   function subjectID() {
-    let beforeEdit = router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
-    return beforeEdit.replace("/edit", "")
+    let id = router.asPath.replace("/admin/cnsa/school/groups/", "")
+    id = id.replace("/subjects/", "")
+    id = id.replace("/edit", "")
+    id = id.substr(25)
+    return id
+  }
+  function getGroupId() {
+    let path = router.asPath
+    path = path.replace("/admin/cnsa/school/groups/", "")
+    path = path.replace("/subjects/", "")
+    path = path.replace("/edit", "")
+    path = path.substr(0, 25)
+    return path
   }
 
   async function updateSubject(data, content) {
@@ -74,7 +85,7 @@ export default function AdminSubjectEdit() {
       post: "adminDeleteSubject",
       id: subject.id,
     })
-    router.push(`/admin/${school ? school.code : null}/school/subjects`)
+    router.push(`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}`)
     updateData()
   }
   function updateData() {
@@ -95,7 +106,7 @@ export default function AdminSubjectEdit() {
       })
     }
     updateSubject(data, unifyContent)
-    router.push(`/admin/${school ? school.code : null}/school/subjects/${subject.id}`)
+    router.push(`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}`)
   }
 
   function range(start, end) {

@@ -1,7 +1,16 @@
 import { atom } from "recoil"
-import { v1 } from "uuid"
 
-export const dataUpdateState = atom({
-  key: `dataUpdateState${v1()}`,
+export const schoolCodeState = atom({
+  key: "schoolCodeState",
+  default: null,
+})
+
+export const loadingState = atom({
+  key: "loadingState",
   default: false,
+})
+
+export const userState = atom({
+  key: "userState",
+  default: {},
 })

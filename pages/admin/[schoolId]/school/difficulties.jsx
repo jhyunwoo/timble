@@ -7,8 +7,6 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
-import { useSetRecoilState } from "recoil"
-import { dataUpdateState } from "../../../../components/recoil/states"
 import MoveBack from "../../../../components/moveBack"
 import useDifficulites from "../../../../lib/client/useDifficulties"
 
@@ -17,7 +15,6 @@ export default function AdminSubjectDifficulties() {
   const [difficultyId, setDifficultyId] = useState(0)
   const { school } = useSchool()
   const { difficulties } = useDifficulites()
-  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
@@ -79,7 +76,6 @@ export default function AdminSubjectDifficulties() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.put(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`, {
         data: {
           name: data.difficultyName,
@@ -87,15 +83,12 @@ export default function AdminSubjectDifficulties() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     async function deleteDifficulty() {
-      controlUpdate(true)
       await axios.delete(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`)
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -166,7 +159,6 @@ export default function AdminSubjectDifficulties() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.post(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`, {
         data: {
           name: data.difficultyName,
@@ -175,7 +167,6 @@ export default function AdminSubjectDifficulties() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     return (

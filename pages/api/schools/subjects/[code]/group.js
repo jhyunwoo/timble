@@ -1,11 +1,12 @@
-import prisma from "../../../../lib/prismadb"
-import { authOptions } from "../../auth/[...nextauth]"
+import prisma from "../../../../../lib/prismadb"
+import { authOptions } from "../../../auth/[...nextauth]"
 import { unstable_getServerSession } from "next-auth/next"
 
 export default async function handler(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
   if (session) {
-    const { code } = req.query
+    const { id, code } = req.query
+    console.log(code, id)
     if (req.method === "GET") {
       try {
         if (session.user.school.code === code) {
@@ -13,6 +14,9 @@ export default async function handler(req, res) {
             where: {
               school: {
                 code: code,
+              },
+              studentgroup: {
+                id: id,
               },
             },
             include: {

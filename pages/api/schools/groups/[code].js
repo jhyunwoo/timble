@@ -14,6 +14,9 @@ export default async function handler(req, res) {
               code: code,
             },
           },
+          orderBy: {
+            entrance: "desc",
+          },
         })
         res.status(200).json(getGroups)
       } else {

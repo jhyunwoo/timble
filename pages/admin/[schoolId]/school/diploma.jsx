@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { mutate } from "swr"
-import { useSetRecoilState } from "recoil"
-import { dataUpdateState } from "../../../../components/recoil/states"
+
 import MoveBack from "../../../../components/moveBack"
 import useDiplomas from "../../../../lib/client/useDiplomas"
 
@@ -16,7 +15,6 @@ export default function AdminDiploma() {
   const [diplomaId, setDiplomaId] = useState(0)
   const { school } = useSchool()
   const { diplomas } = useDiplomas()
-  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
@@ -79,7 +77,6 @@ export default function AdminDiploma() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.put(`/api/schools/diplomas?id=${diplomas[diplomaId].id}`, {
         data: {
           name: data.diplomaName,
@@ -88,15 +85,12 @@ export default function AdminDiploma() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     async function deleteDiploma() {
-      controlUpdate(true)
       await axios.delete(`/api/schools/diplomas?id=${diplomas[diplomaId].id}`)
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -188,7 +182,6 @@ export default function AdminDiploma() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.post(`/api/schools/diplomas`, {
         data: {
           name: data.diplomaName,
@@ -198,7 +191,6 @@ export default function AdminDiploma() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     return (

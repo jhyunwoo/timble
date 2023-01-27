@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { mutate } from "swr"
-import { useSetRecoilState } from "recoil"
-import { dataUpdateState } from "../../../../components/recoil/states"
+
 import MoveBack from "../../../../components/moveBack"
 import useTypes from "../../../../lib/client/useTypes"
 
@@ -16,7 +15,6 @@ export default function AdminSubjectTypes() {
   const [typeId, setTypeId] = useState(0)
   const { school } = useSchool()
   const { types } = useTypes()
-  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
@@ -78,7 +76,6 @@ export default function AdminSubjectTypes() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.put(`/api/schools/types?id=${types[typeId].id}`, {
         data: {
           name: data.typeName,
@@ -86,15 +83,12 @@ export default function AdminSubjectTypes() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     async function deleteType() {
-      controlUpdate(true)
       await axios.delete(`/api/schools/types?id=${types[typeId].id}`)
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -165,7 +159,6 @@ export default function AdminSubjectTypes() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.post(`/api/schools/types`, {
         data: {
           name: data.typeName,
@@ -174,7 +167,6 @@ export default function AdminSubjectTypes() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     return (

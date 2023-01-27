@@ -8,7 +8,7 @@ export default function SchoolName() {
       <div
         className={`text-transparent tracking-wide text-3xl font-bold bg-clip-text bg-gradient-to-r from-cnsablue-200 via-cnsablue-300 to-cnsablue-200`}
       >
-        {school.name}
+        {school ? school.name : null}
       </div>
     </div>
   )

@@ -5,10 +5,8 @@ import { ErrorMessage } from "@hookform/error-message"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import useUser from "../../../../lib/client/useUser"
 import { mutate } from "swr"
-import { useSetRecoilState } from "recoil"
-import { dataUpdateState } from "../../../../components/recoil/states"
+
 import MoveBack from "../../../../components/moveBack"
 import useAreas from "../../../../lib/client/useAreas"
 
@@ -17,7 +15,6 @@ export default function AdminSubjectAreas() {
   const [areaId, setAreaId] = useState(0)
   const { school } = useSchool()
   const { areas } = useAreas()
-  const controlUpdate = useSetRecoilState(dataUpdateState)
 
   function updateData() {
     function mutateData() {
@@ -79,7 +76,6 @@ export default function AdminSubjectAreas() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.put(`/api/schools/areas?id=${areas[areaId].id}`, {
         data: {
           name: data.areaName,
@@ -87,15 +83,12 @@ export default function AdminSubjectAreas() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     async function deleteArea() {
-      controlUpdate(true)
       await axios.delete(`/api/schools/areas?id=${areas[areaId].id}`)
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     useEffect(() => {
@@ -166,7 +159,6 @@ export default function AdminSubjectAreas() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      controlUpdate(true)
       await axios.post(`/api/schools/areas`, {
         data: {
           name: data.areaName,
@@ -175,7 +167,6 @@ export default function AdminSubjectAreas() {
       })
       setPop(false)
       updateData()
-      controlUpdate(false)
     }
 
     return (

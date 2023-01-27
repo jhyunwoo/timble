@@ -1,5 +1,4 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
 import ProtectedPage from "../../../../../../components/ProtectedPage"
 import useSchool from "../../../../../../lib/client/useSchool"
 import useGroup from "../../../../../../lib/client/useGroup"
@@ -10,7 +9,6 @@ export default function StudentGroupDetail() {
   const router = useRouter()
   const { school } = useSchool()
   const { group } = useGroup(getGroupId())
-  console.log(group)
   function getGroupId() {
     let id = router.asPath.replace(`/admin/${school ? school.code : null}/school/groups/`, "")
     return id
@@ -26,12 +24,20 @@ export default function StudentGroupDetail() {
             <div className="text-lg font-medium">{group.entrance}년 입학</div>
           </div>
           <div className="text-2xl font-bold m-2 mt-4">설정</div>
-          <Link
-            className="bg-white p-4 rounded-lg shadow-sm text-xl font-medium hover:shadow-lg transition duration-200"
-            href={`/admin/${school.code}/school/groups/${getGroupId()}/compulsory`}
-          >
-            필수 이수 과목 설정
-          </Link>
+          <div className="grid grid-cols-1 gap-4">
+            <Link
+              className="bg-white p-4 rounded-lg shadow-sm text-xl font-medium hover:shadow-lg transition duration-200"
+              href={`/admin/${school.code}/school/groups/${getGroupId()}/subjects`}
+            >
+              교과목 설정
+            </Link>
+            <Link
+              className="bg-white p-4 rounded-lg shadow-sm text-xl font-medium hover:shadow-lg transition duration-200"
+              href={`/admin/${school.code}/school/groups/${getGroupId()}/compulsory`}
+            >
+              필수 이수 과목 설정
+            </Link>
+          </div>
         </div>
       </ProtectedPage>
     )
