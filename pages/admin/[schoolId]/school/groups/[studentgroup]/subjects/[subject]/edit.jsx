@@ -1,7 +1,6 @@
 import ProtectedPage from "../../../../../../../../components/ProtectedPage"
 import useSubjects from "../../../../../../../../lib/client/useSubjects"
 import useSchool from "../../../../../../../../lib/client/useSchool"
-import useUser from "../../../../../../../../lib/client/useUser"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
@@ -235,10 +234,7 @@ export default function AdminSubjectEdit() {
 
   return (
     <ProtectedPage>
-      <MoveBack
-        title={`${subject ? subject.title : ""}`}
-        link={`/admin/${school ? school.code : null}/school/subjects/${subjectID()}`}
-      />
+      <MoveBack title={`${subject ? subject.title : ""}`} />
       <div className="w-full h-full p-4">
         <div className="flex justify-between items-center p-2">
           <div className="text-2xl font-bold">교과목 수정</div>

@@ -26,7 +26,7 @@ export default function StudentGroupAdd() {
   }
   return (
     <ProtectedPage>
-      <MoveBack title={"학생 그룹"} link={`/admin/${school ? school.code : null}/school/student-group`} />
+      <MoveBack title={"학생 그룹"} />
       <div className="p-4">
         <div className="text-xl font-semibold m-2">학생 그룹 추가</div>
         <div>

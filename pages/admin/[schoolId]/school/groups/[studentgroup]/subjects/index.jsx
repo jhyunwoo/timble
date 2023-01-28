@@ -60,10 +60,7 @@ export default function AdminSubjects() {
 
   return (
     <ProtectedPage>
-      <MoveBack
-        title={group ? group.name : ""}
-        link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`}
-      />
+      <MoveBack title={group ? group.name : ""} />
 
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas

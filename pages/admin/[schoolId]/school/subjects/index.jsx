@@ -2,7 +2,6 @@ import Loading from "../../../../../components/Loading"
 import ProtectedPage from "../../../../../components/ProtectedPage"
 import useSubjects from "../../../../../lib/client/useSubjects"
 import useUser from "../../../../../lib/client/useUser"
-import useSchool from "../../../../../lib/client/useSchool"
 import { DocumentPlusIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { useState, useEffect } from "react"
@@ -12,7 +11,6 @@ import { useRouter } from "next/router"
 
 export default function AdminSubjects() {
   const router = useRouter()
-  const { school } = useSchool()
   const { user } = useUser()
   const { diplomas } = useDiplomas()
   const [diplomaFilter, setDiplomaFilter] = useState("")
@@ -57,7 +55,7 @@ export default function AdminSubjects() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`} />
+      <MoveBack title={"학교"} />
 
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas

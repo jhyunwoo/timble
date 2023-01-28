@@ -15,10 +15,7 @@ export default function CompulsorySubjects() {
   }
   return (
     <ProtectedPage>
-      <MoveBack
-        title={group ? group.name : null}
-        link={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}`}
-      />
+      <MoveBack title={group ? group.name : null} />
       <div className="p-4 grid grid-cols-1 gap-4">
         <div className="text-xl font-semibold mx-2">필수 이수 과목 설정</div>
         <AddCompulsory year={1} />

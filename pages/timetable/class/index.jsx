@@ -9,7 +9,7 @@ export default function Class() {
   const { diplomas } = useDiplomas()
   return (
     <LayOut pageLocation={"timetable"}>
-      <MoveBack title={"시간표"} link={"/timetable"} />
+      <MoveBack title={"시간표"} />
       <div className="p-4">
         <div className="text-2xl font-bold">교과 정보</div>
         <div className="grid grid-cols-1 gap-4 mt-4">
