@@ -13,6 +13,9 @@ export default async function handler(req, res) {
             code: code,
           },
         },
+        orderBy: {
+          id: "asc",
+        },
       })
       res.status(200).json(getDifficulties)
     }

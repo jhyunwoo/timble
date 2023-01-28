@@ -192,7 +192,7 @@ export default function AddSubject() {
             <div className="text-lg font-semibold mt-2">디플로마</div>
             <div
               {...register("subjectDiplomas", { required: { value: true, message: "디플로마를 입력하세요" } })}
-              className="grid grid-cols-3 gap-2 text-center"
+              className="grid grid-cols-3 gap-2 text-center sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8"
             >
               {diplomas
                 ? diplomas.map((data, key) => (
@@ -220,7 +220,7 @@ export default function AddSubject() {
             <div {...register("subjectPrerequisite")} className="text-lg font-semibold mt-2">
               선수 과목
             </div>
-            <div className="grid grid-cols-2 gap-2 text-center">
+            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {subjects
                 ? subjects.map((data, key) => (
                     <button
@@ -250,7 +250,7 @@ export default function AddSubject() {
             >
               종류
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {types
                 ? types.map((data, key) => (
                     <button
@@ -278,7 +278,7 @@ export default function AddSubject() {
             >
               교과 난이도
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {difficulties
                 ? difficulties.map((data, key) => (
                     <button
@@ -307,7 +307,7 @@ export default function AddSubject() {
             >
               학생 그룹
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {groups
                 ? groups.map((data, key) => (
                     <button
@@ -337,7 +337,7 @@ export default function AddSubject() {
             >
               교과 영역
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {areas
                 ? areas.map((data, key) => (
                     <button
@@ -380,7 +380,7 @@ export default function AddSubject() {
             >
               개설 학기
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               <button
                 type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${open.includes("1-1") ? "bg-slate-800 text-white" : ""}`}
@@ -435,7 +435,7 @@ export default function AddSubject() {
             <div {...register("subjectCSAT")} className="text-lg font-semibold mt-2">
               수능 과목 여부
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               <button
                 type="button"
                 className={`bg-slate-50 p-1 px-2 rounded-md ${csat ? "bg-slate-800 text-white" : ""}`}

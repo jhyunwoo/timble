@@ -77,6 +77,11 @@ export default function AdminSubjects() {
             ))
           : ""}
       </div>
+      <Link href={`/admin/${user ? user.admin : null}/school/groups/${groupId()}/subjects/add`}>
+        <div className=" bg-white p-4 hover:bg-slate-800 group mx-4 mt-4 hover:text-white shadow-lg rounded-lg flex justify-center hover:shadow-xl transition duration-200">
+          <DocumentPlusIcon className="w-6 h-6" />
+        </div>
+      </Link>
       {filteredSubjects ? (
         <div className={"grid grid-cols-1 p-4 gap-4"}>
           {filteredSubjects.map((data, key) => (
@@ -103,11 +108,6 @@ export default function AdminSubjects() {
               </div>
             </Link>
           ))}
-          <Link href={`/admin/${user ? user.admin : null}/school/groups/${groupId()}/subjects/add`}>
-            <div className=" bg-white p-4 hover:bg-slate-800 group hover:text-white shadow-lg rounded-lg flex justify-center hover:shadow-xl transition duration-200">
-              <DocumentPlusIcon className="w-6 h-6" />
-            </div>
-          </Link>
         </div>
       ) : (
         <Loading />

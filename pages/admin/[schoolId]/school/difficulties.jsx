@@ -158,7 +158,7 @@ export default function AdminSubjectDifficulties() {
     } = useForm()
 
     const onSubmit = async (data) => {
-      await axios.post(`/api/schools/difficulties?id=${difficulties[difficultyId].id}`, {
+      await axios.post(`/api/schools/difficulties`, {
         data: {
           name: data.difficultyName,
           code: school.code,

@@ -20,6 +20,9 @@ export default async function handler(req, res) {
             studentgroup: true,
             diploma: true,
           },
+          orderBy: {
+            id: "asc",
+          },
         })
         res.status(200).json(getStudents)
       } else {

@@ -3,12 +3,10 @@ import DataCard from "../../../components/DataCard"
 import useStudents from "../../../lib/client/useStudents"
 import useSubjects from "../../../lib/client/useSubjects"
 import useDiplomas from "../../../lib/client/useDiplomas"
-import { useSession } from "next-auth/react"
 import SchoolName from "../../../components/SchoolName"
 import useSchool from "../../../lib/client/useSchool"
 
 export default function SchoolAdminPage() {
-  const { session } = useSession()
   const { diplomas } = useDiplomas()
   const { students } = useStudents()
   const { subjects } = useSubjects()
@@ -16,7 +14,7 @@ export default function SchoolAdminPage() {
 
   return (
     <ProtectedPage>
-      <div className="sm:grid-cols-2 grid grid-cols-2 gap-4 p-4 lg:grid-cols-6 xl:grid-cols-8">
+      <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
         <SchoolName />
         <DataCard link={`/admin/${school ? school.code : null}/students`} title={"학생"}>
           {students ? students.length : "..."}
