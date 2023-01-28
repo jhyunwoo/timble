@@ -65,7 +65,6 @@ export default async function handler(req, res) {
       res.status(200)
     } else if (req.method === "POST") {
       const { data } = req.body
-      console.log(data)
       const postDiplomaById = await prisma.diploma.create({
         data: {
           name: data.name,

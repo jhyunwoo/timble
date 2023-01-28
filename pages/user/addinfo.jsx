@@ -41,14 +41,12 @@ export default function Userinfo() {
 
   // school control
   function controlSchool(value) {
-    console.log(value)
     if (school !== value) {
       setSchool(value)
       setWarn(false)
     } else {
       setSchool(null)
     }
-    console.log(school)
   }
 
   // diploma control
@@ -201,9 +199,7 @@ export default function Userinfo() {
   function DiplomaForm() {
     return (
       <div>
-        <div className={"p-4 text-center text-2xl font-semibold "} onClick={() => console.log(diplomas)}>
-          디플로마
-        </div>
+        <div className={"p-4 text-center text-2xl font-semibold "}>디플로마</div>
         <div className={"grid grid-cols-2 gap-4 p-4"}>
           {diplomas
             ? diplomas.map((data, key) => (

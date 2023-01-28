@@ -21,7 +21,6 @@ export default async function handler(req, res) {
     }
   } else if (session) {
     const { id, which } = req.query
-    console.log(id, which)
     if (req.method === "PUT") {
       const { data } = req.body
       const postUser = await prisma.user.update({

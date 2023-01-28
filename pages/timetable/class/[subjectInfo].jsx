@@ -6,11 +6,9 @@ import useSubject from "../../../lib/client/useSubject"
 export default function SubjectInfo() {
   const router = useRouter()
   const { subject } = useSubject(subjectID())
-  console.log(subject)
   function subjectID() {
     return router.asPath.replace(`/timetable/class/`, "")
   }
-  console.log(subjectID())
 
   function BasicInfo(props) {
     return (
@@ -67,9 +65,7 @@ export default function SubjectInfo() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg flex flex-col">
-            <div className="text-xl font-semibold my-1" onClick={() => console.log(subject)}>
-              교과 난이도
-            </div>
+            <div className="text-xl font-semibold my-1">교과 난이도</div>
             <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
               {subject.difficulty ? subject.difficulty.name : ""}
             </p>

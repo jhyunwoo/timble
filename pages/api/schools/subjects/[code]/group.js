@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   const session = await unstable_getServerSession(req, res, authOptions)
   if (session) {
     const { id, code } = req.query
-    console.log(code, id)
     if (req.method === "GET") {
       try {
         if (session.user.school.code === code) {

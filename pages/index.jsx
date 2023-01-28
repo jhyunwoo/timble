@@ -5,7 +5,6 @@ import useSchools from "../lib/client/useSchools"
 export default function Home() {
   const { data: session } = useSession()
   const { schools } = useSchools("cldcg9mgy000dtqf39w7gwfln")
-  console.log(schools)
 
   return (
     <div className={"flex h-screen w-full flex-col bg-green-50"}>
