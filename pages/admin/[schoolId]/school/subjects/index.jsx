@@ -7,13 +7,24 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import MoveBack from "../../../../../components/MoveBack"
 import useDiplomas from "../../../../../lib/client/useDiplomas"
+import useGroups from "../../../../../lib/client/useGroups"
 
 export default function AdminSubjects() {
   const { user } = useUser()
   const { diplomas } = useDiplomas()
-  const [diplomaFilter, setDiplomaFilter] = useState("")
+  const [diplomaFilter, setDiplomaFilter] = useState()
+  const [groupFilter, setGroupFilter] = useState()
   const [filteredSubjects, setFilteredSubjects] = useState([])
   const { subjects } = useSubjects()
+  const { groups } = useGroups()
+
+  function controlGroupFilter(data) {
+    if (data === groupFilter) {
+      setGroupFilter(null)
+    } else {
+      setGroupFilter(data)
+    }
+  }
 
   function controlDiplomaFilter(data) {
     if (data === diplomaFilter) {
@@ -22,27 +33,56 @@ export default function AdminSubjects() {
       setDiplomaFilter(data)
     }
   }
+
   function filterSubjects() {
     let list = subjects
     let filtered = []
-    if (diplomaFilter) {
-      list.map((data) => {
-        let i
-        for (i = 0; i < data.diplomas.length; i++) {
-          if (data.diplomas[i].name === diplomaFilter) {
+    if (groupFilter && diplomaFilter) {
+      try {
+        list.map((data) => {
+          data.diplomas.map((diplomaData) => {
+            console.log(diplomaData)
+            if (diplomaData.id === diplomaFilter && data.studentgroup.id === groupFilter) {
+              filtered.push(data)
+            }
+          })
+        })
+      } catch {
+        console.log("error on filtering year and diploma")
+      }
+      setFilteredSubjects(filtered)
+    } else if (groupFilter) {
+      try {
+        list.map((data) => {
+          if (data.studentgroup.id === groupFilter) {
             filtered.push(data)
           }
-        }
-      })
+        })
+      } catch {
+        console.log("error on filtering year")
+      }
+      setFilteredSubjects(filtered)
+    } else if (diplomaFilter) {
+      try {
+        list.map((data) => {
+          data.diplomas.map((diplomaData) => {
+            if (diplomaData.id === diplomaFilter) {
+              filtered.push(data)
+            }
+            console.log(diplomaData)
+          })
+        })
+      } catch {
+        console.log("error on filtering diploma")
+      }
       setFilteredSubjects(filtered)
     } else {
       setFilteredSubjects(list)
     }
   }
-
   useEffect(() => {
     filterSubjects()
-  }, [diplomaFilter, subjects])
+  }, [diplomaFilter, subjects, groupFilter])
 
   return (
     <ProtectedPage>
@@ -52,9 +92,24 @@ export default function AdminSubjects() {
         {diplomas
           ? diplomas.map((data, key) => (
               <button
-                onClick={() => controlDiplomaFilter(data.name)}
+                onClick={() => controlDiplomaFilter(data.id)}
                 className={`${
-                  diplomaFilter === data.name ? "bg-slate-800 text-white" : ""
+                  diplomaFilter === data.id ? "bg-slate-800 text-white" : ""
+                } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
+                key={key}
+              >
+                {data.name}
+              </button>
+            ))
+          : ""}
+      </div>
+      <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
+        {groups
+          ? groups.map((data, key) => (
+              <button
+                onClick={() => controlGroupFilter(data.id)}
+                className={`${
+                  groupFilter === data.id ? "bg-slate-800 text-white" : ""
                 } rounded-xl bg-slate-100 px-4 hover:shadow-sm  transition duration-200 p-1 m-1`}
                 key={key}
               >
@@ -83,7 +138,7 @@ export default function AdminSubjects() {
                     )}
                   </div>
                   <div className="text-xl mt-1 font-semibold text-slate-900 group-hover:text-slate-50 transition duration-200">
-                    {data.title}
+                    {data.title} ({data.studentgroup ? data.studentgroup.name : "미정"})
                   </div>
                 </div>
               </div>

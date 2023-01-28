@@ -10,8 +10,7 @@ export default function StudentGroupDetail() {
   const { school } = useSchool()
   const { group } = useGroup(getGroupId())
   function getGroupId() {
-    let id = router.query.studentgroup
-    return id
+    return router.query.studentgroup
   }
 
   if (group) {

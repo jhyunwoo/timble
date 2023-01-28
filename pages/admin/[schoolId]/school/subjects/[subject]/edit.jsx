@@ -93,7 +93,7 @@ export default function AdminSubjectEdit() {
       })
     }
     updateSubject(data, unifyContent)
-    router.push(`/admin/${school ? school.code : null}/school/subjects/${subject.id}`)
+    router.replace(`/admin/${school ? school.code : null}/school/subjects/${subject.id}`)
   }
 
   function range(start, end) {
@@ -210,9 +210,9 @@ export default function AdminSubjectEdit() {
       let setPre = []
       subject.prerequisite.map((data) => setPre.push(data.id))
       setPrerequisite(setPre)
-      setType(subject.type.id)
-      setDifficulty(subject.difficulty.id)
-      setArea(subject.area.id)
+      setType(subject.typeId)
+      setDifficulty(subject.difficultyId)
+      setArea(subject.areaId)
       setOpen(subject.open)
       setCsta(subject.CSATSubject)
       setContentLength(subject.contents.length + 1)

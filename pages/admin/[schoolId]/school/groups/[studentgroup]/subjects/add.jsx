@@ -13,6 +13,7 @@ import useSubjects from "../../../../../../../lib/client/useSubjects"
 import useAreas from "../../../../../../../lib/client/useAreas"
 import useTypes from "../../../../../../../lib/client/useTypes"
 import useDifficulties from "../../../../../../../lib/client/useDifficulties"
+import useGroups from "../../../../../../../lib/client/useGroups"
 
 export default function AddSubject() {
   const {
@@ -20,6 +21,7 @@ export default function AddSubject() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm()
   const { school } = useSchool()
   const { diplomas } = useDiplomas()
@@ -27,10 +29,12 @@ export default function AddSubject() {
   const { types } = useTypes()
   const { difficulties } = useDifficulties()
   const { subjects } = useSubjects()
+  const { groups } = useGroups()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
   const [area, setArea] = useState("")
+  const [group, setGroup] = useState()
   const [open, setOpen] = useState([])
   const [csat, setCsta] = useState(0)
   const [difficulty, setDifficulty] = useState("")
@@ -53,15 +57,21 @@ export default function AddSubject() {
         targetParticipants: data.subjectTargetParticipants,
         contents: content,
         difficulty: difficulty,
+        group: group,
       },
     })
   }
   function updateData() {
     function mutateData() {
-      mutate(`/api/schools/subjects?id=${subject ? subject.id : null}`)
+      mutate(`/api/schools/subjects/${school ? school.code : null}`)
     }
     setTimeout(mutateData, 2000)
   }
+
+  function getGroupId() {
+    return router.query.studentgroup
+  }
+
   const onSubmit = (data) => {
     let unifyContent = []
     for (let i = 1; i < contentLength; i++) {
@@ -72,7 +82,7 @@ export default function AddSubject() {
       })
     }
     postSubject(data, unifyContent)
-    router.push(`/admin/${school ? school.code : null}/school/subjects`)
+    router.replace(`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects`)
     updateData()
   }
 
@@ -83,7 +93,13 @@ export default function AddSubject() {
     }
     return array
   }
-
+  function controlGroupSelect(data) {
+    if (data === group) {
+      setGroup("")
+    } else {
+      setGroup(data)
+    }
+  }
   function controlDiplomaSelect(data) {
     let filterDiploma = diploma
     if (filterDiploma.includes(data)) {
@@ -149,8 +165,14 @@ export default function AddSubject() {
     setValue("subjectCSAT", csat)
   }, [csat])
   useEffect(() => {
-    setValue("subjectDifficulty", csat)
-  }, [csat])
+    setValue("subjectDifficulty", difficulty)
+  }, [difficulty])
+  useEffect(() => {
+    setValue("subjectGroup", group)
+  }, [group])
+  useEffect(() => {
+    setGroup(getGroupId())
+  }, [router])
 
   return (
     <ProtectedPage>
@@ -279,6 +301,35 @@ export default function AddSubject() {
             <ErrorMessage
               errors={errors}
               name="subjectType"
+              render={({ message }) => (
+                <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
+              )}
+            />
+            <div
+              {...register("subjectGroup", { required: { value: true, message: "학생 그룹을 입력하세요" } })}
+              className="text-lg font-semibold mt-2"
+            >
+              학생 그룹
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {groups
+                ? groups.map((data, key) => (
+                    <button
+                      key={key}
+                      type="button"
+                      className={`bg-slate-50 p-1 px-2 rounded-md ${
+                        group === data.id ? "bg-slate-800 text-white" : ""
+                      }`}
+                      onClick={() => controlGroupSelect(data.id)}
+                    >
+                      {data.name}
+                    </button>
+                  ))
+                : ""}
+            </div>
+            <ErrorMessage
+              errors={errors}
+              name="subjectGroup"
               render={({ message }) => (
                 <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
               )}

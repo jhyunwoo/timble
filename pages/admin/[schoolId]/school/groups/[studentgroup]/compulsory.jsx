@@ -7,8 +7,7 @@ export default function CompulsorySubjects() {
   const router = useRouter()
   const { group } = useGroup(getGroupId())
   function getGroupId() {
-    let id = router.query.studentgroup
-    return id
+    return router.query.studentgroup
   }
 
   return (

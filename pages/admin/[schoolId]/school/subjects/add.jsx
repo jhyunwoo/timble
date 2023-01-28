@@ -38,7 +38,6 @@ export default function AddSubject() {
   const [open, setOpen] = useState([])
   const [csat, setCsta] = useState(0)
   const { data: session } = useSession()
-
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
   const router = useRouter()

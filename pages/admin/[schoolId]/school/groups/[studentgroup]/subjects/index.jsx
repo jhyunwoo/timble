@@ -102,7 +102,7 @@ export default function AdminSubjects() {
               </div>
             </Link>
           ))}
-          <Link href={`/admin/${user ? user.admin : null}/school/subjects/add`}>
+          <Link href={`/admin/${user ? user.admin : null}/school/groups/${getGroupId()}/subjects/add`}>
             <div className=" bg-white p-4 hover:bg-slate-800 group hover:text-white shadow-lg rounded-lg flex justify-center hover:shadow-xl transition duration-200">
               <DocumentPlusIcon className="w-6 h-6" />
             </div>
