@@ -41,22 +41,13 @@ export default function AdminSubjectEdit() {
   const [csat, setCsta] = useState(0)
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
-  const { subject } = useSubject(subjectID())
+  const { subject } = useSubject(subjectId())
 
-  function subjectID() {
-    let id = router.asPath.replace("/admin/cnsa/school/groups/", "")
-    id = id.replace("/subjects/", "")
-    id = id.replace("/edit", "")
-    id = id.substr(25)
-    return id
+  function subjectId() {
+    return router.query.subject
   }
-  function getGroupId() {
-    let path = router.asPath
-    path = path.replace("/admin/cnsa/school/groups/", "")
-    path = path.replace("/subjects/", "")
-    path = path.replace("/edit", "")
-    path = path.substr(0, 25)
-    return path
+  function groupId() {
+    return router.query.studentgroup
   }
 
   async function updateSubject(data, content) {
@@ -84,7 +75,7 @@ export default function AdminSubjectEdit() {
       post: "adminDeleteSubject",
       id: subject.id,
     })
-    router.push(`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}`)
+    router.push(`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects/${subjectId()}`)
     updateData()
   }
   function updateData() {
@@ -105,7 +96,7 @@ export default function AdminSubjectEdit() {
       })
     }
     updateSubject(data, unifyContent)
-    router.push(`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}`)
+    router.push(`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects/${subjectId()}`)
   }
 
   function range(start, end) {

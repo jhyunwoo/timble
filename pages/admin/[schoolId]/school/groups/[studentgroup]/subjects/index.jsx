@@ -14,7 +14,6 @@ import useGroup from "../../../../../../../lib/client/useGroup"
 
 export default function AdminSubjects() {
   const router = useRouter()
-  const { school } = useSchool()
   const { user } = useUser()
   const { diplomas } = useDiplomas()
   const [diplomaFilter, setDiplomaFilter] = useState("")
@@ -23,10 +22,7 @@ export default function AdminSubjects() {
   const { group } = useGroup(getGroupId())
 
   function getGroupId() {
-    let path = router.asPath
-    path = path.replace("/admin/cnsa/school/groups/", "")
-    path = path.replace("/subjects", "")
-    return path
+    return router.query.studentgroup
   }
 
   function controlDiplomaFilter(data) {

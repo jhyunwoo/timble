@@ -2,17 +2,15 @@ import { useRouter } from "next/router"
 import MoveBack from "../../../../../../components/MoveBack"
 import ProtectedPage from "../../../../../../components/ProtectedPage"
 import useGroup from "../../../../../../lib/client/useGroup"
-import useSchool from "../../../../../../lib/client/useSchool"
 import { useForm } from "react-hook-form"
 export default function CompulsorySubjects() {
-  const { school } = useSchool()
   const router = useRouter()
   const { group } = useGroup(getGroupId())
   function getGroupId() {
-    let id = router.asPath.replace(`/admin/${school ? school.code : null}/school/groups/`, "")
-    id = id.replace("/compulsory", "")
+    let id = router.query.studentgroup
     return id
   }
+
   return (
     <ProtectedPage>
       <MoveBack title={group ? group.name : null} />

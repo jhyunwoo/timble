@@ -41,11 +41,10 @@ export default function AdminSubjectEdit() {
   const [csat, setCsta] = useState(0)
   const [difficulty, setDifficulty] = useState("")
   const [contentLength, setContentLength] = useState(1)
-  const { subject } = useSubject(subjectID())
+  const { subject } = useSubject(subjectId())
 
-  function subjectID() {
-    let beforeEdit = router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
-    return beforeEdit.replace("/edit", "")
+  function subjectId() {
+    return router.query.subject
   }
 
   async function updateSubject(data, content) {

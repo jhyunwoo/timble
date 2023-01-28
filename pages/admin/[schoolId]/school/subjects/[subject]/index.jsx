@@ -11,13 +11,14 @@ import { mutate } from "swr"
 export default function Subject() {
   const router = useRouter()
   const { school } = useSchool()
-  const { subject } = useSubject(subjectID())
-  function subjectID() {
-    return router.asPath.replace(`/admin/${school ? school.code : null}/school/subjects/`, "")
+  const { subject } = useSubject(subjectId())
+  function subjectId() {
+    return router.query.subject
   }
+
   function updateData() {
     function mutateData() {
-      mutate([subjectID() ? "/api/getSubject" : null, subjectID() ? subjectID() : null])
+      mutate([subjectId() ? "/api/getSubject" : null, subjectId() ? subjectId() : null])
     }
     setTimeout(mutateData, 2000)
   }

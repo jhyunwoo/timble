@@ -7,22 +7,13 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import MoveBack from "../../../../../components/MoveBack"
 import useDiplomas from "../../../../../lib/client/useDiplomas"
-import { useRouter } from "next/router"
 
 export default function AdminSubjects() {
-  const router = useRouter()
   const { user } = useUser()
   const { diplomas } = useDiplomas()
   const [diplomaFilter, setDiplomaFilter] = useState("")
   const [filteredSubjects, setFilteredSubjects] = useState([])
   const { subjects } = useSubjects()
-
-  function getGroupId() {
-    let path = router.asPath
-    path = path.replace("/admin/cnsa/school/groups/", "")
-    path = path.replace("/subjects", "")
-    return path
-  }
 
   function controlDiplomaFilter(data) {
     if (data === diplomaFilter) {

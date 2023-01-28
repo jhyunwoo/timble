@@ -10,9 +10,10 @@ export default function StudentGroupDetail() {
   const { school } = useSchool()
   const { group } = useGroup(getGroupId())
   function getGroupId() {
-    let id = router.asPath.replace(`/admin/${school ? school.code : null}/school/groups/`, "")
+    let id = router.query.studentgroup
     return id
   }
+
   if (group) {
     return (
       <ProtectedPage>

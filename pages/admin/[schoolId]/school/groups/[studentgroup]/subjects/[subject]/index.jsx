@@ -11,23 +11,16 @@ import { mutate } from "swr"
 export default function Subject() {
   const router = useRouter()
   const { school } = useSchool()
-  const { subject } = useSubject(subjectID())
-  function subjectID() {
-    let id = router.asPath.replace("/admin/cnsa/school/groups/", "")
-    id = id.replace("/subjects/", "")
-    id = id.substr(25)
-    return id
+  const { subject } = useSubject(subjectId())
+  function subjectId() {
+    return router.query.subject
   }
-  function getGroupId() {
-    let path = router.asPath
-    path = path.replace("/admin/cnsa/school/groups/", "")
-    path = path.replace("/subjects/", "")
-    path = path.substr(0, 25)
-    return path
+  function groupId() {
+    return router.query.studentgroup
   }
   function updateData() {
     function mutateData() {
-      mutate([subjectID() ? "/api/getSubject" : null, subjectID() ? subjectID() : null])
+      mutate([subjectId() ? "/api/getSubject" : null, subjectId() ? subjectId() : null])
     }
     setTimeout(mutateData, 2000)
   }
@@ -53,7 +46,7 @@ export default function Subject() {
           <div className="text-2xl font-bold m-2 flex justify-between items-center">
             <div>{subject.title}</div>
             <Link
-              href={`/admin/${school ? school.code : null}/school/groups/${getGroupId()}/subjects/${subjectID()}/edit`}
+              href={`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects/${subjectId()}/edit`}
               className="bg-slate-100 flex justify-center items-center rounded-lg w-10 h-10 hover:bg-slate-200 transition duration-200"
             >
               <PencilSquareIcon className="w-8 h-8" />
