@@ -15,6 +15,7 @@ import useTypes from "../../../../../lib/client/useTypes"
 import useDifficulties from "../../../../../lib/client/useDifficulties"
 import useGroups from "../../../../../lib/client/useGroups"
 import { useSession } from "next-auth/react"
+import MoveBack from "../../../../../components/MoveBack"
 
 export default function AddSubject() {
   const {
@@ -171,6 +172,7 @@ export default function AddSubject() {
   return (
     <ProtectedPage>
       <div className="w-full h-full p-4">
+        <MoveBack title={"교과목"} link={`/admin/${school ? school.code : null}/school/subjects`} />
         <div className="text-2xl font-bold mx-2 mb-2">교과목 추가</div>
         <div className="bg-white p-4 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit(onSubmit)}>

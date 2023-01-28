@@ -1,14 +1,13 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/solid"
-import { useRouter } from "next/router"
+import Link from "next/link"
 
 export default function MoveBack(props) {
-  const router = useRouter()
   return (
     <div className="w-full flex justify-start items-center px-4 py-2">
-      <button onClick={() => router.back()} className="flex justify-start items-center">
+      <Link href={props.link} className="flex justify-start items-center">
         <ChevronLeftIcon className="w-4 h-4" />
         <div>{props.title}</div>
-      </button>
+      </Link>
     </div>
   )
 }

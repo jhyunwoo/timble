@@ -285,6 +285,47 @@ export default async function handler(req, res) {
         })
       })
       res.status(200)
+    } else if (req.method === "DELETE") {
+      const disconnectSubject = await prisma.subject.update({
+        where: {
+          id: id,
+        },
+        data: {
+          diplomas: {
+            set: [],
+          },
+          prerequisite: {
+            set: [],
+          },
+          prerequisiteRelation: {
+            set: [],
+          },
+          difficulty: {
+            disconnect: true,
+          },
+          area: {
+            disconnect: true,
+          },
+          type: {
+            disconnect: true,
+          },
+          contents: {
+            deleteMany: {},
+          },
+          periods: {
+            set: [],
+          },
+          studentgroup: {
+            disconnect: true,
+          },
+        },
+      })
+      const deleteSubjectById = await prisma.subject.delete({
+        where: {
+          id: id,
+        },
+      })
+      res.status(204)
     }
   } else {
     res.status(401).json({

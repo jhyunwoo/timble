@@ -28,7 +28,7 @@ export default function AdminDiploma() {
       {pop === "edit" ? <EditPopUp /> : ""}
       {pop === "add" ? <AddPopUp /> : ""}
       <div className="flex h-full w-full flex-col items-center">
-        <MoveBack title={"학교"} />
+        <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
         <div className="w-full px-6 text-left text-2xl font-semibold">디플로마</div>
         {diplomas ? (
           <div className="grid w-full grid-cols-1 gap-4 p-4">

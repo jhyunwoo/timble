@@ -16,7 +16,7 @@ export default function MyInfo() {
   }
   return (
     <LayOut>
-      <MoveBack title={"홈"} />
+      <MoveBack title={"홈"} link={"/lobby"} />
       <div className="px-4">
         <div className="text-2xl font-semibold">내 정보</div>
         {user ? (

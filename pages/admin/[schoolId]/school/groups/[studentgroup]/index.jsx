@@ -16,7 +16,7 @@ export default function StudentGroupDetail() {
   if (group) {
     return (
       <ProtectedPage>
-        <MoveBack title={"학생 그룹"} />
+        <MoveBack title={"학생 그룹"} link={`/admin/${school ? school.code : null}/school/groups`} />
         <div className="p-4 grid grid-cols-1">
           <div className="text-2xl font-bold m-2">학생 그룹 정보</div>
           <div className="bg-white p-4 rounded-lg shadow-sm">

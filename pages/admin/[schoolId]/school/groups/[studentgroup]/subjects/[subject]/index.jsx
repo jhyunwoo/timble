@@ -39,7 +39,7 @@ export default function Subject() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"교과목"} />
+      <MoveBack title={"교과목"} link={`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects`} />
 
       {subject ? (
         <div className="p-4 grid grid-cols-1 gap-4 -mt-4">

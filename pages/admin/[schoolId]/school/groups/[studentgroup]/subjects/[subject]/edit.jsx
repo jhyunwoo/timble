@@ -71,11 +71,8 @@ export default function AdminSubjectEdit() {
     })
   }
   async function deleteSubject() {
-    await axios.post("/api/adminPost", {
-      post: "adminDeleteSubject",
-      id: subject.id,
-    })
-    router.push(`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects/${subjectId()}`)
+    await axios.delete(`/api/schools/subjects?id=${subjectId()}`)
+    router.replace(`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects`)
     updateData()
   }
   function updateData() {
@@ -225,7 +222,10 @@ export default function AdminSubjectEdit() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={`${subject ? subject.title : ""}`} />
+      <MoveBack
+        title={`${subject ? subject.title : ""}`}
+        link={`/admin/${school ? school.code : null}/school/groups/${groupId()}/subjects/${subjectId()}`}
+      />
       <div className="w-full h-full p-4">
         <div className="flex justify-between items-center p-2">
           <div className="text-2xl font-bold">교과목 수정</div>

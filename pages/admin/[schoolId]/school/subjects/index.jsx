@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import MoveBack from "../../../../../components/MoveBack"
 import useDiplomas from "../../../../../lib/client/useDiplomas"
 import useGroups from "../../../../../lib/client/useGroups"
+import useSchool from "../../../../../lib/client/useSchool"
 
 export default function AdminSubjects() {
   const { user } = useUser()
@@ -17,7 +18,7 @@ export default function AdminSubjects() {
   const [filteredSubjects, setFilteredSubjects] = useState([])
   const { subjects } = useSubjects()
   const { groups } = useGroups()
-
+  const { school } = useSchool()
   function controlGroupFilter(data) {
     if (data === groupFilter) {
       setGroupFilter(null)
@@ -86,7 +87,7 @@ export default function AdminSubjects() {
 
   return (
     <ProtectedPage>
-      <MoveBack title={"학교"} />
+      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
 
       <div className="overflow-x-auto scrollbar-hide whitespace-nowrap px-2">
         {diplomas

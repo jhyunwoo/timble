@@ -21,7 +21,7 @@ export default function SubjectInfo() {
 
   return (
     <LayOut>
-      <MoveBack title={"교과목"} />
+      <MoveBack title={"교과목"} link={`/timetable/class`} />
 
       {subject ? (
         <div className="p-4 grid grid-cols-1 gap-4 -mt-4">

@@ -5,14 +5,11 @@ import HeadBar from "./HeadBar"
 import Footer from "./Footer"
 import Loading from "./Loading"
 import Error from "./Error"
-import { useRecoilState } from "recoil"
-import { loadingState } from "./recoil/states"
 import useUser from "../lib/client/useUser"
 
 export default function LayOut(props) {
   const router = useRouter()
   // 사용자 로그인 정보 가져오기
-  const isLoading = useRecoilState(loadingState)
   const { status } = useSession()
   const { nullData, user } = useUser()
   if (nullData.length > 0) {
@@ -20,23 +17,21 @@ export default function LayOut(props) {
   } else if (user) {
     if (user.role === "ADMIN") {
       router.push("/admin")
-    }
-  } else if (status === "loading" || isLoading) {
-    return <Loading />
-  } else if (status === "unauthenticated") {
-    router.push("/signin")
-    return <Loading />
-  } else if (status === "authenticated") {
-    return (
-      <div className="bg-slate-50 pt-20">
-        <div className="min-h-screen">
-          <HeadBar page={props.pageLocation} />
-          {props.children}
+    } else if (status === "unauthenticated") {
+      router.push("/signin")
+      return <Loading />
+    } else if (status === "authenticated") {
+      return (
+        <div className="bg-slate-50 pt-20">
+          <div className="min-h-screen">
+            <HeadBar page={props.pageLocation} />
+            {props.children}
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    )
-  } else {
-    return <Error />
+      )
+    } else {
+      return <Error />
+    }
   }
 }

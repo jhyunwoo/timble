@@ -25,7 +25,7 @@ export default function StudentGroup() {
   return (
     <ProtectedPage>
       {pop ? <EditPopUp /> : ""}
-      <MoveBack title={"학교"} />
+      <MoveBack title={"학교"} link={`/admin/${school ? school.code : null}/school`} />
       <div className="p-4">
         <div className="text-2xl font-bold my-4">학생 그룹 설정</div>
         <div className="grid grid-cols-1 gap-4">
