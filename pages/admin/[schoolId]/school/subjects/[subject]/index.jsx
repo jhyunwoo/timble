@@ -40,9 +40,9 @@ export default function Subject() {
       <MoveBack title={"교과목"} link={`/admin/${school ? school.code : null}/school/subjects`} />
 
       {subject ? (
-        <div className="p-4 grid grid-cols-1 gap-4 -mt-4">
-          <div className="text-2xl font-bold m-2 flex justify-between items-center">
-            <div>{subject.title}</div>
+        <div className="p-4 grid grid-cols-1 gap-4 -mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="text-2xl font-bold m-2 md:m-0 flex justify-between md:justify-center items-center md:bg-white md:rounded-md md:shadow-sm">
+            <div className="md:mx-4 md:text-3xl">{subject.title}</div>
             <Link
               href={`/admin/${school ? school.code : null}/school/subjects/${subject.id}/edit`}
               className="bg-slate-100 flex justify-center items-center rounded-lg w-10 h-10 hover:bg-slate-200 transition duration-200"
@@ -53,7 +53,7 @@ export default function Subject() {
           <BasicInfo title={"목표"} content={subject.target} />
           <div className="bg-white p-4 rounded-lg">
             <div className="text-xl font-semibold my-1 mb-3">디플로마</div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {subject.diplomas
                 ? subject.diplomas.map((data, key) => (
                     <div key={key} className="bg-slate-100 rounded-lg text-center p-1 px-2 font-semibold">
@@ -128,18 +128,23 @@ export default function Subject() {
               {subject.CSATSubject ? "예" : "아니요"}
             </p>
           </div>
-          <div className="bg-white rounded-lg flex flex-col p-2">
+          <div className="bg-white rounded-lg flex flex-col p-2 md:col-span-2 lg:col-span-3 xl:col-span-4">
             <div className="text-xl font-semibold m-4">내용 체계</div>
-            <div className="grid grid-cols-1 gap-2">
+            <div className="invisible md:visible flex w-full justify-around text-xl font-semibold mx-4">
+              <div>영역</div>
+              <div>핵심 개념</div>
+              <div>내용 요소</div>
+            </div>
+            <div className="grid grid-cols-1 gap-2 ">
               {subject.contents
                 ? subject.contents.map((data, key) => (
-                    <div key={key} className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2">
+                    <div key={key} className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2 md:grid-flow-col md:grid-cols-3">
                       <div className="flex flex-col bg-white rounded-md p-2">
-                        <div className="text-lg font-semibold">영역</div>
-                        <div className="text-md">{data.area}</div>
+                        <div className="text-lg font-semibold md:invisible md:-mt-6">영역</div>
+                        <div className="text-md md:text-xl md:text-center my-auto">{data.area}</div>
                       </div>
                       <div className="flex flex-col bg-white rounded-md p-2">
-                        <div className="text-lg font-semibold">핵심 개념</div>
+                        <div className="text-lg font-semibold md:invisible md:-mt-6">핵심 개념</div>
                         {data.mainTarget.map((data, key) => (
                           <div className="text-md" key={key}>
                             • {data}
@@ -147,7 +152,7 @@ export default function Subject() {
                         ))}
                       </div>
                       <div className="flex flex-col bg-white rounded-md p-2">
-                        <div className="text-lg font-semibold">내용 요소</div>
+                        <div className="text-lg font-semibold md:invisible md:-mt-6">내용 요소</div>
                         <div className="text-md">{data.detail}</div>
                       </div>
                     </div>
