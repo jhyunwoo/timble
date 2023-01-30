@@ -7,6 +7,9 @@ import MoveBack from "../../../../../../../components/MoveBack"
 export default function ConfigCoupulsory() {
   const router = useRouter()
   const [filteredSubject, setFilteredSubject] = useState()
+  const [filteredSubject1, setFilteredSubject1] = useState()
+  const [filteredSubject2, setFilteredSubject2] = useState()
+
   const { groupSubjects } = useGroupSubjects(groupId())
   function yearId() {
     return router.query.yearId
@@ -43,21 +46,52 @@ export default function ConfigCoupulsory() {
     filter()
   }, [groupSubjects])
 
-  return (
-    <ProtectedPage>
-      <MoveBack title="필수 이수 과목 설정" link={`/admin/${schoolId()}/school/groups/${groupId()}/compulsory`} />
-      <div className="p-4">
-        <div className="text-2xl font-bold">{yearId()}학년 필수 이수 과목 설정</div>
-        <div className="grid grid-cols-2 gap-2 my-4">
-          {filteredSubject
-            ? filteredSubject.map((data, key) => (
-                <button key={key} className="bg-slate-100 p-2 px-4 rounded-md">
-                  <div>{data.title}</div>
-                </button>
-              ))
-            : null}
+  if(yearId()==="1"){
+    return (
+      <ProtectedPage>
+        <MoveBack title="필수 이수 과목 설정" link={`/admin/${schoolId()}/school/groups/${groupId()}/compulsory`} />
+        <div className="p-4">
+          <div className="text-2xl font-bold">{yearId()}학년 필수 이수 과목 설정</div>
+          <div className="grid grid-cols-2 gap-2 my-4">
+            {filteredSubject
+              ? filteredSubject.map((data, key) => (
+                  <button key={key} className="bg-slate-100 p-2 px-4 rounded-md">
+                    <div>{data.title}</div>
+                  </button>
+                ))
+              : null}
+          </div>
         </div>
-      </div>
-    </ProtectedPage>
-  )
+      </ProtectedPage>
+    )
+  } else {
+    return (
+      <ProtectedPage>
+        <MoveBack title="필수 이수 과목 설정" link={`/admin/${schoolId()}/school/groups/${groupId()}/compulsory`} />
+        <div className="p-4">
+          <div className="text-2xl font-bold">{yearId()}학년 필수 이수 과목 설정</div>
+          <div className="text-lg font-semibold mt-2">1학기</div>
+          <div className="grid grid-cols-2 gap-2 my-4">
+            {filteredSubject
+              ? filteredSubject.map((data, key) => (
+                  <button key={key} className="bg-slate-100 p-2 px-4 rounded-md">
+                    <div>{data.title}</div>
+                  </button>
+                ))
+              : null}
+          </div>
+          <div className="text-lg font-semibold mt-2">2학기</div>
+          <div className="grid grid-cols-2 gap-2 my-4">
+            {filteredSubject
+              ? filteredSubject.map((data, key) => (
+                  <button key={key} className="bg-slate-100 p-2 px-4 rounded-md">
+                    <div>{data.title}</div>
+                  </button>
+                ))
+              : null}
+          </div>
+        </div>
+      </ProtectedPage>
+    )
+  }
 }

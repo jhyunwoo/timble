@@ -8,15 +8,19 @@ import Link from "next/link"
 export default function StudentGroupDetail() {
   const router = useRouter()
   const { school } = useSchool()
-  const { group } = useGroup(getGroupId())
-  function getGroupId() {
+
+  const { group } = useGroup(groupId())
+  function groupId() {
     return router.query.studentgroup
+  }
+  function schoolCode() {
+    return router.query.schoolId
   }
 
   if (group) {
     return (
       <ProtectedPage>
-        <MoveBack title={"학생 그룹"} link={`/admin/${school ? school.code : null}/school/groups`} />
+        <MoveBack title={"학생 그룹"} link={`/admin/${schoolCode()}/school/groups`} />
         <div className="p-4 grid grid-cols-1">
           <div className="text-2xl font-bold m-2">학생 그룹 정보</div>
           <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -27,13 +31,13 @@ export default function StudentGroupDetail() {
           <div className="grid grid-cols-1 gap-4">
             <Link
               className="bg-white p-4 rounded-lg shadow-sm text-xl font-medium hover:shadow-lg transition duration-200"
-              href={`/admin/${school.code}/school/groups/${getGroupId()}/subjects`}
+              href={`/admin/${schoolCode()}/school/groups/${groupId()}/subjects`}
             >
               교과목 설정
             </Link>
             <Link
               className="bg-white p-4 rounded-lg shadow-sm text-xl font-medium hover:shadow-lg transition duration-200"
-              href={`/admin/${school.code}/school/groups/${getGroupId()}/compulsory`}
+              href={`/admin/${schoolCode()}/school/groups/${groupId()}/compulsory`}
             >
               필수 이수 과목 설정
             </Link>
