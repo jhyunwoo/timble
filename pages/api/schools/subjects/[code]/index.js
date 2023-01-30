@@ -37,18 +37,21 @@ export default async function handler(req, res) {
               id: "asc",
             },
           })
-          res.status(200).json(getSubjects)
+          // res.status(200).json(getSubjects)
+          return new Response(JSON.stringify(getSubjects), { status: 200 })
         } else {
-          res.status(400)
+          // res.status(400)
+          return new Response({ status: 200 })
         }
       } catch {
-        res.status(400)
+        // res.status(400)
+        return new Response({ status: 400 })
       }
     }
   } else {
-    res.status(401).json({
-      message: "You must be sign in to view the protected content on this page.",
-    })
+    return new Response({ status: 401 })
+    // res.status(401).json({
+    //   message: "You must be sign in to view the protected content on this page.",
+    // })
   }
-  res.end()
 }
