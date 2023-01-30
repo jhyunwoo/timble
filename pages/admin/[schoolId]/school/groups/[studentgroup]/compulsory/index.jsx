@@ -2,7 +2,6 @@ import { useRouter } from "next/router"
 import MoveBack from "../../../../../../../components/MoveBack"
 import ProtectedPage from "../../../../../../../components/ProtectedPage"
 import useGroup from "../../../../../../../lib/client/useGroup"
-import useSchool from "../../../../../../../lib/client/useSchool"
 import Link from "next/dist/client/link"
 
 export default function CompulsorySubjects() {
@@ -30,7 +29,7 @@ export default function CompulsorySubjects() {
   function AddCompulsory(props) {
     return (
       <Link
-        href={`/admin/${schoolCode()}/school/groups/${groupId()}/compulsory/${props.year}`}
+        href={`/admin/${schoolCode()}/school/groups/${groupId()}/compulsory/year${props.year}`}
         className="bg-white rounded-lg p-4 shadow-sm"
       >
         <div className="text-lg font-medium">{props.year}학년 필수 이수 과목</div>

@@ -8,28 +8,18 @@ export default async function handler(req, res) {
     const { id } = req.query
     if (req.method === "GET") {
       if (id) {
-        const getGroupById = await prisma.studentgroup.findUnique({
+        const getEssentialById = await prisma.essential.findUnique({
           where: {
             id: id,
           },
-          include: {
-            essentials: {
-              select: {
-                id: true,
-                group: true,
-                semester: true,
-                subjects: true,
-              },
-            },
-          },
         })
-        res.status(200).json(getGroupById)
+        res.status(200).json(getEssentialById)
       } else {
-        const getGroups = await prisma.studentgroup.findMany()
-        res.status(200).json(getGroups)
+        const getEssentials = await prisma.essential.findMany()
+        res.status(200).json(getEssentials)
       }
     } else if (req.method === "DELETE") {
-      const deleteGroupById = await prisma.studentgroup.delete({
+      const deleteEssentialById = await prisma.essential.delete({
         where: {
           id: id,
         },
@@ -37,30 +27,50 @@ export default async function handler(req, res) {
       res.status(204)
     } else if (req.method === "PUT") {
       const { data } = req.body
-      const putGroup = await prisma.studentgroup.update({
+      const disconnectEssential = await prisma.essential.update({
         where: {
           id: id,
         },
         data: {
-          name: data.name,
-          entrance: data.entrance,
+          subjects: {
+            set: [],
+          },
+        },
+      })
+      const putEssential = await prisma.essential.update({
+        where: {
+          id: id,
+        },
+        data: {
+          group: {
+            connect: {
+              id: data.groupId,
+            },
+          },
+          subjects: {
+            connect: data.subjects,
+          },
+          semester: data.semester,
         },
       })
       res.status(200)
     } else if (req.method === "POST") {
       const { data } = req.body
-      const postGroup = await prisma.studentgroup.create({
+      const postEssential = await prisma.essential.create({
         data: {
-          name: data.name,
-          entrance: data.entrance,
-          school: {
+          group: {
             connect: {
-              code: data.code,
+              id: data.groupId,
             },
           },
+          subjects: {
+            connect: data.subjects,
+          },
+          semester: data.semester,
         },
       })
     }
+    res.status(201)
   } else {
     res.status(401).json({
       message: "You must be sign in to view the protected content on this page.",

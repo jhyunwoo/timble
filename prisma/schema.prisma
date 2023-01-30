@@ -100,15 +100,14 @@ model studentgroup {
   entrance          Int
   students          User[]
   subjects          subject[]
-  essentialsubjects essentialsubjects[]
+  essentials essential[]
 }
 
-model essentialsubjects {
+model essential {
   id             String       @id @default(cuid())
   group          studentgroup @relation(fields: [studentgroupId], references: [id])
   studentgroupId String
-  year           Int
-  semester       Int
+  semester       String
   subjects       subject[]
 }
 
@@ -135,8 +134,8 @@ model subject {
   periods              period[]
   studentgroup         studentgroup?      @relation(fields: [studentgroupId], references: [id])
   studentgroupId       String?
-  essentialsubjects    essentialsubjects? @relation(fields: [essentialsubjectsId], references: [id])
-  essentialsubjectsId  String?
+  essentials    essential? @relation(fields: [essentialsId], references: [id])
+  essentialsId  String?
 }
 
 model subjectcontent {
