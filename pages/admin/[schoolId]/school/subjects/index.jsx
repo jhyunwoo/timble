@@ -42,7 +42,6 @@ export default function AdminSubjects() {
       try {
         list.map((data) => {
           data.diplomas.map((diplomaData) => {
-            console.log(diplomaData)
             if (diplomaData.id === diplomaFilter && data.studentgroup.id === groupFilter) {
               filtered.push(data)
             }
@@ -70,7 +69,6 @@ export default function AdminSubjects() {
             if (diplomaData.id === diplomaFilter) {
               filtered.push(data)
             }
-            console.log(diplomaData)
           })
         })
       } catch {
@@ -119,11 +117,16 @@ export default function AdminSubjects() {
             ))
           : ""}
       </div>
+      <Link href={`/admin/${user ? user.admin : null}/school/subjects/add`}>
+        <div className=" bg-white p-4 hover:bg-slate-800 group mx-4 mt-4 hover:text-white shadow-sm rounded-lg flex justify-center hover:shadow-lg transition duration-200">
+          <DocumentPlusIcon className="w-6 h-6" />
+        </div>
+      </Link>
       {filteredSubjects ? (
         <div className={"grid grid-cols-1 p-4 gap-4"}>
           {filteredSubjects.map((data, key) => (
             <Link key={key} href={`/admin/${user ? user.admin : null}/school/subjects/${data.id}`}>
-              <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
+              <div className="bg-white p-4 shadow-sm rounded-lg flex justify-between hover:shadow-lg transition duration-200">
                 <div className="my-1 w-full">
                   <div className="text-sm font-normal text-slate-500 transition duration-1000 flex flex-row w-full flex-wrap">
                     {diplomas && data.diplomas.length !== diplomas.length ? (
@@ -145,11 +148,6 @@ export default function AdminSubjects() {
               </div>
             </Link>
           ))}
-          <Link href={`/admin/${user ? user.admin : null}/school/subjects/add`}>
-            <div className=" bg-white p-4 hover:bg-slate-800 group hover:text-white shadow-lg rounded-lg flex justify-center hover:shadow-xl transition duration-200">
-              <DocumentPlusIcon className="w-6 h-6" />
-            </div>
-          </Link>
         </div>
       ) : (
         <Loading />

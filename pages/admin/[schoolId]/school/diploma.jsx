@@ -35,7 +35,7 @@ export default function AdminDiploma() {
             {diplomas.map((data, key) => (
               <div
                 key={key}
-                className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-lg transition duration-200 hover:shadow-xl"
+                className="flex w-full justify-between rounded-lg bg-white pr-4 shadow-sm transition duration-200 hover:shadow-lg"
               >
                 <div className="  py-4 pl-4 pr-2">
                   <div className="text-lg font-bold">{data.name}</div>
@@ -56,7 +56,7 @@ export default function AdminDiploma() {
             ))}
             <button
               onClick={() => setPop("add")}
-              className="flex w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-center shadow-lg transition duration-200 hover:bg-slate-700 hover:text-white hover:shadow-xl"
+              className="flex w-full items-center justify-center rounded-lg bg-white px-4 py-2 text-center shadow-sm transition duration-200 hover:bg-slate-700 hover:text-white hover:shadow-lg"
             >
               <SquaresPlusIcon className="h-8 w-8" />
             </button>

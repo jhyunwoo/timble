@@ -19,7 +19,11 @@ export default async function handler(req, res) {
             difficulty: true,
             area: true,
             type: true,
-            contents: true,
+            contents: {
+              orderBy: {
+                order: "asc",
+              },
+            },
             studentgroup: true,
           },
         })

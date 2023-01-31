@@ -78,7 +78,38 @@ export default function AdminHeadBar(props) {
             <button onClick={() => signOut()}>로그아웃</button>
           </div>
         </div>
-        <div className="p-4"></div>
+        <div className="p-4">
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">학생</div>
+          <div className=" grid grid-cols-1 gap-1">
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/students`}>
+              학생 정보
+            </Link>
+          </div>
+          <div className="my-2 border-b-2 border-slate-300 text-sm font-medium text-slate-400">학교</div>
+          <div className=" grid grid-cols-1 gap-1">
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/student-group`}>
+              학생 그룹 설정
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/groups`}>
+              학생 그룹
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/diploma`}>
+              디플로마
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/subjects`}>
+              교과목
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/types`}>
+              교과 종류
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/areas`}>
+              교과 영역
+            </Link>
+            <Link className="text-lg font-semibold" href={`/admin/${session.user.admin}/school/difficulties`}>
+              교과 난이도
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -73,7 +73,7 @@ export default function Year1() {
 
   async function postEssential() {
     if (group) {
-      if (group.essentials.length === 0) {
+      if (!getYear1Essential()) {
         if (selected.length > 0) {
           setLoading(true)
           await axios.post("/api/schools/essential", {
@@ -86,6 +86,7 @@ export default function Year1() {
           setWarn(false)
           updateData()
           setLoading(false)
+          router.replace(`/admin/${schoolId()}/school/groups/${groupId()}/compulsory`)
         } else {
           setWarn(true)
         }
@@ -102,6 +103,7 @@ export default function Year1() {
           setWarn(false)
           updateData()
           setLoading(false)
+          router.replace(`/admin/${schoolId()}/school/groups/${groupId()}/compulsory`)
         } else {
           setWarn(true)
         }
