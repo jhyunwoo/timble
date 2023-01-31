@@ -1,9 +1,9 @@
 import prisma from "../../../../lib/prismadb"
 import { authOptions } from "../../auth/[...nextauth]"
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 
 export default async function handler(req, res) {
-  const session = await unstable_getServerSession(req, res, authOptions)
+  const session = await getServerSession(req, res, authOptions)
   if (session) {
     const { code } = req.query
     if (req.method === "GET") {
