@@ -17,15 +17,19 @@ export default async function handler(req, res) {
         },
       })
       let tockenList = getMessageTocken.messagetocken
-      tockenList.push(data.message)
-      const updateUser = await prisma.user.update({
-        where: {
-          id: id,
-        },
-        data: {
-          messagetocken: tockenList,
-        },
-      })
+      if (!tockenList.includes(data.message)) {
+        tockenList.push(data.message)
+
+        const updateUser = await prisma.user.update({
+          where: {
+            id: id,
+          },
+          data: {
+            messagetocken: tockenList,
+          },
+        })
+      }
+
       res.status(200)
     } else {
       res.status(401).json({
