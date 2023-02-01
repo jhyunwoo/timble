@@ -110,6 +110,12 @@ export default function Subject() {
               {subject.area ? subject.area.name : "미정"}
             </p>
           </div>
+          <div className="bg-white p-4 rounded-lg flex flex-col">
+            <div className="text-xl font-semibold my-1">단위수</div>
+            <p className="font-semibold m-2 bg-slate-100 rounded-lg text-center p-2 px-8">
+              {subject.units ? subject.units + "단위" : "미정"}
+            </p>
+          </div>
           <div className="bg-white p-4 rounded-lg">
             <div className="text-xl font-semibold my-1 mb-3">개설 학기</div>
             <div className="grid grid-cols-3 gap-2">
@@ -138,7 +144,10 @@ export default function Subject() {
             <div className="grid grid-cols-1 gap-2 ">
               {subject.contents
                 ? subject.contents.map((data, key) => (
-                    <div key={key} className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2 md:grid-flow-col md:grid-cols-3">
+                    <div
+                      key={key}
+                      className="bg-slate-100 p-2 rounded-lg grid grid-cols-1 gap-2 md:grid-flow-col md:grid-cols-3"
+                    >
                       <div className="flex flex-col bg-white rounded-md p-2">
                         <div className="text-lg font-semibold md:invisible md:-mt-6">영역</div>
                         <div className="text-md md:text-xl md:text-center my-auto">{data.area}</div>

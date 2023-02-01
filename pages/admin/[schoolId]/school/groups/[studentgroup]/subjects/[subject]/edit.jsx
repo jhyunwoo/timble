@@ -30,7 +30,7 @@ export default function AdminSubjectEdit() {
   const { difficulties } = useDifficulties()
   const { diplomas } = useDiplomas()
   const { groupSubjects } = useGroupSubjects(router ? groupId() : null)
-  const {groups}=useGroups()
+  const { groups } = useGroups()
   const [diploma, setDiploma] = useState([])
   const [prerequisite, setPrerequisite] = useState([])
   const [type, setType] = useState("")
@@ -66,6 +66,7 @@ export default function AdminSubjectEdit() {
         contents: content,
         difficulty: difficulty,
         group: group,
+        units: Number(data.subjectUnits),
       },
     })
   }
@@ -188,6 +189,7 @@ export default function AdminSubjectEdit() {
         subjectTargetParticipants: subject.targetParticipants,
         subjectTarget: subject.target,
         subjectRelatedMajor: subject.relatedMajor,
+        subjectUnits: subject.units,
       })
       for (let i = 1; i < contentLength; i++) {
         if (subject.contents[i - 1]) {
@@ -432,6 +434,20 @@ export default function AdminSubjectEdit() {
             <ErrorMessage
               errors={errors}
               name="subjectTargetParticipants"
+              render={({ message }) => (
+                <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
+              )}
+            />
+
+            <div className="text-lg font-semibold mt-2">단위수</div>
+            <input
+              type="number"
+              className="w-full bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
+              {...register("subjectUnits", { required: { value: true, message: "단위수를 입력하세요" } })}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="subjectUnits"
               render={({ message }) => (
                 <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
               )}

@@ -57,6 +57,7 @@ export default async function handler(req, res) {
         data: {
           title: data.title,
           open: data.open,
+          units: data.units,
           type: {
             connect: {
               id: data.type,
@@ -203,6 +204,7 @@ export default async function handler(req, res) {
         data: {
           title: data.title,
           open: data.open,
+          units: data.units,
           type: {
             connect: {
               id: data.type,

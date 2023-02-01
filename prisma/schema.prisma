@@ -93,13 +93,13 @@ model school {
 }
 
 model studentgroup {
-  id                String              @id @default(cuid())
-  school            school              @relation(fields: [schoolId], references: [id])
-  schoolId          Int
-  name              String
-  entrance          Int
-  students          User[]
-  subjects          subject[]
+  id         String      @id @default(cuid())
+  school     school      @relation(fields: [schoolId], references: [id])
+  schoolId   Int
+  name       String
+  entrance   Int
+  students   User[]
+  subjects   subject[]
   essentials essential[]
 }
 
@@ -112,30 +112,31 @@ model essential {
 }
 
 model subject {
-  id                   String             @id @default(cuid())
-  school               school?            @relation(fields: [schoolId], references: [id])
+  id                   String           @id @default(cuid())
+  school               school?          @relation(fields: [schoolId], references: [id])
   schoolId             Int?
   diplomas             diploma[]
   title                String
   open                 String[]
-  prerequisite         subject[]          @relation("SubjectPrerequisite")
-  prerequisiteRelation subject[]          @relation("SubjectPrerequisite")
-  difficulty           difficulty?        @relation(fields: [difficultyId], references: [id])
+  prerequisite         subject[]        @relation("SubjectPrerequisite")
+  prerequisiteRelation subject[]        @relation("SubjectPrerequisite")
+  difficulty           difficulty?      @relation(fields: [difficultyId], references: [id])
   difficultyId         String?
-  area                 subjectArea?       @relation(fields: [areaId], references: [id])
+  area                 subjectArea?     @relation(fields: [areaId], references: [id])
   areaId               String?
-  type                 subjectType?       @relation(fields: [typeId], references: [id])
+  type                 subjectType?     @relation(fields: [typeId], references: [id])
   typeId               String?
+  units                Int @default(0)
   target               String
   relatedMajor         String
   targetParticipants   String
   CSATSubject          Boolean
   contents             subjectcontent[]
   periods              period[]
-  studentgroup         studentgroup?      @relation(fields: [studentgroupId], references: [id])
+  studentgroup         studentgroup?    @relation(fields: [studentgroupId], references: [id])
   studentgroupId       String?
-  essentials    essential? @relation(fields: [essentialsId], references: [id])
-  essentialsId  String?
+  essentials           essential?       @relation(fields: [essentialsId], references: [id])
+  essentialsId         String?
 }
 
 model subjectcontent {

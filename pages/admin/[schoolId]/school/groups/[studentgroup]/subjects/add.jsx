@@ -9,7 +9,6 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import { mutate } from "swr"
 import useDiplomas from "../../../../../../../lib/client/useDiplomas"
-import useSubjects from "../../../../../../../lib/client/useSubjects"
 import useAreas from "../../../../../../../lib/client/useAreas"
 import useTypes from "../../../../../../../lib/client/useTypes"
 import useDifficulties from "../../../../../../../lib/client/useDifficulties"
@@ -60,6 +59,7 @@ export default function AddSubject() {
         contents: content,
         difficulty: difficulty,
         group: group,
+        units: Number(data.subjectUnits),
       },
     })
   }
@@ -385,6 +385,20 @@ export default function AddSubject() {
             <ErrorMessage
               errors={errors}
               name="subjectTargetParticipants"
+              render={({ message }) => (
+                <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
+              )}
+            />
+
+            <div className="text-lg font-semibold mt-2">단위수</div>
+            <input
+              type="number"
+              className="w-full bg-slate-100 rounded-md outline-none focus:outline-blue-500 focus:outline-2 p-1 my-1"
+              {...register("subjectUnits", { required: { value: true, message: "단위수를 입력하세요" } })}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="subjectUnits"
               render={({ message }) => (
                 <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
               )}
