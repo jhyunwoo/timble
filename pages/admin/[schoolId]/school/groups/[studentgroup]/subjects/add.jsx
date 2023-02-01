@@ -227,7 +227,7 @@ export default function AddSubject() {
             <div {...register("subjectPrerequisite")} className="text-lg font-semibold mt-2">
               선수 과목
             </div>
-            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7  ">
+            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
               {groupSubjects
                 ? groupSubjects.map((data, key) => (
                     <button
@@ -312,7 +312,7 @@ export default function AddSubject() {
             </div>
             <ErrorMessage
               errors={errors}
-              name="subjectType"
+              name="subjectDifficulty"
               render={({ message }) => (
                 <p className="bg-red-500 text-white p-1 px-2 rounded-lg animate-pulse text-sm my-2">{message}</p>
               )}

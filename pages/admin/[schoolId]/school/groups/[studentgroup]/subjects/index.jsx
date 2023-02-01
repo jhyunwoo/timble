@@ -83,10 +83,10 @@ export default function AdminSubjects() {
         </div>
       </Link>
       {filteredSubjects ? (
-        <div className={"grid grid-cols-1 p-4 gap-4"}>
+        <div className={"grid grid-cols-1 p-4 gap-4  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"}>
           {filteredSubjects.map((data, key) => (
             <Link key={key} href={`/admin/${user ? user.admin : null}/school/groups/${groupId()}/subjects/${data.id}`}>
-              <div className="bg-white p-4 shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
+              <div className="bg-white p-4 h-full shadow-lg rounded-lg flex justify-between hover:shadow-xl transition duration-200">
                 <div className="my-1 w-full">
                   <div className="text-sm font-normal text-slate-500 transition duration-1000 flex flex-row w-full flex-wrap">
                     {diplomas && data.diplomas.length !== diplomas.length ? (
