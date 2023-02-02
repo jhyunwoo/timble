@@ -7,19 +7,6 @@ import { Analytics } from "@vercel/analytics/react"
 import localFont from "@next/font/local"
 import Router from "next/router"
 import { useEffect, useState } from "react"
-import { initializeApp } from "firebase/app"
-import { getMessaging } from "firebase/messaging/sw"
-
-const config = {
-  apiKey: "AIzaSyBXiA07mFMSZiOLTRvo6Cf2_cX6MAY2ReM",
-  projectId: "timble-9af87",
-  messagingSenderId: "536733530711",
-  appId: "1:536733530711:web:dcb3eba94fdcc227dec112",
-}
-// Initialize Firebase
-const app = initializeApp(config)
-
-const messaging = getMessaging(app)
 
 const inter = localFont({ src: "../public/NanumSquareNeo-Variable.woff2" })
 
