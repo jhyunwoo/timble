@@ -31,8 +31,7 @@
     "react-loadingg": "^1.7.2",
     "recoil": "^0.7.6",
     "sharp": "^0.31.3",
-    "swr": "^2.0.0",
-    "v8": "^0.1.0"
+    "swr": "^2.0.0"
   },
   "devDependencies": {
     "@types/uuid": "^9.0.0",
